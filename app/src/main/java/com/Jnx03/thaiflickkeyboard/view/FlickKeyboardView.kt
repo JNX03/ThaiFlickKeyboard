@@ -88,7 +88,9 @@ class FlickKeyboardView @JvmOverloads constructor(
     private val hintColor = Color.parseColor("#8E8E93")
     private val flickBalloonBg = Color.parseColor("#3A3A3C")
     private val flickBalloonActive = Color.parseColor("#4285f4")
+    private val flickDimOverlay = Color.argb(160, 0, 0, 0)
 
+    private val dimPaint = Paint().apply { color = flickDimOverlay }
     private val keyBgPaint = Paint(Paint.ANTI_ALIAS_FLAG)
     private val textPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         color = textColor; textAlign = Paint.Align.CENTER
@@ -141,8 +143,19 @@ class FlickKeyboardView @JvmOverloads constructor(
             }
         }
 
-        // Draw inline flick overlay on top of everything
+        // When flicking: dim everything, then draw the active key + balloons on top
         if (isTouching && currentDirection != FlickDirection.TAP) {
+            canvas.drawRect(0f, 0f, width.toFloat(), height.toFloat(), dimPaint)
+
+            // Redraw the active key on top of the dim overlay
+            val ax = colStarts[activeCol] + pad
+            val ay = activeRow * rowHeight + pad
+            val aw = colWidths[activeCol] - pad * 2
+            val ah = rowHeight - pad * 2
+            rect.set(ax, ay, ax + aw, ay + ah)
+            if (activeCol in 1..3) drawCharKey(canvas, activeRow, activeCol, rect, true)
+            else drawUtilKey(canvas, activeRow, activeCol, rect, true)
+
             drawFlickOverlay(canvas)
         }
     }
