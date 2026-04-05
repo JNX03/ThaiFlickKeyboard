@@ -1,12 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="key_padding">2dp</dimen>
-    <dimen name="key_corner_radius">8dp</dimen>
-    <dimen name="key_text_size_primary">22sp</dimen>
-    <dimen name="key_text_size_secondary">11sp</dimen>
-    <dimen name="key_text_size_hint">8sp</dimen>
+    <dimen name="key_padding">3dp</dimen>
+    <dimen name="key_corner_radius">10dp</dimen>
+    <dimen name="key_text_size_primary">24sp</dimen>
+    <dimen name="key_text_size_secondary">10sp</dimen>
+    <dimen name="key_text_size_hint">9sp</dimen>
     <dimen name="dead_zone_radius">20dp</dimen>
     <dimen name="utility_bar_height">48dp</dimen>
-    <dimen name="preview_text_size">32sp</dimen>
+    <dimen name="suggestion_bar_height">44dp</dimen>
+    <dimen name="preview_text_size">28sp</dimen>
     <dimen name="preview_padding">12dp</dimen>
+    <dimen name="popup_cell_size">52dp</dimen>
+    <dimen name="popup_text_size">22sp</dimen>
+    <dimen name="popup_corner_radius">12dp</dimen>
 </resources>
