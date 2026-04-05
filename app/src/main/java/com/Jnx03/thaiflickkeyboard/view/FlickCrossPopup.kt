@@ -35,7 +35,7 @@ class FlickCrossPopup(private val context: Context) {
         crossView?.setKey(key, direction)
 
         val x = anchorX - popupWidth / 2
-        val y = anchorY - popupHeight - (16f.dpToPx(context)).toInt()
+        val y = maxOf(0, anchorY - popupHeight - (16f.dpToPx(context)).toInt())
 
         try {
             if (popupWindow?.isShowing == true) {
