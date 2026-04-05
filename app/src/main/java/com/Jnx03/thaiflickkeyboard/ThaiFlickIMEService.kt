@@ -1,5 +1,6 @@
 package com.Jnx03.thaiflickkeyboard
 
+import android.content.ClipboardManager
 import android.content.Intent
 import android.content.SharedPreferences
 import android.inputmethodservice.InputMethodService
@@ -10,13 +11,16 @@ import android.speech.RecognizerIntent
 import android.speech.SpeechRecognizer
 import android.view.View
 import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
+import com.Jnx03.thaiflickkeyboard.data.ClipboardHistoryManager
 import com.Jnx03.thaiflickkeyboard.data.LayoutRepository
 import com.Jnx03.thaiflickkeyboard.data.PreferencesManager
 import com.Jnx03.thaiflickkeyboard.data.ThaiWordList
 import com.Jnx03.thaiflickkeyboard.model.KeyboardLayout
 import com.Jnx03.thaiflickkeyboard.model.KeyboardMode
 import com.Jnx03.thaiflickkeyboard.util.HapticHelper
+import com.Jnx03.thaiflickkeyboard.view.ClipboardPanelView
 import com.Jnx03.thaiflickkeyboard.view.FlickKeyboardView
 import com.Jnx03.thaiflickkeyboard.view.QwertyKeyboardView
 import com.Jnx03.thaiflickkeyboard.view.SuggestionBarView
@@ -27,43 +31,53 @@ class ThaiFlickIMEService : InputMethodService(), SharedPreferences.OnSharedPref
     private lateinit var layoutRepository: LayoutRepository
     private lateinit var prefsManager: PreferencesManager
     private lateinit var actionHandler: InputActionHandler
+    private lateinit var clipboardHistory: ClipboardHistoryManager
 
     private var keyboardView: FlickKeyboardView? = null
     private var qwertyView: QwertyKeyboardView? = null
     private var suggestionBar: SuggestionBarView? = null
+    private var clipboardPanel: ClipboardPanelView? = null
     private var currentMode = KeyboardMode.THAI
+    private var clipboardShowing = false
 
     private var speechRecognizer: SpeechRecognizer? = null
     private var isSpeechListening = false
+
+    private var clipListener: ClipboardManager.OnPrimaryClipChangedListener? = null
 
     override fun onCreate() {
         super.onCreate()
         layoutRepository = LayoutRepository(this)
         prefsManager = PreferencesManager(this)
         actionHandler = InputActionHandler(this)
+        clipboardHistory = ClipboardHistoryManager(this)
         layoutRepository.registerChangeListener(this)
+
+        // Listen for clipboard changes
+        val cm = getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
+        clipListener = ClipboardManager.OnPrimaryClipChangedListener {
+            val clip = cm.primaryClip
+            if (clip != null && clip.itemCount > 0) {
+                val text = clip.getItemAt(0).text?.toString()
+                if (!text.isNullOrBlank()) clipboardHistory.addClip(text)
+            }
+        }
+        cm.addPrimaryClipChangedListener(clipListener)
     }
 
     override fun onCreateInputView(): View {
         val view = layoutInflater.inflate(R.layout.keyboard_container, null)
 
+        // Toolbar
         view.findViewById<ToolbarView>(R.id.toolbar_view).apply {
             onSettings = {
-                val intent = android.content.Intent(this@ThaiFlickIMEService, com.Jnx03.thaiflickkeyboard.settings.SettingsActivity::class.java)
-                intent.addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK)
+                val intent = Intent(this@ThaiFlickIMEService, com.Jnx03.thaiflickkeyboard.settings.SettingsActivity::class.java)
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 startActivity(intent)
             }
             onMic = { startSpeechRecognition() }
             onEmoji = { showSystemEmoji() }
-            onClipboard = {
-                // Paste from clipboard
-                val cm = getSystemService(CLIPBOARD_SERVICE) as android.content.ClipboardManager
-                val clip = cm.primaryClip
-                if (clip != null && clip.itemCount > 0) {
-                    val text = clip.getItemAt(0).text
-                    if (!text.isNullOrEmpty()) currentInputConnection?.commitText(text, 1)
-                }
-            }
+            onClipboard = { toggleClipboardPanel() }
         }
 
         suggestionBar = view.findViewById<SuggestionBarView>(R.id.suggestion_bar).apply {
@@ -73,7 +87,6 @@ class ThaiFlickIMEService : InputMethodService(), SharedPreferences.OnSharedPref
         keyboardView = view.findViewById<FlickKeyboardView>(R.id.keyboard_view).apply {
             layout = layoutRepository.loadLayout()
             hapticEnabled = prefsManager.hapticEnabled
-
             onCharacterSelected = { char ->
                 if (prefsManager.hapticEnabled) HapticHelper.performKeyPress(this)
                 actionHandler.commitChar(char)
@@ -107,19 +120,27 @@ class ThaiFlickIMEService : InputMethodService(), SharedPreferences.OnSharedPref
 
         qwertyView = view.findViewById<QwertyKeyboardView>(R.id.qwerty_view).apply {
             hapticEnabled = prefsManager.hapticEnabled
-            onCharacterSelected = { char ->
-                actionHandler.commitChar(char)
-            }
-            onBackspace = {
-                actionHandler.deleteBackward()
-            }
-            onSpace = {
-                actionHandler.sendSpace()
-            }
-            onEnter = {
-                actionHandler.sendEnter()
-            }
+            onCharacterSelected = { char -> actionHandler.commitChar(char) }
+            onBackspace = { actionHandler.deleteBackward() }
+            onSpace = { actionHandler.sendSpace() }
+            onEnter = { actionHandler.sendEnter() }
             onSwitchMode = { switchMode() }
+        }
+
+        clipboardPanel = view.findViewById<ClipboardPanelView>(R.id.clipboard_panel).apply {
+            onPaste = { text ->
+                currentInputConnection?.commitText(text, 1)
+                hideClipboardPanel()
+            }
+            onClose = { hideClipboardPanel() }
+            onDelete = { index ->
+                clipboardHistory.removeClip(index)
+                setHistory(clipboardHistory.getHistory())
+            }
+            onClearAll = {
+                clipboardHistory.clearAll()
+                setHistory(emptyList())
+            }
         }
 
         updateModeLabel()
@@ -129,10 +150,35 @@ class ThaiFlickIMEService : InputMethodService(), SharedPreferences.OnSharedPref
 
     override fun onStartInputView(info: EditorInfo?, restarting: Boolean) {
         super.onStartInputView(info, restarting)
+        if (clipboardShowing) hideClipboardPanel()
         updateSuggestions()
     }
 
+    // ── Clipboard Panel ──
+
+    private fun toggleClipboardPanel() {
+        if (clipboardShowing) hideClipboardPanel()
+        else showClipboardPanel()
+    }
+
+    private fun showClipboardPanel() {
+        clipboardPanel?.setHistory(clipboardHistory.getHistory())
+        keyboardView?.visibility = View.GONE
+        qwertyView?.visibility = View.GONE
+        clipboardPanel?.visibility = View.VISIBLE
+        clipboardShowing = true
+    }
+
+    private fun hideClipboardPanel() {
+        clipboardPanel?.visibility = View.GONE
+        clipboardShowing = false
+        showKeyboardForMode()
+    }
+
+    // ── Mode Switching ──
+
     private fun showKeyboardForMode() {
+        if (clipboardShowing) return
         when (currentMode) {
             KeyboardMode.ENGLISH -> {
                 keyboardView?.visibility = View.GONE
@@ -143,30 +189,6 @@ class ThaiFlickIMEService : InputMethodService(), SharedPreferences.OnSharedPref
                 qwertyView?.visibility = View.GONE
             }
         }
-    }
-
-    private fun updateSuggestions() {
-        if (currentMode != KeyboardMode.THAI) {
-            suggestionBar?.setSuggestions(emptyList())
-            return
-        }
-        val ic = currentInputConnection ?: return
-        val textBefore = ic.getTextBeforeCursor(20, 0)?.toString() ?: ""
-        val lastWord = textBefore.split(" ", "\n").lastOrNull() ?: ""
-        if (lastWord.isEmpty()) {
-            suggestionBar?.setSuggestions(emptyList())
-            return
-        }
-        suggestionBar?.setSuggestions(ThaiWordList.getSuggestions(lastWord, 3))
-    }
-
-    private fun commitSuggestion(word: String) {
-        val ic = currentInputConnection ?: return
-        val textBefore = ic.getTextBeforeCursor(20, 0)?.toString() ?: ""
-        val lastWord = textBefore.split(" ", "\n").lastOrNull() ?: ""
-        if (lastWord.isNotEmpty()) ic.deleteSurroundingText(lastWord.length, 0)
-        ic.commitText("$word ", 1)
-        suggestionBar?.setSuggestions(emptyList())
     }
 
     private fun switchMode() {
@@ -195,12 +217,33 @@ class ThaiFlickIMEService : InputMethodService(), SharedPreferences.OnSharedPref
         }
     }
 
-    private fun showSystemEmoji() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            currentInputConnection?.performEditorAction(0)
+    // ── Suggestions ──
+
+    private fun updateSuggestions() {
+        if (currentMode != KeyboardMode.THAI) {
+            suggestionBar?.setSuggestions(emptyList())
+            return
         }
-        // Switch to the system emoji input method or show emoji via InputConnection
-        val imeManager = getSystemService(INPUT_METHOD_SERVICE) as android.view.inputmethod.InputMethodManager
+        val ic = currentInputConnection ?: return
+        val textBefore = ic.getTextBeforeCursor(20, 0)?.toString() ?: ""
+        val lastWord = textBefore.split(" ", "\n").lastOrNull() ?: ""
+        if (lastWord.isEmpty()) { suggestionBar?.setSuggestions(emptyList()); return }
+        suggestionBar?.setSuggestions(ThaiWordList.getSuggestions(lastWord, 3))
+    }
+
+    private fun commitSuggestion(word: String) {
+        val ic = currentInputConnection ?: return
+        val textBefore = ic.getTextBeforeCursor(20, 0)?.toString() ?: ""
+        val lastWord = textBefore.split(" ", "\n").lastOrNull() ?: ""
+        if (lastWord.isNotEmpty()) ic.deleteSurroundingText(lastWord.length, 0)
+        ic.commitText("$word ", 1)
+        suggestionBar?.setSuggestions(emptyList())
+    }
+
+    // ── Emoji ──
+
+    private fun showSystemEmoji() {
+        val imeManager = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
         imeManager.showInputMethodPicker()
     }
 
@@ -260,6 +303,8 @@ class ThaiFlickIMEService : InputMethodService(), SharedPreferences.OnSharedPref
     override fun onDestroy() {
         speechRecognizer?.destroy()
         speechRecognizer = null
+        val cm = getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
+        clipListener?.let { cm.removePrimaryClipChangedListener(it) }
         layoutRepository.unregisterChangeListener(this)
         super.onDestroy()
     }

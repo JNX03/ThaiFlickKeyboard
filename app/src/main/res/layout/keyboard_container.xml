@@ -27,4 +27,10 @@
         android:layout_height="wrap_content"
         android:visibility="gone" />
 
+    <com.Jnx03.thaiflickkeyboard.view.ClipboardPanelView
+        android:id="@+id/clipboard_panel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone" />
+
 </LinearLayout>
