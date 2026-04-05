@@ -28,6 +28,13 @@
     <string name="label_color">Color</string>
     <string name="label_hint">Hint</string>
 
+    <string name="layout_preset">Layout Preset</string>
+    <string name="preset_optimized_center">Optimized (Center) - Both hands</string>
+    <string name="preset_optimized_right">Optimized (Right Hand)</string>
+    <string name="preset_optimized_left">Optimized (Left Hand)</string>
+    <string name="preset_phonetic">Phonetic (Original)</string>
+    <string name="preset_speed">Speed (Experimental)</string>
+
     <string name="settings_title">Settings</string>
     <string name="pref_sensitivity">Flick Sensitivity</string>
     <string name="pref_haptic">Haptic Feedback</string>
