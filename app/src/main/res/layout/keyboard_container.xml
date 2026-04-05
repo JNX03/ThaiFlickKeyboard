@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:background="@color/keyboard_background">
+    android:background="#2b2b2b">
 
     <com.Jnx03.thaiflickkeyboard.view.SuggestionBarView
         android:id="@+id/suggestion_bar"
@@ -14,13 +14,6 @@
     <com.Jnx03.thaiflickkeyboard.view.FlickKeyboardView
         android:id="@+id/keyboard_view"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1" />
-
-    <com.Jnx03.thaiflickkeyboard.view.UtilityBarView
-        android:id="@+id/utility_bar"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/utility_bar_height"
-        android:background="@color/utility_bar_background" />
+        android:layout_height="wrap_content" />
 
 </LinearLayout>
