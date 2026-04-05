@@ -22,18 +22,18 @@ class SuggestionBarView @JvmOverloads constructor(
     private var pressedIndex = -1
 
     private val bgPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        color = Color.parseColor("#333333")
+        color = Color.parseColor("#1C1C1E")
     }
     private val textPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        color = Color.parseColor("#e0e0e0")
+        color = Color.parseColor("#FFFFFF")
         textAlign = Paint.Align.CENTER
         textSize = 15f.spToPx(context)
     }
     private val pressedBgPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        color = Color.parseColor("#444444")
+        color = Color.parseColor("#3A3A3C")
     }
     private val dividerPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        color = Color.parseColor("#444444")
+        color = Color.parseColor("#3A3A3C")
         strokeWidth = 1f.dpToPx(context)
     }
 

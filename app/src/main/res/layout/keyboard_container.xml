@@ -3,17 +3,23 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:background="#2b2b2b">
+    android:background="#1C1C1E">
 
     <com.Jnx03.thaiflickkeyboard.view.SuggestionBarView
         android:id="@+id/suggestion_bar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/suggestion_bar_height"
-        android:background="@color/suggestion_background" />
+        android:background="#1C1C1E" />
 
     <com.Jnx03.thaiflickkeyboard.view.FlickKeyboardView
         android:id="@+id/keyboard_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
+
+    <com.Jnx03.thaiflickkeyboard.view.QwertyKeyboardView
+        android:id="@+id/qwerty_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone" />
 
 </LinearLayout>
