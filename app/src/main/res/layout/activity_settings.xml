@@ -1,333 +1,239 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/keyboard_background"
-    android:padding="16dp">
+    android:background="#1C1C1E">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:gravity="center_horizontal">
+        android:paddingTop="48dp"
+        android:paddingBottom="24dp">
 
-        <!-- App Title -->
+        <!-- Title -->
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/app_name"
-            android:textSize="28sp"
-            android:textColor="@color/white"
+            android:textSize="24sp"
+            android:textColor="#FFFFFF"
             android:textStyle="bold"
-            android:layout_marginTop="24dp"
-            android:layout_marginBottom="8dp" />
+            android:paddingHorizontal="20dp"
+            android:paddingBottom="4dp" />
 
+        <!-- Status -->
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Thai Flick Input Method"
-            android:textSize="14sp"
-            android:textColor="@color/key_text_secondary"
-            android:layout_marginBottom="32dp" />
-
-        <!-- Step 1: Enable -->
-        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/tv_status"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="12dp"
-            app:cardBackgroundColor="#1e1e3a"
-            app:cardCornerRadius="12dp"
-            app:cardElevation="0dp"
-            xmlns:app="http://schemas.android.com/apk/res-auto">
+            android:text="@string/keyboard_not_enabled"
+            android:textSize="13sp"
+            android:textColor="#FF453A"
+            android:paddingHorizontal="20dp"
+            android:paddingBottom="20dp" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="16dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/step1_enable"
-                    android:textSize="18sp"
-                    android:textColor="@color/white"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/tv_status"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/keyboard_not_enabled"
-                    android:textSize="13sp"
-                    android:textColor="@color/key_red"
-                    android:layout_marginTop="4dp"
-                    android:layout_marginBottom="12dp" />
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btn_enable"
-                    android:layout_width="match_parent"
-                    android:layout_height="48dp"
-                    android:text="@string/btn_enable_keyboard"
-                    android:textAllCaps="false"
-                    app:cornerRadius="8dp"
-                    xmlns:app="http://schemas.android.com/apk/res-auto" />
-            </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
-
-        <!-- Step 2: Select -->
-        <com.google.android.material.card.MaterialCardView
+        <!-- Section: Setup -->
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="12dp"
-            app:cardBackgroundColor="#1e1e3a"
-            app:cardCornerRadius="12dp"
-            app:cardElevation="0dp"
-            xmlns:app="http://schemas.android.com/apk/res-auto">
+            android:text="Setup"
+            android:textSize="13sp"
+            android:textColor="#8E8E93"
+            android:textAllCaps="true"
+            android:letterSpacing="0.05"
+            android:paddingHorizontal="20dp"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="16dp">
+        <!-- Enable Keyboard -->
+        <LinearLayout
+            android:id="@+id/row_enable"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingHorizontal="20dp"
+            android:background="?android:attr/selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true">
+            <ImageView android:layout_width="24dp" android:layout_height="24dp"
+                android:src="@drawable/ic_keyboard" android:layout_marginEnd="16dp" />
+            <TextView android:layout_width="0dp" android:layout_height="wrap_content"
+                android:layout_weight="1" android:text="Enable Keyboard"
+                android:textSize="16sp" android:textColor="#FFFFFF" />
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="›" android:textSize="20sp" android:textColor="#8E8E93" />
+        </LinearLayout>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/step2_select"
-                    android:textSize="18sp"
-                    android:textColor="@color/white"
-                    android:textStyle="bold" />
+        <View android:layout_width="match_parent" android:layout_height="1dp"
+            android:background="#2C2C2E" android:layout_marginStart="60dp" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/step2_desc"
-                    android:textSize="13sp"
-                    android:textColor="@color/key_text_secondary"
-                    android:layout_marginTop="4dp"
-                    android:layout_marginBottom="12dp" />
+        <!-- Select Keyboard -->
+        <LinearLayout
+            android:id="@+id/row_select"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingHorizontal="20dp"
+            android:background="?android:attr/selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true">
+            <ImageView android:layout_width="24dp" android:layout_height="24dp"
+                android:src="@drawable/ic_language_switch" android:layout_marginEnd="16dp" />
+            <TextView android:layout_width="0dp" android:layout_height="wrap_content"
+                android:layout_weight="1" android:text="Select Keyboard"
+                android:textSize="16sp" android:textColor="#FFFFFF" />
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="›" android:textSize="20sp" android:textColor="#8E8E93" />
+        </LinearLayout>
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btn_select"
-                    android:layout_width="match_parent"
-                    android:layout_height="48dp"
-                    android:text="@string/btn_select_keyboard"
-                    android:textAllCaps="false"
-                    app:cornerRadius="8dp"
-                    xmlns:app="http://schemas.android.com/apk/res-auto" />
-            </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
-
-        <!-- Layout Preset Selection -->
-        <com.google.android.material.card.MaterialCardView
+        <!-- Section: Input -->
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="12dp"
-            app:cardBackgroundColor="#1e1e3a"
-            app:cardCornerRadius="12dp"
-            app:cardElevation="0dp"
-            xmlns:app="http://schemas.android.com/apk/res-auto">
+            android:text="Input"
+            android:textSize="13sp"
+            android:textColor="#8E8E93"
+            android:textAllCaps="true"
+            android:letterSpacing="0.05"
+            android:paddingHorizontal="20dp"
+            android:paddingTop="24dp"
+            android:paddingBottom="8dp" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="16dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/layout_preset"
-                    android:textSize="18sp"
-                    android:textColor="@color/white"
-                    android:textStyle="bold"
-                    android:layout_marginBottom="4dp" />
-
-                <TextView
-                    android:id="@+id/tv_preset_desc"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="12sp"
-                    android:textColor="@color/key_text_secondary"
-                    android:layout_marginBottom="12dp" />
-
-                <RadioGroup
-                    android:id="@+id/rg_presets"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <com.google.android.material.radiobutton.MaterialRadioButton
-                        android:id="@+id/rb_optimized_center"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/preset_optimized_center"
-                        android:textColor="@color/white"
-                        android:layout_marginBottom="4dp" />
-
-                    <com.google.android.material.radiobutton.MaterialRadioButton
-                        android:id="@+id/rb_optimized_right"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/preset_optimized_right"
-                        android:textColor="@color/white"
-                        android:layout_marginBottom="4dp" />
-
-                    <com.google.android.material.radiobutton.MaterialRadioButton
-                        android:id="@+id/rb_optimized_left"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/preset_optimized_left"
-                        android:textColor="@color/white"
-                        android:layout_marginBottom="4dp" />
-
-                    <com.google.android.material.radiobutton.MaterialRadioButton
-                        android:id="@+id/rb_phonetic"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/preset_phonetic"
-                        android:textColor="@color/white"
-                        android:layout_marginBottom="4dp" />
-
-                    <com.google.android.material.radiobutton.MaterialRadioButton
-                        android:id="@+id/rb_speed"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/preset_speed"
-                        android:textColor="@color/white" />
-
-                </RadioGroup>
+        <!-- Layout Preset -->
+        <LinearLayout
+            android:id="@+id/row_preset"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingHorizontal="20dp"
+            android:background="?android:attr/selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true">
+            <ImageView android:layout_width="24dp" android:layout_height="24dp"
+                android:src="@drawable/ic_layout" android:layout_marginEnd="16dp" />
+            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+                android:layout_weight="1" android:orientation="vertical">
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="Layout Preset" android:textSize="16sp" android:textColor="#FFFFFF" />
+                <TextView android:id="@+id/tv_preset_value" android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" android:text="Optimized (Center)"
+                    android:textSize="12sp" android:textColor="#8E8E93" />
             </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="›" android:textSize="20sp" android:textColor="#8E8E93" />
+        </LinearLayout>
 
-        <!-- Customize -->
-        <com.google.android.material.card.MaterialCardView
+        <View android:layout_width="match_parent" android:layout_height="1dp"
+            android:background="#2C2C2E" android:layout_marginStart="60dp" />
+
+        <!-- Customize Keys -->
+        <LinearLayout
+            android:id="@+id/row_customize"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingHorizontal="20dp"
+            android:background="?android:attr/selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true">
+            <ImageView android:layout_width="24dp" android:layout_height="24dp"
+                android:src="@drawable/ic_tune" android:layout_marginEnd="16dp" />
+            <TextView android:layout_width="0dp" android:layout_height="wrap_content"
+                android:layout_weight="1" android:text="Customize Keys"
+                android:textSize="16sp" android:textColor="#FFFFFF" />
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="›" android:textSize="20sp" android:textColor="#8E8E93" />
+        </LinearLayout>
+
+        <!-- Section: Preferences -->
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="12dp"
-            app:cardBackgroundColor="#1e1e3a"
-            app:cardCornerRadius="12dp"
-            app:cardElevation="0dp"
-            xmlns:app="http://schemas.android.com/apk/res-auto">
+            android:text="Preferences"
+            android:textSize="13sp"
+            android:textColor="#8E8E93"
+            android:textAllCaps="true"
+            android:letterSpacing="0.05"
+            android:paddingHorizontal="20dp"
+            android:paddingTop="24dp"
+            android:paddingBottom="8dp" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="16dp">
+        <!-- Haptic Feedback -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingHorizontal="20dp">
+            <ImageView android:layout_width="24dp" android:layout_height="24dp"
+                android:src="@drawable/ic_vibration" android:layout_marginEnd="16dp" />
+            <TextView android:layout_width="0dp" android:layout_height="wrap_content"
+                android:layout_weight="1" android:text="@string/pref_haptic"
+                android:textSize="16sp" android:textColor="#FFFFFF" />
+            <com.google.android.material.switchmaterial.SwitchMaterial
+                android:id="@+id/switch_haptic"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/customize_layout"
-                    android:textSize="18sp"
-                    android:textColor="@color/white"
-                    android:textStyle="bold"
-                    android:layout_marginBottom="12dp" />
+        <View android:layout_width="match_parent" android:layout_height="1dp"
+            android:background="#2C2C2E" android:layout_marginStart="60dp" />
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btn_customize"
-                    android:layout_width="match_parent"
-                    android:layout_height="48dp"
-                    android:text="@string/btn_customize"
-                    android:textAllCaps="false"
-                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                    app:cornerRadius="8dp"
-                    app:strokeColor="@color/key_indigo"
-                    xmlns:app="http://schemas.android.com/apk/res-auto" />
-            </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
+        <!-- Key Sound -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingHorizontal="20dp">
+            <ImageView android:layout_width="24dp" android:layout_height="24dp"
+                android:src="@drawable/ic_volume" android:layout_marginEnd="16dp" />
+            <TextView android:layout_width="0dp" android:layout_height="wrap_content"
+                android:layout_weight="1" android:text="@string/pref_sound"
+                android:textSize="16sp" android:textColor="#FFFFFF" />
+            <com.google.android.material.switchmaterial.SwitchMaterial
+                android:id="@+id/switch_sound"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
 
-        <!-- Settings -->
-        <com.google.android.material.card.MaterialCardView
+        <!-- Section: Test -->
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="24dp"
-            app:cardBackgroundColor="#1e1e3a"
-            app:cardCornerRadius="12dp"
-            app:cardElevation="0dp"
-            xmlns:app="http://schemas.android.com/apk/res-auto">
+            android:text="Test"
+            android:textSize="13sp"
+            android:textColor="#8E8E93"
+            android:textAllCaps="true"
+            android:letterSpacing="0.05"
+            android:paddingHorizontal="20dp"
+            android:paddingTop="24dp"
+            android:paddingBottom="8dp" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="16dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/settings_title"
-                    android:textSize="18sp"
-                    android:textColor="@color/white"
-                    android:textStyle="bold"
-                    android:layout_marginBottom="16dp" />
-
-                <!-- Haptic toggle -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical"
-                    android:layout_marginBottom="12dp">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="@string/pref_haptic"
-                        android:textSize="15sp"
-                        android:textColor="@color/white" />
-
-                    <com.google.android.material.switchmaterial.SwitchMaterial
-                        android:id="@+id/switch_haptic"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
-                </LinearLayout>
-
-                <!-- Sound toggle -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="@string/pref_sound"
-                        android:textSize="15sp"
-                        android:textColor="@color/white" />
-
-                    <com.google.android.material.switchmaterial.SwitchMaterial
-                        android:id="@+id/switch_sound"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
-                </LinearLayout>
-            </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
-
-        <!-- Test area -->
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
             android:layout_marginBottom="24dp"
-            android:hint="Try typing here..."
-            app:boxBackgroundColor="#1e1e3a"
-            app:boxCornerRadiusTopStart="12dp"
-            app:boxCornerRadiusTopEnd="12dp"
-            app:boxCornerRadiusBottomStart="12dp"
-            app:boxCornerRadiusBottomEnd="12dp"
-            app:hintTextColor="@color/key_text_secondary"
-            xmlns:app="http://schemas.android.com/apk/res-auto">
+            android:hint="Try typing here…"
+            app:boxBackgroundColor="#2C2C2E"
+            app:boxCornerRadiusTopStart="10dp"
+            app:boxCornerRadiusTopEnd="10dp"
+            app:boxCornerRadiusBottomStart="10dp"
+            app:boxCornerRadiusBottomEnd="10dp"
+            app:hintTextColor="#8E8E93">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/et_test"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/white"
+                android:textColor="#FFFFFF"
                 android:minLines="3"
                 android:inputType="textMultiLine" />
         </com.google.android.material.textfield.TextInputLayout>
