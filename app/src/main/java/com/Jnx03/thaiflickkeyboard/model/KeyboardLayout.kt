@@ -226,6 +226,36 @@ data class KeyboardLayout(
                 description = "Pure frequency optimization. Fastest possible but harder to learn.")
         }
 
+        fun emoji(): KeyboardLayout {
+            val keys = listOf(
+                // Row 0: Smileys, Gestures, Hearts
+                FlickKey("em1", "😀", "😂", "🥹", "😍", "🤣", "#f59e0b", "Smileys"),
+                FlickKey("em2", "👍", "👋", "🙏", "✌️", "👏", "#f59e0b", "Hands"),
+                FlickKey("em3", "❤️", "💕", "💔", "🔥", "✨", "#ec4899", "Hearts"),
+                FlickKey("tone", "😊", "😎", "🥰", "😇", "🤩", "#a855f7", "Happy"),
+
+                // Row 1: Faces, Animals, Nature
+                FlickKey("em4", "😢", "😭", "😤", "😡", "🥺", "#6366f1", "Sad"),
+                FlickKey("em5", "🐱", "🐶", "🐻", "🐼", "🦊", "#22c55e", "Animals"),
+                FlickKey("em6", "🌸", "🌺", "🌻", "🌹", "🍀", "#22c55e", "Nature"),
+                FlickKey("special", "😅", "😜", "🤔", "😏", "🙄", "#64748b", "Misc"),
+
+                // Row 2: Food, Activities, Objects
+                FlickKey("em7", "🍕", "🍔", "🍣", "🍜", "☕", "#f59e0b", "Food"),
+                FlickKey("em8", "⚽", "🎮", "🎵", "📸", "🎉", "#6366f1", "Fun"),
+                FlickKey("em9", "💯", "⭐", "💪", "🎯", "🏆", "#6366f1", "Symbols"),
+                FlickKey("mode", "TH", "", "", "", "", "#64748b", "Mode"),
+
+                // Row 3: Weather, Travel, Misc
+                FlickKey("em10", "☀️", "🌙", "⛅", "🌈", "❄️", "#22c55e", "Weather"),
+                FlickKey("em11", "🏠", "✈️", "🚗", "🌍", "🏖️", "#ec4899", "Travel"),
+                FlickKey("em12", "💬", "👀", "💡", "🔔", "📌", "#ec4899", "Misc"),
+                FlickKey("backspace", "⌫", "", "", "", "", "#ef4444", "Delete")
+            )
+            return KeyboardLayout("Emoji", keys,
+                description = "Emoji keyboard with flick input for variants.")
+        }
+
         fun english(): KeyboardLayout {
             val keys = listOf(
                 FlickKey("e1", "a", "b", "c", "d", "e", "#6366f1", "a-e"),
