@@ -20,15 +20,15 @@ import com.Jnx03.thaiflickkeyboard.util.spToPx
 
 /**
  * Full keyboard view with integrated utility keys.
- * Layout: 5 columns x 4 rows (Japanese flick style)
+ * Layout: 5 columns x 4 rows (Japanese flick keyboard style)
  *
- *   [Tone]  [k1] [k2] [k3]  [⌫]
- *   [◀]     [k4] [k5] [k6]  [▶]
- *   [Spec]  [k7] [k8] [k9]  [Enter]
- *   [Mode]  [v1] [v2] [v3]  [Space]
+ *   [🎤 Mic]  [k1] [k2] [k3]  [⌫]
+ *   [◀]       [k4] [k5] [k6]  [▶]
+ *   [123]     [k7] [k8] [k9]  [Space/Tones]
+ *   [😀]      [v1] [v2] [v3]  [↵ Enter]
  *
  * Character keys (cols 1-3): flick-enabled, from KeyboardLayout
- * Utility keys (cols 0,4): tap-only
+ * Utility keys (cols 0,4): tap-only, except Space (flick=tones) & Emoji (flick=special)
  */
 class FlickKeyboardView @JvmOverloads constructor(
     context: Context,
@@ -52,13 +52,18 @@ class FlickKeyboardView @JvmOverloads constructor(
     var onEnter: (() -> Unit)? = null
     var onCursorLeft: (() -> Unit)? = null
     var onCursorRight: (() -> Unit)? = null
+    var onMicPressed: (() -> Unit)? = null
+    var onEmojiPressed: (() -> Unit)? = null
     var hapticEnabled: Boolean = true
+    var modeLabel: String = "123"
+        set(value) { field = value; invalidate() }
 
     private var charKeys: List<FlickKey> = emptyList()
 
-    // Tone key (always the same)
-    private val toneKey = FlickKey("tone", "์", "่", "้", "็", "๊", "#a855f7", "Tones")
-    private val specialKey = FlickKey("special", "ๆ", "ฯ", "ฌ", "๋", "ฺ", "#64748b", "Special")
+    // Space key: tap=space, flick=tone marks (like Japanese dakuten key)
+    private val toneSpaceKey = FlickKey("space_tone", "Space", "่", "์", "้", "๊", "#a855f7", "")
+    // Emoji key: tap=emoji, flick=special Thai chars
+    private val emojiSpecialKey = FlickKey("emoji_special", "😀", "ๆ", "ฯ", "็", "๋", "#64748b", "")
 
     private val gestureDetector = FlickGestureDetector(20f.dpToPx(context))
     private val crossPopup = FlickCrossPopup(context)
@@ -108,6 +113,8 @@ class FlickKeyboardView @JvmOverloads constructor(
 
     private val backspaceIcon: Drawable? = ContextCompat.getDrawable(context, R.drawable.ic_backspace)
     private val enterIcon: Drawable? = ContextCompat.getDrawable(context, R.drawable.ic_enter)
+    private val micIcon: Drawable? = ContextCompat.getDrawable(context, R.drawable.ic_mic)
+    private val emojiIcon: Drawable? = ContextCompat.getDrawable(context, R.drawable.ic_emoji)
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         val w = MeasureSpec.getSize(widthMeasureSpec)
@@ -208,27 +215,32 @@ class FlickKeyboardView @JvmOverloads constructor(
 
         when {
             // Left column (col 0)
-            col == 0 && row == 0 -> { // Tone key
-                textPaint.textSize = 18f.spToPx(context)
-                canvas.drawText(toDisplayChar(toneKey.tap), cx, cy + 2f.dpToPx(context), textPaint)
-                hintPaint.textSize = 8f.spToPx(context)
-                canvas.drawText("Tone", cx, rect.bottom - 4f.dpToPx(context), hintPaint)
+            col == 0 && row == 0 -> { // Mic (speech-to-text)
+                drawIcon(canvas, micIcon, rect, 0.40f)
             }
             col == 0 && row == 1 -> { // Left arrow
                 textPaint.textSize = 20f.spToPx(context)
                 canvas.drawText("◀", cx, cy + 6f.dpToPx(context), textPaint)
             }
-            col == 0 && row == 2 -> { // Special key
-                textPaint.textSize = 18f.spToPx(context)
-                canvas.drawText(specialKey.tap, cx, cy + 2f.dpToPx(context), textPaint)
-                hintPaint.textSize = 8f.spToPx(context)
-                canvas.drawText("Misc", cx, rect.bottom - 4f.dpToPx(context), hintPaint)
-            }
-            col == 0 && row == 3 -> { // Mode
+            col == 0 && row == 2 -> { // Mode switch (123/ABC/ก)
                 textPaint.textSize = 14f.spToPx(context)
                 textPaint.color = accentColor
-                canvas.drawText("EN", cx, cy + 5f.dpToPx(context), textPaint)
+                canvas.drawText(modeLabel, cx, cy + 5f.dpToPx(context), textPaint)
                 textPaint.color = textColor
+            }
+            col == 0 && row == 3 -> { // Emoji (tap) + Special chars (flick)
+                drawIcon(canvas, emojiIcon, rect, 0.35f)
+                if (!isActive) {
+                    hintPaint.textSize = 8f.spToPx(context)
+                    if (emojiSpecialKey.up.isNotEmpty())
+                        canvas.drawText(emojiSpecialKey.up, cx, rect.top + 11f.dpToPx(context), hintPaint)
+                    if (emojiSpecialKey.down.isNotEmpty())
+                        canvas.drawText(emojiSpecialKey.down, cx, rect.bottom - 4f.dpToPx(context), hintPaint)
+                    if (emojiSpecialKey.left.isNotEmpty())
+                        canvas.drawText(emojiSpecialKey.left, rect.left + 10f.dpToPx(context), cy + 3f.dpToPx(context), hintPaint)
+                    if (emojiSpecialKey.right.isNotEmpty())
+                        canvas.drawText(toDisplayChar(emojiSpecialKey.right), rect.right - 10f.dpToPx(context), cy + 3f.dpToPx(context), hintPaint)
+                }
             }
             // Right column (col 4)
             col == 4 && row == 0 -> { // Backspace
@@ -238,12 +250,23 @@ class FlickKeyboardView @JvmOverloads constructor(
                 textPaint.textSize = 20f.spToPx(context)
                 canvas.drawText("▶", cx, cy + 6f.dpToPx(context), textPaint)
             }
-            col == 4 && row == 2 -> { // Enter
-                drawIcon(canvas, enterIcon, rect, 0.40f)
-            }
-            col == 4 && row == 3 -> { // Space
-                textPaint.textSize = 12f.spToPx(context)
+            col == 4 && row == 2 -> { // Space (tap) + Tone marks (flick)
+                textPaint.textSize = 11f.spToPx(context)
                 canvas.drawText("Space", cx, cy + 4f.dpToPx(context), textPaint)
+                if (!isActive) {
+                    hintPaint.textSize = 8f.spToPx(context)
+                    if (toneSpaceKey.up.isNotEmpty())
+                        canvas.drawText(toDisplayChar(toneSpaceKey.up), cx, rect.top + 11f.dpToPx(context), hintPaint)
+                    if (toneSpaceKey.down.isNotEmpty())
+                        canvas.drawText(toDisplayChar(toneSpaceKey.down), cx, rect.bottom - 4f.dpToPx(context), hintPaint)
+                    if (toneSpaceKey.left.isNotEmpty())
+                        canvas.drawText(toDisplayChar(toneSpaceKey.left), rect.left + 10f.dpToPx(context), cy + 3f.dpToPx(context), hintPaint)
+                    if (toneSpaceKey.right.isNotEmpty())
+                        canvas.drawText(toDisplayChar(toneSpaceKey.right), rect.right - 10f.dpToPx(context), cy + 3f.dpToPx(context), hintPaint)
+                }
+            }
+            col == 4 && row == 3 -> { // Enter
+                drawIcon(canvas, enterIcon, rect, 0.40f)
             }
         }
     }
@@ -322,6 +345,28 @@ class FlickKeyboardView @JvmOverloads constructor(
     }
 
     private fun handleKeyUp(col: Int, row: Int, direction: FlickDirection) {
+        // Space key: tap=space, flick=tone marks
+        if (col == 4 && row == 2) {
+            if (direction == FlickDirection.TAP) {
+                onSpace?.invoke()
+            } else {
+                val char = toneSpaceKey.charForDirection(direction)
+                if (char.isNotEmpty() && char != "Space") onCharacterSelected?.invoke(char)
+            }
+            return
+        }
+
+        // Emoji key: tap=emoji, flick=special Thai chars
+        if (col == 0 && row == 3) {
+            if (direction == FlickDirection.TAP) {
+                onEmojiPressed?.invoke()
+            } else {
+                val char = emojiSpecialKey.charForDirection(direction)
+                if (char.isNotEmpty()) onCharacterSelected?.invoke(char)
+            }
+            return
+        }
+
         // Character keys (cols 1-3)
         val flickKey = getFlickKeyAt(col, row)
         if (flickKey != null) {
@@ -334,12 +379,12 @@ class FlickKeyboardView @JvmOverloads constructor(
 
         // Utility keys
         when {
+            col == 0 && row == 0 -> onMicPressed?.invoke()
             col == 0 && row == 1 -> onCursorLeft?.invoke()
-            col == 0 && row == 3 -> onSpecialKey?.invoke("mode")
+            col == 0 && row == 2 -> onSpecialKey?.invoke("mode")
             col == 4 && row == 0 -> { /* backspace already handled */ }
             col == 4 && row == 1 -> onCursorRight?.invoke()
-            col == 4 && row == 2 -> onEnter?.invoke()
-            col == 4 && row == 3 -> onSpace?.invoke()
+            col == 4 && row == 3 -> onEnter?.invoke()
         }
     }
 
@@ -349,16 +394,16 @@ class FlickKeyboardView @JvmOverloads constructor(
             val index = row * 3 + (col - 1)
             return charKeys.getOrNull(index)
         }
-        // Tone key
-        if (col == 0 && row == 0) return toneKey
-        // Special key
-        if (col == 0 && row == 2) return specialKey
+        // Space key (col 4, row 2): flick for tone marks
+        if (col == 4 && row == 2) return toneSpaceKey
+        // Emoji key (col 0, row 3): flick for special chars
+        if (col == 0 && row == 3) return emojiSpecialKey
         return null
     }
 
     private fun showCrossPopup(key: FlickKey, col: Int, row: Int) {
         val location = IntArray(2)
-        getLocationOnScreen(location)
+        getLocationInWindow(location)
         val anchorX = location[0] + (colStarts[col] + colWidths[col] / 2).toInt()
         val anchorY = location[1] + (row * rowHeight).toInt()
         crossPopup.show(this, key, FlickDirection.TAP, anchorX, anchorY)
