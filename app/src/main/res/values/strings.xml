@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Thai Flick Keyboard</string>
+    <string name="ime_name">Thai Flick</string>
+    <string name="subtype_thai_flick">Thai Flick</string>
+
+    <string name="setup_title">Setup Thai Flick Keyboard</string>
+    <string name="step1_enable">Step 1: Enable Keyboard</string>
+    <string name="step1_desc">Enable Thai Flick Keyboard in your system settings</string>
+    <string name="step2_select">Step 2: Select Keyboard</string>
+    <string name="step2_desc">Choose Thai Flick as your active keyboard</string>
+    <string name="btn_enable_keyboard">Enable in Settings</string>
+    <string name="btn_select_keyboard">Select Keyboard</string>
+    <string name="keyboard_enabled">Keyboard is enabled</string>
+    <string name="keyboard_not_enabled">Keyboard is not enabled</string>
+
+    <string name="customize_layout">Customize Layout</string>
+    <string name="btn_customize">Customize Keys</string>
+    <string name="btn_reset_default">Reset to Default</string>
+    <string name="btn_save">Save</string>
+
+    <string name="edit_key_title">Edit Key</string>
+    <string name="label_tap">Tap</string>
+    <string name="label_left">Flick Left</string>
+    <string name="label_up">Flick Up</string>
+    <string name="label_right">Flick Right</string>
+    <string name="label_down">Flick Down</string>
+    <string name="label_color">Color</string>
+    <string name="label_hint">Hint</string>
+
+    <string name="settings_title">Settings</string>
+    <string name="pref_sensitivity">Flick Sensitivity</string>
+    <string name="pref_haptic">Haptic Feedback</string>
+    <string name="pref_sound">Key Sound</string>
+    <string name="pref_height">Keyboard Height</string>
+
+    <string name="reset_confirm_title">Reset Layout</string>
+    <string name="reset_confirm_message">Reset all keys to the default layout?</string>
+    <string name="cancel">Cancel</string>
+    <string name="ok">OK</string>
+</resources>
