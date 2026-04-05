@@ -12,7 +12,6 @@ import com.Jnx03.thaiflickkeyboard.model.KeyboardMode
 import com.Jnx03.thaiflickkeyboard.util.HapticHelper
 import com.Jnx03.thaiflickkeyboard.view.FlickKeyboardView
 import com.Jnx03.thaiflickkeyboard.view.SuggestionBarView
-import com.Jnx03.thaiflickkeyboard.view.UtilityBarView
 
 class ThaiFlickIMEService : InputMethodService(), SharedPreferences.OnSharedPreferenceChangeListener {
 
@@ -21,7 +20,6 @@ class ThaiFlickIMEService : InputMethodService(), SharedPreferences.OnSharedPref
     private lateinit var actionHandler: InputActionHandler
 
     private var keyboardView: FlickKeyboardView? = null
-    private var utilityBar: UtilityBarView? = null
     private var suggestionBar: SuggestionBarView? = null
     private var currentMode = KeyboardMode.THAI
 
@@ -37,9 +35,7 @@ class ThaiFlickIMEService : InputMethodService(), SharedPreferences.OnSharedPref
         val view = layoutInflater.inflate(R.layout.keyboard_container, null)
 
         suggestionBar = view.findViewById<SuggestionBarView>(R.id.suggestion_bar).apply {
-            onSuggestionSelected = { word ->
-                commitSuggestion(word)
-            }
+            onSuggestionSelected = { word -> commitSuggestion(word) }
         }
 
         keyboardView = view.findViewById<FlickKeyboardView>(R.id.keyboard_view).apply {
@@ -47,9 +43,7 @@ class ThaiFlickIMEService : InputMethodService(), SharedPreferences.OnSharedPref
             hapticEnabled = prefsManager.hapticEnabled
 
             onCharacterSelected = { char ->
-                if (prefsManager.hapticEnabled) {
-                    HapticHelper.performKeyPress(this)
-                }
+                if (prefsManager.hapticEnabled) HapticHelper.performKeyPress(this)
                 actionHandler.commitChar(char)
                 updateSuggestions()
             }
@@ -57,41 +51,28 @@ class ThaiFlickIMEService : InputMethodService(), SharedPreferences.OnSharedPref
             onSpecialKey = { key ->
                 when (key) {
                     "backspace" -> {
-                        if (prefsManager.hapticEnabled) {
-                            HapticHelper.performKeyPress(this)
-                        }
+                        if (prefsManager.hapticEnabled) HapticHelper.performKeyPress(this)
                         actionHandler.deleteBackward()
                         updateSuggestions()
                     }
                     "mode" -> switchMode()
                 }
             }
-        }
 
-        utilityBar = view.findViewById<UtilityBarView>(R.id.utility_bar).apply {
             onSpace = {
-                if (prefsManager.hapticEnabled) {
-                    HapticHelper.performKeyPress(this)
-                }
+                if (prefsManager.hapticEnabled) HapticHelper.performKeyPress(this)
                 actionHandler.sendSpace()
                 updateSuggestions()
             }
+
             onEnter = {
-                if (prefsManager.hapticEnabled) {
-                    HapticHelper.performKeyPress(this)
-                }
+                if (prefsManager.hapticEnabled) HapticHelper.performKeyPress(this)
                 actionHandler.sendEnter()
                 suggestionBar?.setSuggestions(emptyList())
             }
-            onLanguageSwitch = {
-                switchMode()
-            }
-            onCursorLeft = {
-                actionHandler.moveCursorLeft()
-            }
-            onCursorRight = {
-                actionHandler.moveCursorRight()
-            }
+
+            onCursorLeft = { actionHandler.moveCursorLeft() }
+            onCursorRight = { actionHandler.moveCursorRight() }
         }
 
         return view
@@ -109,17 +90,13 @@ class ThaiFlickIMEService : InputMethodService(), SharedPreferences.OnSharedPref
         }
         val ic = currentInputConnection ?: return
         val textBefore = ic.getTextBeforeCursor(20, 0)?.toString() ?: ""
-
-        // Extract the last word (text after last space)
         val lastWord = textBefore.split(" ", "\n").lastOrNull() ?: ""
 
         if (lastWord.isEmpty()) {
             suggestionBar?.setSuggestions(emptyList())
             return
         }
-
-        val suggestions = ThaiWordList.getSuggestions(lastWord, 3)
-        suggestionBar?.setSuggestions(suggestions)
+        suggestionBar?.setSuggestions(ThaiWordList.getSuggestions(lastWord, 3))
     }
 
     private fun commitSuggestion(word: String) {
@@ -127,7 +104,6 @@ class ThaiFlickIMEService : InputMethodService(), SharedPreferences.OnSharedPref
         val textBefore = ic.getTextBeforeCursor(20, 0)?.toString() ?: ""
         val lastWord = textBefore.split(" ", "\n").lastOrNull() ?: ""
 
-        // Delete the typed prefix and commit the full word
         if (lastWord.isNotEmpty()) {
             ic.deleteSurroundingText(lastWord.length, 0)
         }
