@@ -5,6 +5,11 @@
     android:orientation="vertical"
     android:background="#1C1C1E">
 
+    <com.Jnx03.thaiflickkeyboard.view.ToolbarView
+        android:id="@+id/toolbar_view"
+        android:layout_width="match_parent"
+        android:layout_height="38dp" />
+
     <com.Jnx03.thaiflickkeyboard.view.SuggestionBarView
         android:id="@+id/suggestion_bar"
         android:layout_width="match_parent"

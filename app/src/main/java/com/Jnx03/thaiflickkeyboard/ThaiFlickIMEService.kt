@@ -20,6 +20,7 @@ import com.Jnx03.thaiflickkeyboard.util.HapticHelper
 import com.Jnx03.thaiflickkeyboard.view.FlickKeyboardView
 import com.Jnx03.thaiflickkeyboard.view.QwertyKeyboardView
 import com.Jnx03.thaiflickkeyboard.view.SuggestionBarView
+import com.Jnx03.thaiflickkeyboard.view.ToolbarView
 
 class ThaiFlickIMEService : InputMethodService(), SharedPreferences.OnSharedPreferenceChangeListener {
 
@@ -45,6 +46,25 @@ class ThaiFlickIMEService : InputMethodService(), SharedPreferences.OnSharedPref
 
     override fun onCreateInputView(): View {
         val view = layoutInflater.inflate(R.layout.keyboard_container, null)
+
+        view.findViewById<ToolbarView>(R.id.toolbar_view).apply {
+            onSettings = {
+                val intent = android.content.Intent(this@ThaiFlickIMEService, com.Jnx03.thaiflickkeyboard.settings.SettingsActivity::class.java)
+                intent.addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK)
+                startActivity(intent)
+            }
+            onMic = { startSpeechRecognition() }
+            onEmoji = { showSystemEmoji() }
+            onClipboard = {
+                // Paste from clipboard
+                val cm = getSystemService(CLIPBOARD_SERVICE) as android.content.ClipboardManager
+                val clip = cm.primaryClip
+                if (clip != null && clip.itemCount > 0) {
+                    val text = clip.getItemAt(0).text
+                    if (!text.isNullOrEmpty()) currentInputConnection?.commitText(text, 1)
+                }
+            }
+        }
 
         suggestionBar = view.findViewById<SuggestionBarView>(R.id.suggestion_bar).apply {
             onSuggestionSelected = { word -> commitSuggestion(word) }
