@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@color/keyboard_background">
+
+    <com.Jnx03.thaiflickkeyboard.view.FlickKeyboardView
+        android:id="@+id/keyboard_view"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <com.Jnx03.thaiflickkeyboard.view.UtilityBarView
+        android:id="@+id/utility_bar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/utility_bar_height"
+        android:background="@color/utility_bar_background" />
+
+</LinearLayout>
