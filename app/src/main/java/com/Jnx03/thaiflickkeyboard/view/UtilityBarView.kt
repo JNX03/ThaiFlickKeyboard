@@ -33,10 +33,10 @@ class UtilityBarView @JvmOverloads constructor(
     private var isTouching = false
 
     private val bgPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        color = Color.parseColor("#2a2a4a")
+        color = Color.parseColor("#3c3c3c")
     }
     private val activeBgPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        color = Color.parseColor("#3a3a5a")
+        color = Color.parseColor("#4a4a4a")
     }
     private val textPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         color = Color.WHITE
