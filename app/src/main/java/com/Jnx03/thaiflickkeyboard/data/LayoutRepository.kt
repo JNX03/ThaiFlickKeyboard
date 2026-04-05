@@ -21,15 +21,31 @@ class LayoutRepository(context: Context) {
             try {
                 gson.fromJson(json, KeyboardLayout::class.java)
             } catch (e: Exception) {
-                KeyboardLayout.default()
+                loadPresetLayout()
             }
         } else {
-            KeyboardLayout.default()
+            loadPresetLayout()
         }
     }
 
+    fun loadPresetLayout(): KeyboardLayout {
+        val presetName = prefs.getString(KEY_PRESET, null)
+        return if (presetName != null) {
+            KeyboardLayout.fromPresetName(presetName)
+        } else {
+            KeyboardLayout.optimizedCenter()
+        }
+    }
+
+    fun setPreset(presetName: String) {
+        prefs.edit()
+            .putString(KEY_PRESET, presetName)
+            .remove(KEY_LAYOUT)
+            .apply()
+    }
+
     fun resetToDefault() {
-        prefs.edit().remove(KEY_LAYOUT).apply()
+        prefs.edit().remove(KEY_LAYOUT).remove(KEY_PRESET).apply()
     }
 
     fun registerChangeListener(listener: SharedPreferences.OnSharedPreferenceChangeListener) {
@@ -42,5 +58,6 @@ class LayoutRepository(context: Context) {
 
     companion object {
         private const val KEY_LAYOUT = "custom_keyboard_layout"
+        private const val KEY_PRESET = "selected_preset"
     }
 }
