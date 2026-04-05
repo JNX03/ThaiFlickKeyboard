@@ -1,9 +1,15 @@
 package com.Jnx03.thaiflickkeyboard
 
+import android.content.Intent
 import android.content.SharedPreferences
 import android.inputmethodservice.InputMethodService
+import android.os.Bundle
+import android.speech.RecognitionListener
+import android.speech.RecognizerIntent
+import android.speech.SpeechRecognizer
 import android.view.View
 import android.view.inputmethod.EditorInfo
+import android.widget.Toast
 import com.Jnx03.thaiflickkeyboard.data.LayoutRepository
 import com.Jnx03.thaiflickkeyboard.data.PreferencesManager
 import com.Jnx03.thaiflickkeyboard.data.ThaiWordList
@@ -22,6 +28,9 @@ class ThaiFlickIMEService : InputMethodService(), SharedPreferences.OnSharedPref
     private var keyboardView: FlickKeyboardView? = null
     private var suggestionBar: SuggestionBarView? = null
     private var currentMode = KeyboardMode.THAI
+
+    private var speechRecognizer: SpeechRecognizer? = null
+    private var isSpeechListening = false
 
     override fun onCreate() {
         super.onCreate()
@@ -73,8 +82,12 @@ class ThaiFlickIMEService : InputMethodService(), SharedPreferences.OnSharedPref
 
             onCursorLeft = { actionHandler.moveCursorLeft() }
             onCursorRight = { actionHandler.moveCursorRight() }
+
+            onMicPressed = { startSpeechRecognition() }
+            onEmojiPressed = { switchToEmoji() }
         }
 
+        updateModeLabel()
         return view
     }
 
@@ -116,6 +129,7 @@ class ThaiFlickIMEService : InputMethodService(), SharedPreferences.OnSharedPref
             KeyboardMode.THAI -> layoutRepository.loadLayout()
             KeyboardMode.ENGLISH -> KeyboardLayout.english()
             KeyboardMode.NUMBERS -> KeyboardLayout.numbers()
+            KeyboardMode.EMOJI -> KeyboardLayout.emoji()
         }
     }
 
@@ -124,9 +138,81 @@ class ThaiFlickIMEService : InputMethodService(), SharedPreferences.OnSharedPref
             KeyboardMode.THAI -> KeyboardMode.ENGLISH
             KeyboardMode.ENGLISH -> KeyboardMode.NUMBERS
             KeyboardMode.NUMBERS -> KeyboardMode.THAI
+            KeyboardMode.EMOJI -> KeyboardMode.THAI
         }
         keyboardView?.layout = loadLayoutForCurrentMode()
+        updateModeLabel()
         updateSuggestions()
+    }
+
+    private fun switchToEmoji() {
+        currentMode = KeyboardMode.EMOJI
+        keyboardView?.layout = loadLayoutForCurrentMode()
+        updateModeLabel()
+        updateSuggestions()
+    }
+
+    private fun updateModeLabel() {
+        keyboardView?.modeLabel = when (currentMode) {
+            KeyboardMode.THAI -> "123"
+            KeyboardMode.ENGLISH -> "ก"
+            KeyboardMode.NUMBERS -> "ABC"
+            KeyboardMode.EMOJI -> "ก"
+        }
+    }
+
+    // ── Speech-to-Text ──
+
+    private fun startSpeechRecognition() {
+        if (isSpeechListening) {
+            speechRecognizer?.stopListening()
+            isSpeechListening = false
+            return
+        }
+
+        if (!SpeechRecognizer.isRecognitionAvailable(this)) {
+            Toast.makeText(this, "Speech recognition not available", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        if (speechRecognizer == null) {
+            speechRecognizer = SpeechRecognizer.createSpeechRecognizer(this)
+            speechRecognizer?.setRecognitionListener(object : RecognitionListener {
+                override fun onReadyForSpeech(params: Bundle?) {}
+                override fun onBeginningOfSpeech() {}
+                override fun onRmsChanged(rmsdB: Float) {}
+                override fun onBufferReceived(buffer: ByteArray?) {}
+                override fun onEndOfSpeech() { isSpeechListening = false }
+                override fun onError(error: Int) { isSpeechListening = false }
+                override fun onPartialResults(partialResults: Bundle?) {
+                    val matches = partialResults?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
+                    // Partial results could be shown in suggestion bar if desired
+                }
+                override fun onEvent(eventType: Int, params: Bundle?) {}
+                override fun onResults(results: Bundle?) {
+                    val matches = results?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
+                    if (!matches.isNullOrEmpty()) {
+                        currentInputConnection?.commitText(matches[0], 1)
+                        updateSuggestions()
+                    }
+                    isSpeechListening = false
+                }
+            })
+        }
+
+        val lang = if (currentMode == KeyboardMode.THAI || currentMode == KeyboardMode.EMOJI) "th-TH" else "en-US"
+        val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
+            putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
+            putExtra(RecognizerIntent.EXTRA_LANGUAGE, lang)
+            putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS, true)
+        }
+
+        try {
+            speechRecognizer?.startListening(intent)
+            isSpeechListening = true
+        } catch (e: SecurityException) {
+            Toast.makeText(this, "Microphone permission needed — enable in Settings", Toast.LENGTH_LONG).show()
+        }
     }
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
@@ -137,6 +223,8 @@ class ThaiFlickIMEService : InputMethodService(), SharedPreferences.OnSharedPref
     }
 
     override fun onDestroy() {
+        speechRecognizer?.destroy()
+        speechRecognizer = null
         layoutRepository.unregisterChangeListener(this)
         super.onDestroy()
     }

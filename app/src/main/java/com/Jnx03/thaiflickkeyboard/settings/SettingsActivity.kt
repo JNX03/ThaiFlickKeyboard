@@ -1,12 +1,17 @@
 package com.Jnx03.thaiflickkeyboard.settings
 
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.view.inputmethod.InputMethodManager
 import android.widget.RadioGroup
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import com.Jnx03.thaiflickkeyboard.R
 import com.Jnx03.thaiflickkeyboard.data.LayoutRepository
 import com.Jnx03.thaiflickkeyboard.data.PreferencesManager
@@ -66,6 +71,18 @@ class SettingsActivity : AppCompatActivity() {
         switchSound.isChecked = prefsManager.soundEnabled
         switchSound.setOnCheckedChangeListener { _, isChecked ->
             prefsManager.soundEnabled = isChecked
+        }
+
+        // Request microphone permission for speech-to-text
+        requestMicPermissionIfNeeded()
+    }
+
+    private fun requestMicPermissionIfNeeded() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M &&
+            ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO)
+            != PackageManager.PERMISSION_GRANTED
+        ) {
+            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.RECORD_AUDIO), 100)
         }
     }
 
