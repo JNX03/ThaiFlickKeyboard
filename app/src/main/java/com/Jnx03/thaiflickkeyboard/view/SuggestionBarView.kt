@@ -42,6 +42,7 @@ class SuggestionBarView @JvmOverloads constructor(
     private var flickBalloonChar: String? = null
     private var flickBalloonCenterX = 0f
     private var flickBalloonWidth = 0f
+    private var flickBalloonHeight = 0f
     private var flickBalloonActive = false
     private val flickBgPaint = Paint(Paint.ANTI_ALIAS_FLAG)
     private val flickTextPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
@@ -58,7 +59,7 @@ class SuggestionBarView @JvmOverloads constructor(
         invalidate()
     }
 
-    fun showFlickBalloon(displayChar: String?, centerX: Float, width: Float, isActive: Boolean) {
+    fun showFlickBalloon(displayChar: String?, centerX: Float, width: Float, balloonH: Float, isActive: Boolean) {
         if (displayChar == null) {
             if (flickBalloonChar != null) {
                 flickBalloonChar = null
@@ -69,6 +70,7 @@ class SuggestionBarView @JvmOverloads constructor(
         flickBalloonChar = displayChar
         flickBalloonCenterX = centerX
         flickBalloonWidth = width
+        flickBalloonHeight = balloonH
         flickBalloonActive = isActive
         invalidate()
     }
@@ -109,10 +111,10 @@ class SuggestionBarView @JvmOverloads constructor(
     }
 
     private fun drawFlickBalloonOverlay(canvas: Canvas, displayChar: String) {
-        val balloonH = height.toFloat() - flickPad * 2
+        val balloonH = if (flickBalloonHeight > 0f) flickBalloonHeight else (height.toFloat() - flickPad * 2)
         val balloonW = flickBalloonWidth
         val left = flickBalloonCenterX - balloonW / 2
-        val top = flickPad
+        val top = height.toFloat() - balloonH - flickPad
         flickRect.set(left, top, left + balloonW, top + balloonH)
 
         flickBgPaint.color = if (flickBalloonActive) Color.parseColor("#4285f4") else Color.parseColor("#3A3A3C")

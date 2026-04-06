@@ -125,8 +125,8 @@ class ThaiFlickIMEService : InputMethodService(), SharedPreferences.OnSharedPref
             onCursorRight = { actionHandler.moveCursorRight() }
             onMicPressed = { startSpeechRecognition() }
             onEmojiPressed = { handleEmojiOrShift() }
-            onTopRowUpBalloon = { displayChar, centerX, width, isActive ->
-                suggestionBar?.showFlickBalloon(displayChar, centerX, width, isActive)
+            onTopRowUpBalloon = { displayChar, centerX, width, height, isActive ->
+                suggestionBar?.showFlickBalloon(displayChar, centerX, width, height, isActive)
             }
         }
 

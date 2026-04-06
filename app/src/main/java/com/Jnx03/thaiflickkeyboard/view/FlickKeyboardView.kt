@@ -51,7 +51,7 @@ class FlickKeyboardView @JvmOverloads constructor(
     var onCursorRight: (() -> Unit)? = null
     var onMicPressed: (() -> Unit)? = null
     var onEmojiPressed: (() -> Unit)? = null
-    var onTopRowUpBalloon: ((displayChar: String?, centerX: Float, balloonWidth: Float, isActive: Boolean) -> Unit)? = null
+    var onTopRowUpBalloon: ((displayChar: String?, centerX: Float, balloonWidth: Float, balloonHeight: Float, isActive: Boolean) -> Unit)? = null
     var showShiftIcon: Boolean = false
         set(value) { field = value; invalidate() }
     var hapticEnabled: Boolean = true
@@ -275,9 +275,11 @@ class FlickKeyboardView @JvmOverloads constructor(
         val balloonW = keyW
         val balloonH = keyH
 
-        // Draw UP balloon (same size for all rows, clamped inside view)
-        drawBalloon(canvas, flickKey.up, FlickDirection.UP,
-            keyCx - balloonW / 2, (keyY - balloonH - pad).coerceAtLeast(0f), balloonW, balloonH)
+        // Draw UP balloon -- skip for row 0 (delegated to suggestion bar at same size)
+        if (activeRow != 0) {
+            drawBalloon(canvas, flickKey.up, FlickDirection.UP,
+                keyCx - balloonW / 2, keyY - balloonH - pad, balloonW, balloonH)
+        }
         drawBalloon(canvas, flickKey.down, FlickDirection.DOWN,
             keyCx - balloonW / 2, keyY + keyH + pad, balloonW, balloonH)
         drawBalloon(canvas, flickKey.left, FlickDirection.LEFT,
@@ -359,7 +361,7 @@ class FlickKeyboardView @JvmOverloads constructor(
                 isTouching = false
                 currentDirection = FlickDirection.TAP
                 gestureDetector.reset()
-                onTopRowUpBalloon?.invoke(null, 0f, 0f, false)
+                onTopRowUpBalloon?.invoke(null, 0f, 0f, 0f, false)
                 invalidate()
                 return true
             }
@@ -370,7 +372,7 @@ class FlickKeyboardView @JvmOverloads constructor(
                 isTouching = false
                 currentDirection = FlickDirection.TAP
                 gestureDetector.reset()
-                onTopRowUpBalloon?.invoke(null, 0f, 0f, false)
+                onTopRowUpBalloon?.invoke(null, 0f, 0f, 0f, false)
                 invalidate()
                 return true
             }
@@ -416,7 +418,21 @@ class FlickKeyboardView @JvmOverloads constructor(
     }
 
     private fun notifyTopRowBalloon() {
-        onTopRowUpBalloon?.invoke(null, 0f, 0f, false)
+        if (activeRow != 0 || activeCol !in 1..3 || currentDirection == FlickDirection.TAP) {
+            onTopRowUpBalloon?.invoke(null, 0f, 0f, 0f, false)
+            return
+        }
+        val flickKey = getFlickKeyAt(activeCol, activeRow) ?: return
+        val upChar = flickKey.up
+        if (upChar.isEmpty()) {
+            onTopRowUpBalloon?.invoke(null, 0f, 0f, 0f, false)
+            return
+        }
+        val keyX = colStarts[activeCol] + pad
+        val keyW = colWidths[activeCol] - pad * 2
+        val keyH = rowHeight - pad * 2
+        val keyCx = keyX + keyW / 2
+        onTopRowUpBalloon?.invoke(toDisplayChar(upChar), keyCx, keyW, keyH, currentDirection == FlickDirection.UP)
     }
 
     private fun getFlickKeyAt(col: Int, row: Int): FlickKey? {
