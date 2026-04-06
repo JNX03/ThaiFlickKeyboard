@@ -19,10 +19,10 @@ android {
 
     signingConfigs {
         create("release") {
-            storeFile = file(System.getProperty("user.home") + "/.android/debug.keystore")
-            storePassword = "android"
-            keyAlias = "androiddebugkey"
-            keyPassword = "android"
+            storeFile = file(System.getProperty("user.home") + "/.android/upload-keystore.jks")
+            storePassword = "thaiflick2026"
+            keyAlias = "upload"
+            keyPassword = "thaiflick2026"
         }
     }
     buildTypes {
