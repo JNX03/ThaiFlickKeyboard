@@ -61,7 +61,7 @@ class FlickKeyboardView @JvmOverloads constructor(
     private var charKeys: List<FlickKey> = emptyList()
 
     // Space key: tap=space, flick=tone marks (left=่, up=้, right=๊)
-    private val toneSpaceKey = FlickKey("space_tone", "Space", "่", "้", "๊", "", "", "")
+    private val toneSpaceKey = FlickKey("space_tone", "Space", "่", "้", "", "๊", "", "")
     // Emoji key: tap=emoji, flick=special Thai chars
     private val emojiSpecialKey = FlickKey("emoji_special", "😀", "ๆ", "ฯ", "็", "๋", "", "")
 
@@ -76,8 +76,8 @@ class FlickKeyboardView @JvmOverloads constructor(
     // Grid
     private val COLS = 5
     private val ROWS = 4
-    private val utilColRatio = 0.13f
-    private val charColRatio = (1f - 2 * utilColRatio) / 3f
+    private val utilColRatio = 0.20f
+    private val charColRatio = 0.20f
 
     private var colWidths = FloatArray(COLS)
     private var colStarts = FloatArray(COLS)
