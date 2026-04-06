@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
+import android.graphics.RectF
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
@@ -37,14 +38,50 @@ class SuggestionBarView @JvmOverloads constructor(
         strokeWidth = 1f.dpToPx(context)
     }
 
+    // Flick balloon overlay state
+    private var flickBalloonChar: String? = null
+    private var flickBalloonCenterX = 0f
+    private var flickBalloonWidth = 0f
+    private var flickBalloonActive = false
+    private val flickBgPaint = Paint(Paint.ANTI_ALIAS_FLAG)
+    private val flickTextPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        color = Color.WHITE
+        textAlign = Paint.Align.CENTER
+        textSize = 22f.spToPx(context)
+    }
+    private val flickRect = RectF()
+    private val flickCornerR = 10f.dpToPx(context)
+    private val flickPad = 3f.dpToPx(context)
+
     fun setSuggestions(words: List<String>) {
         suggestions = words.take(3)
+        invalidate()
+    }
+
+    fun showFlickBalloon(displayChar: String?, centerX: Float, width: Float, isActive: Boolean) {
+        if (displayChar == null) {
+            if (flickBalloonChar != null) {
+                flickBalloonChar = null
+                invalidate()
+            }
+            return
+        }
+        flickBalloonChar = displayChar
+        flickBalloonCenterX = centerX
+        flickBalloonWidth = width
+        flickBalloonActive = isActive
         invalidate()
     }
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
         canvas.drawRect(0f, 0f, width.toFloat(), height.toFloat(), bgPaint)
+
+        val balloonChar = flickBalloonChar
+        if (balloonChar != null) {
+            drawFlickBalloonOverlay(canvas, balloonChar)
+            return
+        }
 
         if (suggestions.isEmpty()) return
 
@@ -69,6 +106,22 @@ class SuggestionBarView @JvmOverloads constructor(
                 canvas.drawLine(right, height * 0.2f, right, height * 0.8f, dividerPaint)
             }
         }
+    }
+
+    private fun drawFlickBalloonOverlay(canvas: Canvas, displayChar: String) {
+        val balloonH = height.toFloat() - flickPad * 2
+        val balloonW = flickBalloonWidth
+        val left = flickBalloonCenterX - balloonW / 2
+        val top = flickPad
+        flickRect.set(left, top, left + balloonW, top + balloonH)
+
+        flickBgPaint.color = if (flickBalloonActive) Color.parseColor("#4285f4") else Color.parseColor("#3A3A3C")
+        canvas.drawRoundRect(flickRect, flickCornerR, flickCornerR, flickBgPaint)
+
+        flickTextPaint.isFakeBoldText = flickBalloonActive
+        canvas.drawText(displayChar, flickRect.centerX(),
+            flickRect.centerY() + flickTextPaint.textSize / 3, flickTextPaint)
+        flickTextPaint.isFakeBoldText = false
     }
 
     override fun onTouchEvent(event: MotionEvent): Boolean {

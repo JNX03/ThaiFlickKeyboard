@@ -125,6 +125,9 @@ class ThaiFlickIMEService : InputMethodService(), SharedPreferences.OnSharedPref
             onCursorRight = { actionHandler.moveCursorRight() }
             onMicPressed = { startSpeechRecognition() }
             onEmojiPressed = { showSystemEmoji() }
+            onTopRowUpBalloon = { displayChar, centerX, width, isActive ->
+                suggestionBar?.showFlickBalloon(displayChar, centerX, width, isActive)
+            }
         }
 
         qwertyView = view.findViewById<QwertyKeyboardView>(R.id.qwerty_view).apply {
