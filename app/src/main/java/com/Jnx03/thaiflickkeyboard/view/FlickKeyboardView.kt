@@ -275,9 +275,9 @@ class FlickKeyboardView @JvmOverloads constructor(
         val balloonW = keyW
         val balloonH = keyH
 
-        // Draw UP balloon (same size for all rows including row 0)
+        // Draw UP balloon (same size for all rows, clamped inside view)
         drawBalloon(canvas, flickKey.up, FlickDirection.UP,
-            keyCx - balloonW / 2, keyY - balloonH - pad, balloonW, balloonH)
+            keyCx - balloonW / 2, (keyY - balloonH - pad).coerceAtLeast(0f), balloonW, balloonH)
         drawBalloon(canvas, flickKey.down, FlickDirection.DOWN,
             keyCx - balloonW / 2, keyY + keyH + pad, balloonW, balloonH)
         drawBalloon(canvas, flickKey.left, FlickDirection.LEFT,
