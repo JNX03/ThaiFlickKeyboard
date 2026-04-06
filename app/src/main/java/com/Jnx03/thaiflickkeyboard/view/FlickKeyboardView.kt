@@ -142,9 +142,11 @@ class FlickKeyboardView @JvmOverloads constructor(
         }
     }
 
+    private val bgFillPaint = Paint().apply { color = kbBg }
+
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
-        canvas.drawColor(kbBg)
+        canvas.drawRect(0f, 0f, width.toFloat(), height.toFloat(), bgFillPaint)
 
         for (row in 0 until ROWS) {
             for (col in 0 until COLS) {
