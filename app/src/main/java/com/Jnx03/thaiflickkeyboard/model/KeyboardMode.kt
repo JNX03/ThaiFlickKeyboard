@@ -1,5 +1,5 @@
 package com.Jnx03.thaiflickkeyboard.model
 
 enum class KeyboardMode {
-    THAI, ENGLISH, NUMBERS, EMOJI
+    THAI, THAI_SHIFT, ENGLISH, NUMBERS, EMOJI
 }

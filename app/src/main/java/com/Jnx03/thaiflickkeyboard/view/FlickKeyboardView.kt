@@ -52,14 +52,16 @@ class FlickKeyboardView @JvmOverloads constructor(
     var onMicPressed: (() -> Unit)? = null
     var onEmojiPressed: (() -> Unit)? = null
     var onTopRowUpBalloon: ((displayChar: String?, centerX: Float, balloonWidth: Float, isActive: Boolean) -> Unit)? = null
+    var showShiftIcon: Boolean = false
+        set(value) { field = value; invalidate() }
     var hapticEnabled: Boolean = true
     var modeLabel: String = "123"
         set(value) { field = value; invalidate() }
 
     private var charKeys: List<FlickKey> = emptyList()
 
-    // Space key: tap=space, flick=tone marks
-    private val toneSpaceKey = FlickKey("space_tone", "Space", "่", "์", "้", "๊", "", "")
+    // Space key: tap=space, flick=tone marks (left=่, up=้, right=๊)
+    private val toneSpaceKey = FlickKey("space_tone", "Space", "่", "้", "๊", "", "", "")
     // Emoji key: tap=emoji, flick=special Thai chars
     private val emojiSpecialKey = FlickKey("emoji_special", "😀", "ๆ", "ฯ", "็", "๋", "", "")
 
@@ -226,7 +228,14 @@ class FlickKeyboardView @JvmOverloads constructor(
                 textPaint.textSize = 14f.spToPx(context)
                 canvas.drawText(modeLabel, cx, cy + 5f.dpToPx(context), textPaint)
             }
-            col == 0 && row == 3 -> drawIcon(canvas, emojiIcon, rect, 0.35f)
+            col == 0 && row == 3 -> {
+                if (showShiftIcon) {
+                    textPaint.textSize = 20f.spToPx(context)
+                    canvas.drawText("⇧", cx, cy + 6f.dpToPx(context), textPaint)
+                } else {
+                    drawIcon(canvas, emojiIcon, rect, 0.35f)
+                }
+            }
             col == 4 && row == 0 -> drawIcon(canvas, backspaceIcon, rect, 0.40f)
             col == 4 && row == 1 -> {
                 textPaint.textSize = 18f.spToPx(context)
@@ -274,9 +283,9 @@ class FlickKeyboardView @JvmOverloads constructor(
         drawBalloon(canvas, flickKey.down, FlickDirection.DOWN,
             keyCx - balloonW / 2, keyY + keyH + pad, balloonW, balloonH)
         drawBalloon(canvas, flickKey.left, FlickDirection.LEFT,
-            keyX - balloonW - pad, keyCy - balloonH / 2, balloonW, balloonH)
+            (keyX - balloonW - pad).coerceAtLeast(pad), keyCy - balloonH / 2, balloonW, balloonH)
         drawBalloon(canvas, flickKey.right, FlickDirection.RIGHT,
-            keyX + keyW + pad, keyCy - balloonH / 2, balloonW, balloonH)
+            (keyX + keyW + pad).coerceAtMost(width - balloonW - pad), keyCy - balloonH / 2, balloonW, balloonH)
     }
 
     private fun drawBalloon(canvas: Canvas, char: String, dir: FlickDirection,

@@ -124,7 +124,7 @@ class ThaiFlickIMEService : InputMethodService(), SharedPreferences.OnSharedPref
             onCursorLeft = { actionHandler.moveCursorLeft() }
             onCursorRight = { actionHandler.moveCursorRight() }
             onMicPressed = { startSpeechRecognition() }
-            onEmojiPressed = { showSystemEmoji() }
+            onEmojiPressed = { handleEmojiOrShift() }
             onTopRowUpBalloon = { displayChar, centerX, width, isActive ->
                 suggestionBar?.showFlickBalloon(displayChar, centerX, width, isActive)
             }
@@ -156,6 +156,7 @@ class ThaiFlickIMEService : InputMethodService(), SharedPreferences.OnSharedPref
         }
 
         updateModeLabel()
+        updateShiftIcon()
         showKeyboardForMode()
         return view
     }
@@ -205,9 +206,10 @@ class ThaiFlickIMEService : InputMethodService(), SharedPreferences.OnSharedPref
 
     private fun switchMode() {
         currentMode = when (currentMode) {
-            KeyboardMode.THAI -> KeyboardMode.ENGLISH
-            KeyboardMode.ENGLISH -> KeyboardMode.NUMBERS
-            KeyboardMode.NUMBERS -> KeyboardMode.THAI
+            KeyboardMode.THAI -> KeyboardMode.NUMBERS
+            KeyboardMode.THAI_SHIFT -> KeyboardMode.NUMBERS
+            KeyboardMode.NUMBERS -> KeyboardMode.ENGLISH
+            KeyboardMode.ENGLISH -> KeyboardMode.THAI
             KeyboardMode.EMOJI -> KeyboardMode.THAI
         }
         when (currentMode) {
@@ -216,15 +218,35 @@ class ThaiFlickIMEService : InputMethodService(), SharedPreferences.OnSharedPref
             else -> {}
         }
         updateModeLabel()
+        updateShiftIcon()
         showKeyboardForMode()
         updateSuggestions()
+    }
+
+    private fun handleEmojiOrShift() {
+        if (currentMode == KeyboardMode.THAI) {
+            currentMode = KeyboardMode.THAI_SHIFT
+            keyboardView?.layout = KeyboardLayout.thaiShift()
+            updateShiftIcon()
+        } else if (currentMode == KeyboardMode.THAI_SHIFT) {
+            currentMode = KeyboardMode.THAI
+            keyboardView?.layout = layoutRepository.loadLayout()
+            updateShiftIcon()
+        } else {
+            showSystemEmoji()
+        }
+    }
+
+    private fun updateShiftIcon() {
+        keyboardView?.showShiftIcon = (currentMode == KeyboardMode.THAI || currentMode == KeyboardMode.THAI_SHIFT)
     }
 
     private fun updateModeLabel() {
         keyboardView?.modeLabel = when (currentMode) {
             KeyboardMode.THAI -> "123"
-            KeyboardMode.ENGLISH -> "ก"
+            KeyboardMode.THAI_SHIFT -> "123"
             KeyboardMode.NUMBERS -> "ABC"
+            KeyboardMode.ENGLISH -> "ก"
             KeyboardMode.EMOJI -> "ก"
         }
     }
@@ -232,7 +254,7 @@ class ThaiFlickIMEService : InputMethodService(), SharedPreferences.OnSharedPref
     // ── Suggestions ──
 
     private fun updateSuggestions() {
-        if (currentMode != KeyboardMode.THAI) {
+        if (currentMode != KeyboardMode.THAI && currentMode != KeyboardMode.THAI_SHIFT) {
             suggestionBar?.setSuggestions(emptyList())
             return
         }

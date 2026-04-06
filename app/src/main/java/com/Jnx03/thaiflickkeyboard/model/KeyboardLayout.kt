@@ -281,6 +281,31 @@ data class KeyboardLayout(
             return KeyboardLayout("English", keys)
         }
 
+        fun thaiShift(): KeyboardLayout {
+            val keys = listOf(
+                // Row 0: Missing Thai chars + Thai numerals
+                FlickKey("ts1", "์", "ฌ", "ฺ", "๋", "็", "#a855f7", "Missing"),
+                FlickKey("ts2", "๑", "๒", "๓", "๔", "๕", "#6366f1", "Thai 1-5"),
+                FlickKey("ts3", "๖", "๗", "๘", "๙", "๐", "#6366f1", "Thai 6-0"),
+
+                // Row 1: Numbers
+                FlickKey("ts4", "1", "2", "3", "4", "5", "#22c55e", "Num 1-5"),
+                FlickKey("ts5", "6", "7", "8", "9", "0", "#22c55e", "Num 6-0"),
+                FlickKey("ts6", "฿", "$", "€", "£", "¥", "#f59e0b", "Currency"),
+
+                // Row 2: Punctuation
+                FlickKey("ts7", ".", ",", "!", "?", ":", "#ec4899", "Punct"),
+                FlickKey("ts8", "\"", "'", ";", "/", "\\", "#ec4899", "Punct2"),
+                FlickKey("ts9", "(", ")", "[", "]", "-", "#ec4899", "Brackets"),
+
+                // Row 3: Symbols
+                FlickKey("ts10", "@", "#", "%", "&", "*", "#64748b", "Symbols"),
+                FlickKey("ts11", "+", "=", "<", ">", "^", "#64748b", "Math"),
+                FlickKey("ts12", "_", "~", "`", "{", "}", "#64748b", "More")
+            )
+            return KeyboardLayout("Thai Shift", keys)
+        }
+
         fun numbers(): KeyboardLayout {
             val keys = listOf(
                 FlickKey("n1", "1", "", "", "", "", "#6366f1", ""),
