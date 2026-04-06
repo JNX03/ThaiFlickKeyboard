@@ -12,6 +12,8 @@ import android.speech.SpeechRecognizer
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import android.widget.Toast
 import com.Jnx03.thaiflickkeyboard.data.ClipboardHistoryManager
 import com.Jnx03.thaiflickkeyboard.data.LayoutRepository
@@ -67,6 +69,13 @@ class ThaiFlickIMEService : InputMethodService(), SharedPreferences.OnSharedPref
 
     override fun onCreateInputView(): View {
         val view = layoutInflater.inflate(R.layout.keyboard_container, null)
+
+        // Push keyboard above the navigation bar
+        ViewCompat.setOnApplyWindowInsetsListener(view) { v, insets ->
+            val navBarHeight = insets.getInsets(WindowInsetsCompat.Type.systemBars()).bottom
+            v.setPadding(v.paddingLeft, v.paddingTop, v.paddingRight, navBarHeight)
+            insets
+        }
 
         // Toolbar
         view.findViewById<ToolbarView>(R.id.toolbar_view).apply {
