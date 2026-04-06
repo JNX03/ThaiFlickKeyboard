@@ -275,11 +275,9 @@ class FlickKeyboardView @JvmOverloads constructor(
         val balloonW = keyW
         val balloonH = keyH
 
-        // Draw UP balloon -- skip for row 0 (delegated to suggestion bar)
-        if (activeRow != 0) {
-            drawBalloon(canvas, flickKey.up, FlickDirection.UP,
-                keyCx - balloonW / 2, keyY - balloonH - pad, balloonW, balloonH)
-        }
+        // Draw UP balloon (same size for all rows including row 0)
+        drawBalloon(canvas, flickKey.up, FlickDirection.UP,
+            keyCx - balloonW / 2, keyY - balloonH - pad, balloonW, balloonH)
         drawBalloon(canvas, flickKey.down, FlickDirection.DOWN,
             keyCx - balloonW / 2, keyY + keyH + pad, balloonW, balloonH)
         drawBalloon(canvas, flickKey.left, FlickDirection.LEFT,
@@ -418,20 +416,7 @@ class FlickKeyboardView @JvmOverloads constructor(
     }
 
     private fun notifyTopRowBalloon() {
-        if (activeRow != 0 || activeCol !in 1..3 || currentDirection == FlickDirection.TAP) {
-            onTopRowUpBalloon?.invoke(null, 0f, 0f, false)
-            return
-        }
-        val flickKey = getFlickKeyAt(activeCol, activeRow) ?: return
-        val upChar = flickKey.up
-        if (upChar.isEmpty()) {
-            onTopRowUpBalloon?.invoke(null, 0f, 0f, false)
-            return
-        }
-        val keyX = colStarts[activeCol] + pad
-        val keyW = colWidths[activeCol] - pad * 2
-        val keyCx = keyX + keyW / 2
-        onTopRowUpBalloon?.invoke(toDisplayChar(upChar), keyCx, keyW, currentDirection == FlickDirection.UP)
+        onTopRowUpBalloon?.invoke(null, 0f, 0f, false)
     }
 
     private fun getFlickKeyAt(col: Int, row: Int): FlickKey? {

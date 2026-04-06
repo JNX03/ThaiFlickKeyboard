@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
+    android:clipChildren="false"
     android:background="#1C1C1E">
 
     <com.Jnx03.thaiflickkeyboard.view.ToolbarView

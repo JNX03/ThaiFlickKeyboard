@@ -48,11 +48,6 @@ class SettingsActivity : AppCompatActivity() {
         }
         updatePresetDisplay()
 
-        // Customize keys
-        findViewById<LinearLayout>(R.id.row_customize).setOnClickListener {
-            startActivity(Intent(this, LayoutCustomizationActivity::class.java))
-        }
-
         // Haptic toggle
         val switchHaptic = findViewById<SwitchMaterial>(R.id.switch_haptic)
         switchHaptic.isChecked = prefsManager.hapticEnabled

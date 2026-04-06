@@ -128,29 +128,6 @@
                 android:text="›" android:textSize="20sp" android:textColor="#8E8E93" />
         </LinearLayout>
 
-        <View android:layout_width="match_parent" android:layout_height="1dp"
-            android:background="#2C2C2E" android:layout_marginStart="60dp" />
-
-        <!-- Customize Keys -->
-        <LinearLayout
-            android:id="@+id/row_customize"
-            android:layout_width="match_parent"
-            android:layout_height="52dp"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:paddingHorizontal="20dp"
-            android:background="?android:attr/selectableItemBackground"
-            android:clickable="true"
-            android:focusable="true">
-            <ImageView android:layout_width="24dp" android:layout_height="24dp"
-                android:src="@drawable/ic_tune" android:layout_marginEnd="16dp" />
-            <TextView android:layout_width="0dp" android:layout_height="wrap_content"
-                android:layout_weight="1" android:text="Customize Keys"
-                android:textSize="16sp" android:textColor="#FFFFFF" />
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                android:text="›" android:textSize="20sp" android:textColor="#8E8E93" />
-        </LinearLayout>
-
         <!-- Section: Preferences -->
         <TextView
             android:layout_width="match_parent"
