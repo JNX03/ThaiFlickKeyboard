@@ -4,8 +4,10 @@ import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
+import android.graphics.Rect
 import android.graphics.RectF
 import android.graphics.drawable.Drawable
+import android.os.Build
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
@@ -123,6 +125,18 @@ class FlickKeyboardView @JvmOverloads constructor(
         colStarts[0] = 0f
         for (i in 1 until COLS) colStarts[i] = colStarts[i - 1] + colWidths[i - 1]
         rowHeight = h.toFloat() / ROWS
+        updateGestureExclusionRects()
+    }
+
+    private fun updateGestureExclusionRects() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            val leftColRight = (colStarts[0] + colWidths[0]).toInt()
+            val rightColLeft = colStarts[4].toInt()
+            systemGestureExclusionRects = listOf(
+                Rect(0, 0, leftColRight, height),
+                Rect(rightColLeft, 0, width, height)
+            )
+        }
     }
 
     override fun onDraw(canvas: Canvas) {
@@ -322,12 +336,22 @@ class FlickKeyboardView @JvmOverloads constructor(
                 }
                 return true
             }
-            MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
+            MotionEvent.ACTION_UP -> {
                 stopBackspaceRepeat()
                 if (isTouching) {
                     val direction = gestureDetector.onTouchUp()
                     handleKeyUp(activeCol, activeRow, direction)
                 }
+                activeCol = -1
+                activeRow = -1
+                isTouching = false
+                currentDirection = FlickDirection.TAP
+                gestureDetector.reset()
+                invalidate()
+                return true
+            }
+            MotionEvent.ACTION_CANCEL -> {
+                stopBackspaceRepeat()
                 activeCol = -1
                 activeRow = -1
                 isTouching = false

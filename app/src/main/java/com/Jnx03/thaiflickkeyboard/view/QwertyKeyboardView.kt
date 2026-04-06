@@ -4,8 +4,10 @@ import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
+import android.graphics.Rect
 import android.graphics.RectF
 import android.graphics.drawable.Drawable
+import android.os.Build
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
@@ -126,6 +128,17 @@ class QwertyKeyboardView @JvmOverloads constructor(
                 }
                 else -> arrayOf()
             }
+        }
+        updateGestureExclusionRects()
+    }
+
+    private fun updateGestureExclusionRects() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            val edgeWidth = (20f.dpToPx(context)).toInt()
+            systemGestureExclusionRects = listOf(
+                Rect(0, 0, edgeWidth, height),
+                Rect(width - edgeWidth, 0, width, height)
+            )
         }
     }
 
