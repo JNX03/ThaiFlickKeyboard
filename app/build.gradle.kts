@@ -20,9 +20,9 @@ android {
     signingConfigs {
         create("release") {
             storeFile = file(System.getProperty("user.home") + "/.android/upload-keystore.jks")
-            storePassword = "thaiflick2026"
+            storePassword = "Jnx03/ThaiFlickProject"
             keyAlias = "upload"
-            keyPassword = "thaiflick2026"
+            keyPassword = "Jnx03/ThaiFlickProject"
         }
     }
     buildTypes {
