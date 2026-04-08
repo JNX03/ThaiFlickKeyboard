@@ -13,6 +13,7 @@ import android.view.MotionEvent
 import android.view.View
 import androidx.core.content.ContextCompat
 import com.Jnx03.thaiflickkeyboard.R
+import com.Jnx03.thaiflickkeyboard.util.ThemeManager
 import com.Jnx03.thaiflickkeyboard.util.dpToPx
 import com.Jnx03.thaiflickkeyboard.util.spToPx
 
@@ -42,16 +43,11 @@ class QwertyKeyboardView @JvmOverloads constructor(
         listOf("MODE",",","SPACE",".","ENTER")
     )
 
-    // Colors
-    private val kbBg = Color.parseColor("#1C1C1E")
-    private val keyBg = Color.parseColor("#3A3A3C")
-    private val keyPressed = Color.parseColor("#4285f4")
-    private val utilBg = Color.parseColor("#2C2C2E")
-    private val textColor = Color.parseColor("#FFFFFF")
+    private inline val colors get() = ThemeManager.currentColors
 
     private val keyBgPaint = Paint(Paint.ANTI_ALIAS_FLAG)
     private val textPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        color = textColor; textAlign = Paint.Align.CENTER
+        textAlign = Paint.Align.CENTER
     }
 
     private val pad = 3f.dpToPx(context)
@@ -144,7 +140,8 @@ class QwertyKeyboardView @JvmOverloads constructor(
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
-        canvas.drawColor(kbBg)
+        canvas.drawColor(colors.kbBg)
+        textPaint.color = colors.textColor
 
         for (rowIdx in rows.indices) {
             val row = rows[rowIdx]
@@ -156,9 +153,9 @@ class QwertyKeyboardView @JvmOverloads constructor(
 
                 val isUtil = key == "SHIFT" || key == "BKSP" || key == "MODE" || key == "ENTER"
                 keyBgPaint.color = when {
-                    isActive -> keyPressed
-                    isUtil -> utilBg
-                    else -> keyBg
+                    isActive -> colors.charKeyPressed
+                    isUtil -> colors.utilKeyBg
+                    else -> colors.charKeyBg
                 }
                 canvas.drawRoundRect(r, cornerR, cornerR, keyBgPaint)
 
@@ -168,9 +165,9 @@ class QwertyKeyboardView @JvmOverloads constructor(
                 when (key) {
                     "SHIFT" -> {
                         textPaint.textSize = 16f.spToPx(context)
-                        textPaint.color = if (isShifted || isCaps) Color.parseColor("#4285f4") else textColor
+                        textPaint.color = if (isShifted || isCaps) colors.charKeyPressed else colors.textColor
                         canvas.drawText(if (isCaps) "⇪" else "⇧", cx, cy + 6f.dpToPx(context), textPaint)
-                        textPaint.color = textColor
+                        textPaint.color = colors.textColor
                     }
                     "BKSP" -> drawIcon(canvas, backspaceIcon, r, 0.35f)
                     "ENTER" -> drawIcon(canvas, enterIcon, r, 0.35f)
@@ -198,6 +195,7 @@ class QwertyKeyboardView @JvmOverloads constructor(
             val cx = rect.centerX().toInt()
             val cy = rect.centerY().toInt()
             it.setBounds(cx - size / 2, cy - size / 2, cx + size / 2, cy + size / 2)
+            it.setTint(colors.textColor)
             it.draw(canvas)
         }
     }
