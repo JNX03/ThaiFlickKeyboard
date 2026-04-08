@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#1C1C1E">
+    android:background="?android:attr/windowBackground">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -17,8 +17,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/app_name"
-            android:textSize="24sp"
-            android:textColor="#FFFFFF"
+            android:textSize="28sp"
+            android:textColor="?android:attr/textColorPrimary"
             android:textStyle="bold"
             android:paddingHorizontal="20dp"
             android:paddingBottom="4dp" />
@@ -40,55 +40,122 @@
             android:layout_height="wrap_content"
             android:text="Setup"
             android:textSize="13sp"
-            android:textColor="#8E8E93"
+            android:textColor="?android:attr/textColorSecondary"
             android:textAllCaps="true"
             android:letterSpacing="0.05"
             android:paddingHorizontal="20dp"
             android:paddingTop="8dp"
             android:paddingBottom="8dp" />
 
-        <!-- Enable Keyboard -->
-        <LinearLayout
-            android:id="@+id/row_enable"
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
-            android:layout_height="52dp"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:paddingHorizontal="20dp"
-            android:background="?android:attr/selectableItemBackground"
-            android:clickable="true"
-            android:focusable="true">
-            <ImageView android:layout_width="24dp" android:layout_height="24dp"
-                android:src="@drawable/ic_keyboard" android:layout_marginEnd="16dp" />
-            <TextView android:layout_width="0dp" android:layout_height="wrap_content"
-                android:layout_weight="1" android:text="Enable Keyboard"
-                android:textSize="16sp" android:textColor="#FFFFFF" />
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                android:text="›" android:textSize="20sp" android:textColor="#8E8E93" />
-        </LinearLayout>
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="0dp"
+            app:cardBackgroundColor="?attr/colorSurface">
 
-        <View android:layout_width="match_parent" android:layout_height="1dp"
-            android:background="#2C2C2E" android:layout_marginStart="60dp" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
-        <!-- Select Keyboard -->
-        <LinearLayout
-            android:id="@+id/row_select"
+                <!-- Enable Keyboard -->
+                <LinearLayout
+                    android:id="@+id/row_enable"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:paddingHorizontal="16dp"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:focusable="true">
+                    <ImageView android:layout_width="24dp" android:layout_height="24dp"
+                        android:src="@drawable/ic_keyboard" android:layout_marginEnd="16dp"
+                        app:tint="?android:attr/textColorPrimary" />
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content"
+                        android:layout_weight="1" android:text="Enable Keyboard"
+                        android:textSize="16sp" android:textColor="?android:attr/textColorPrimary" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="›" android:textSize="20sp" android:textColor="?android:attr/textColorSecondary" />
+                </LinearLayout>
+
+                <View android:layout_width="match_parent" android:layout_height="1dp"
+                    android:background="?android:attr/listDivider" android:layout_marginStart="56dp" />
+
+                <!-- Select Keyboard -->
+                <LinearLayout
+                    android:id="@+id/row_select"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:paddingHorizontal="16dp"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:focusable="true">
+                    <ImageView android:layout_width="24dp" android:layout_height="24dp"
+                        android:src="@drawable/ic_language_switch" android:layout_marginEnd="16dp"
+                        app:tint="?android:attr/textColorPrimary" />
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content"
+                        android:layout_weight="1" android:text="Select Keyboard"
+                        android:textSize="16sp" android:textColor="?android:attr/textColorPrimary" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="›" android:textSize="20sp" android:textColor="?android:attr/textColorSecondary" />
+                </LinearLayout>
+
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Section: Appearance -->
+        <TextView
             android:layout_width="match_parent"
-            android:layout_height="52dp"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
+            android:layout_height="wrap_content"
+            android:text="Appearance"
+            android:textSize="13sp"
+            android:textColor="?android:attr/textColorSecondary"
+            android:textAllCaps="true"
+            android:letterSpacing="0.05"
             android:paddingHorizontal="20dp"
-            android:background="?android:attr/selectableItemBackground"
-            android:clickable="true"
-            android:focusable="true">
-            <ImageView android:layout_width="24dp" android:layout_height="24dp"
-                android:src="@drawable/ic_language_switch" android:layout_marginEnd="16dp" />
-            <TextView android:layout_width="0dp" android:layout_height="wrap_content"
-                android:layout_weight="1" android:text="Select Keyboard"
-                android:textSize="16sp" android:textColor="#FFFFFF" />
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                android:text="›" android:textSize="20sp" android:textColor="#8E8E93" />
-        </LinearLayout>
+            android:paddingTop="24dp"
+            android:paddingBottom="8dp" />
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="0dp"
+            app:cardBackgroundColor="?attr/colorSurface">
+
+            <LinearLayout
+                android:id="@+id/row_theme"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingHorizontal="16dp"
+                android:background="?android:attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true">
+                <ImageView android:layout_width="24dp" android:layout_height="24dp"
+                    android:src="@drawable/ic_tune" android:layout_marginEnd="16dp"
+                    app:tint="?android:attr/textColorPrimary" />
+                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+                    android:layout_weight="1" android:orientation="vertical">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="Theme" android:textSize="16sp"
+                        android:textColor="?android:attr/textColorPrimary" />
+                    <TextView android:id="@+id/tv_theme_value" android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" android:text="Dark"
+                        android:textSize="12sp" android:textColor="?android:attr/textColorSecondary" />
+                </LinearLayout>
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="›" android:textSize="20sp" android:textColor="?android:attr/textColorSecondary" />
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
 
         <!-- Section: Input -->
         <TextView
@@ -96,37 +163,146 @@
             android:layout_height="wrap_content"
             android:text="Input"
             android:textSize="13sp"
-            android:textColor="#8E8E93"
+            android:textColor="?android:attr/textColorSecondary"
             android:textAllCaps="true"
             android:letterSpacing="0.05"
             android:paddingHorizontal="20dp"
             android:paddingTop="24dp"
             android:paddingBottom="8dp" />
 
-        <!-- Layout Preset -->
-        <LinearLayout
-            android:id="@+id/row_preset"
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
-            android:layout_height="52dp"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:paddingHorizontal="20dp"
-            android:background="?android:attr/selectableItemBackground"
-            android:clickable="true"
-            android:focusable="true">
-            <ImageView android:layout_width="24dp" android:layout_height="24dp"
-                android:src="@drawable/ic_layout" android:layout_marginEnd="16dp" />
-            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
-                android:layout_weight="1" android:orientation="vertical">
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                    android:text="Layout Preset" android:textSize="16sp" android:textColor="#FFFFFF" />
-                <TextView android:id="@+id/tv_preset_value" android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" android:text="Optimized (Center)"
-                    android:textSize="12sp" android:textColor="#8E8E93" />
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="0dp"
+            app:cardBackgroundColor="?attr/colorSurface">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <!-- Layout Preset -->
+                <LinearLayout
+                    android:id="@+id/row_preset"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:paddingHorizontal="16dp"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:focusable="true">
+                    <ImageView android:layout_width="24dp" android:layout_height="24dp"
+                        android:src="@drawable/ic_layout" android:layout_marginEnd="16dp"
+                        app:tint="?android:attr/textColorPrimary" />
+                    <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+                        android:layout_weight="1" android:orientation="vertical">
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                            android:text="Layout Preset" android:textSize="16sp"
+                            android:textColor="?android:attr/textColorPrimary" />
+                        <TextView android:id="@+id/tv_preset_value" android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" android:text="Optimized (Center)"
+                            android:textSize="12sp" android:textColor="?android:attr/textColorSecondary" />
+                    </LinearLayout>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="›" android:textSize="20sp" android:textColor="?android:attr/textColorSecondary" />
+                </LinearLayout>
+
             </LinearLayout>
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                android:text="›" android:textSize="20sp" android:textColor="#8E8E93" />
-        </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Section: Keyboard -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Keyboard"
+            android:textSize="13sp"
+            android:textColor="?android:attr/textColorSecondary"
+            android:textAllCaps="true"
+            android:letterSpacing="0.05"
+            android:paddingHorizontal="20dp"
+            android:paddingTop="24dp"
+            android:paddingBottom="8dp" />
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="0dp"
+            app:cardBackgroundColor="?attr/colorSurface">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingVertical="8dp">
+
+                <!-- Flick Sensitivity -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingHorizontal="16dp"
+                    android:paddingVertical="4dp">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+                        <TextView android:layout_width="0dp" android:layout_height="wrap_content"
+                            android:layout_weight="1" android:text="@string/pref_sensitivity"
+                            android:textSize="16sp" android:textColor="?android:attr/textColorPrimary" />
+                        <TextView android:id="@+id/tv_sensitivity_value" android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" android:text="20"
+                            android:textSize="14sp" android:textColor="?android:attr/textColorSecondary" />
+                    </LinearLayout>
+                    <com.google.android.material.slider.Slider
+                        android:id="@+id/slider_sensitivity"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:valueFrom="10"
+                        android:valueTo="30"
+                        android:stepSize="1"
+                        android:value="20" />
+                </LinearLayout>
+
+                <View android:layout_width="match_parent" android:layout_height="1dp"
+                    android:background="?android:attr/listDivider" android:layout_marginStart="16dp" />
+
+                <!-- Keyboard Height -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingHorizontal="16dp"
+                    android:paddingVertical="4dp">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+                        <TextView android:layout_width="0dp" android:layout_height="wrap_content"
+                            android:layout_weight="1" android:text="@string/pref_height"
+                            android:textSize="16sp" android:textColor="?android:attr/textColorPrimary" />
+                        <TextView android:id="@+id/tv_height_value" android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" android:text="38%"
+                            android:textSize="14sp" android:textColor="?android:attr/textColorSecondary" />
+                    </LinearLayout>
+                    <com.google.android.material.slider.Slider
+                        android:id="@+id/slider_height"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:valueFrom="25"
+                        android:valueTo="50"
+                        android:stepSize="1"
+                        android:value="38" />
+                </LinearLayout>
+
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
 
         <!-- Section: Preferences -->
         <TextView
@@ -134,51 +310,69 @@
             android:layout_height="wrap_content"
             android:text="Preferences"
             android:textSize="13sp"
-            android:textColor="#8E8E93"
+            android:textColor="?android:attr/textColorSecondary"
             android:textAllCaps="true"
             android:letterSpacing="0.05"
             android:paddingHorizontal="20dp"
             android:paddingTop="24dp"
             android:paddingBottom="8dp" />
 
-        <!-- Haptic Feedback -->
-        <LinearLayout
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
-            android:layout_height="52dp"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:paddingHorizontal="20dp">
-            <ImageView android:layout_width="24dp" android:layout_height="24dp"
-                android:src="@drawable/ic_vibration" android:layout_marginEnd="16dp" />
-            <TextView android:layout_width="0dp" android:layout_height="wrap_content"
-                android:layout_weight="1" android:text="@string/pref_haptic"
-                android:textSize="16sp" android:textColor="#FFFFFF" />
-            <com.google.android.material.switchmaterial.SwitchMaterial
-                android:id="@+id/switch_haptic"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-        </LinearLayout>
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="0dp"
+            app:cardBackgroundColor="?attr/colorSurface">
 
-        <View android:layout_width="match_parent" android:layout_height="1dp"
-            android:background="#2C2C2E" android:layout_marginStart="60dp" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
-        <!-- Key Sound -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="52dp"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:paddingHorizontal="20dp">
-            <ImageView android:layout_width="24dp" android:layout_height="24dp"
-                android:src="@drawable/ic_volume" android:layout_marginEnd="16dp" />
-            <TextView android:layout_width="0dp" android:layout_height="wrap_content"
-                android:layout_weight="1" android:text="@string/pref_sound"
-                android:textSize="16sp" android:textColor="#FFFFFF" />
-            <com.google.android.material.switchmaterial.SwitchMaterial
-                android:id="@+id/switch_sound"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-        </LinearLayout>
+                <!-- Haptic Feedback -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:paddingHorizontal="16dp">
+                    <ImageView android:layout_width="24dp" android:layout_height="24dp"
+                        android:src="@drawable/ic_vibration" android:layout_marginEnd="16dp"
+                        app:tint="?android:attr/textColorPrimary" />
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content"
+                        android:layout_weight="1" android:text="@string/pref_haptic"
+                        android:textSize="16sp" android:textColor="?android:attr/textColorPrimary" />
+                    <com.google.android.material.switchmaterial.SwitchMaterial
+                        android:id="@+id/switch_haptic"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+
+                <View android:layout_width="match_parent" android:layout_height="1dp"
+                    android:background="?android:attr/listDivider" android:layout_marginStart="56dp" />
+
+                <!-- Key Sound -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:paddingHorizontal="16dp">
+                    <ImageView android:layout_width="24dp" android:layout_height="24dp"
+                        android:src="@drawable/ic_volume" android:layout_marginEnd="16dp"
+                        app:tint="?android:attr/textColorPrimary" />
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content"
+                        android:layout_weight="1" android:text="@string/pref_sound"
+                        android:textSize="16sp" android:textColor="?android:attr/textColorPrimary" />
+                    <com.google.android.material.switchmaterial.SwitchMaterial
+                        android:id="@+id/switch_sound"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
 
         <!-- Section: Test -->
         <TextView
@@ -186,34 +380,73 @@
             android:layout_height="wrap_content"
             android:text="Test"
             android:textSize="13sp"
-            android:textColor="#8E8E93"
+            android:textColor="?android:attr/textColorSecondary"
             android:textAllCaps="true"
             android:letterSpacing="0.05"
             android:paddingHorizontal="20dp"
             android:paddingTop="24dp"
             android:paddingBottom="8dp" />
 
-        <com.google.android.material.textfield.TextInputLayout
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="20dp"
-            android:layout_marginBottom="24dp"
-            android:hint="Try typing here…"
-            app:boxBackgroundColor="#2C2C2E"
-            app:boxCornerRadiusTopStart="10dp"
-            app:boxCornerRadiusTopEnd="10dp"
-            app:boxCornerRadiusBottomStart="10dp"
-            app:boxCornerRadiusBottomEnd="10dp"
-            app:hintTextColor="#8E8E93">
+            android:layout_marginHorizontal="16dp"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="0dp"
+            app:cardBackgroundColor="?attr/colorSurface">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/et_test"
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="#FFFFFF"
-                android:minLines="3"
-                android:inputType="textMultiLine" />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:layout_margin="12dp"
+                android:hint="Try typing here…"
+                app:boxCornerRadiusTopStart="10dp"
+                app:boxCornerRadiusTopEnd="10dp"
+                app:boxCornerRadiusBottomStart="10dp"
+                app:boxCornerRadiusBottomEnd="10dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_test"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="?android:attr/textColorPrimary"
+                    android:minLines="3"
+                    android:inputType="textMultiLine" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- About -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="24dp"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="0dp"
+            app:cardBackgroundColor="?attr/colorSurface">
+
+            <LinearLayout
+                android:id="@+id/row_about"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingHorizontal="16dp"
+                android:background="?android:attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true">
+                <ImageView android:layout_width="24dp" android:layout_height="24dp"
+                    android:src="@drawable/ic_settings" android:layout_marginEnd="16dp"
+                    app:tint="?android:attr/textColorPrimary" />
+                <TextView android:layout_width="0dp" android:layout_height="wrap_content"
+                    android:layout_weight="1" android:text="About"
+                    android:textSize="16sp" android:textColor="?android:attr/textColorPrimary" />
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="›" android:textSize="20sp" android:textColor="?android:attr/textColorSecondary" />
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
 
     </LinearLayout>
 </ScrollView>
