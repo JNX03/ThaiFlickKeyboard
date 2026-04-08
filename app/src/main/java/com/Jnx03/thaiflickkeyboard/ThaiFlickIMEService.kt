@@ -3,9 +3,13 @@ package com.Jnx03.thaiflickkeyboard
 import android.content.ClipboardManager
 import android.content.Intent
 import android.content.SharedPreferences
+import android.content.res.Configuration
 import android.inputmethodservice.InputMethodService
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.HandlerThread
+import android.os.Looper
 import android.speech.RecognitionListener
 import android.speech.RecognizerIntent
 import android.speech.SpeechRecognizer
@@ -26,6 +30,7 @@ import com.Jnx03.thaiflickkeyboard.view.ClipboardPanelView
 import com.Jnx03.thaiflickkeyboard.view.FlickKeyboardView
 import com.Jnx03.thaiflickkeyboard.view.QwertyKeyboardView
 import com.Jnx03.thaiflickkeyboard.view.SuggestionBarView
+import com.Jnx03.thaiflickkeyboard.util.ThemeManager
 import com.Jnx03.thaiflickkeyboard.view.ToolbarView
 
 class ThaiFlickIMEService : InputMethodService(), SharedPreferences.OnSharedPreferenceChangeListener {
@@ -47,12 +52,17 @@ class ThaiFlickIMEService : InputMethodService(), SharedPreferences.OnSharedPref
 
     private var clipListener: ClipboardManager.OnPrimaryClipChangedListener? = null
 
+    private val suggestionsThread = HandlerThread("suggestions").apply { start() }
+    private val suggestionsHandler = Handler(suggestionsThread.looper)
+    private val mainHandler = Handler(Looper.getMainLooper())
+
     override fun onCreate() {
         super.onCreate()
         layoutRepository = LayoutRepository(this)
         prefsManager = PreferencesManager(this)
         actionHandler = InputActionHandler(this)
         clipboardHistory = ClipboardHistoryManager(this)
+        ThemeManager.init(this, prefsManager.themeMode)
         layoutRepository.registerChangeListener(this)
 
         // Listen for clipboard changes
@@ -68,7 +78,9 @@ class ThaiFlickIMEService : InputMethodService(), SharedPreferences.OnSharedPref
     }
 
     override fun onCreateInputView(): View {
+        ThemeManager.init(this, prefsManager.themeMode)
         val view = layoutInflater.inflate(R.layout.keyboard_container, null)
+        view.setBackgroundColor(ThemeManager.currentColors.kbBg)
 
         // Push keyboard above the navigation bar
         ViewCompat.setOnApplyWindowInsetsListener(view) { v, insets ->
@@ -128,6 +140,7 @@ class ThaiFlickIMEService : InputMethodService(), SharedPreferences.OnSharedPref
             onTopRowUpBalloon = { displayChar, centerX, width, height, isActive ->
                 suggestionBar?.showFlickBalloon(displayChar, centerX, width, height, isActive)
             }
+            updateSensitivity(prefsManager.flickSensitivity)
         }
 
         qwertyView = view.findViewById<QwertyKeyboardView>(R.id.qwerty_view).apply {
@@ -262,7 +275,12 @@ class ThaiFlickIMEService : InputMethodService(), SharedPreferences.OnSharedPref
         val textBefore = ic.getTextBeforeCursor(20, 0)?.toString() ?: ""
         val lastWord = textBefore.split(" ", "\n").lastOrNull() ?: ""
         if (lastWord.isEmpty()) { suggestionBar?.setSuggestions(emptyList()); return }
-        suggestionBar?.setSuggestions(ThaiWordList.getSuggestions(lastWord, 3))
+
+        suggestionsHandler.removeCallbacksAndMessages(null)
+        suggestionsHandler.post {
+            val results = ThaiWordList.getSuggestions(lastWord, 3)
+            mainHandler.post { suggestionBar?.setSuggestions(results) }
+        }
     }
 
     private fun commitSuggestion(word: String) {
@@ -329,12 +347,27 @@ class ThaiFlickIMEService : InputMethodService(), SharedPreferences.OnSharedPref
     }
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
+        if (key == "theme_mode") {
+            ThemeManager.init(this, prefsManager.themeMode)
+            setInputView(onCreateInputView())
+            return
+        }
         if (currentMode == KeyboardMode.THAI) keyboardView?.layout = layoutRepository.loadLayout()
         keyboardView?.hapticEnabled = prefsManager.hapticEnabled
+        keyboardView?.updateSensitivity(prefsManager.flickSensitivity)
         qwertyView?.hapticEnabled = prefsManager.hapticEnabled
     }
 
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        if (prefsManager.themeMode == "system") {
+            ThemeManager.init(this, "system")
+            setInputView(onCreateInputView())
+        }
+    }
+
     override fun onDestroy() {
+        suggestionsThread.quitSafely()
         speechRecognizer?.destroy()
         speechRecognizer = null
         val cm = getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
