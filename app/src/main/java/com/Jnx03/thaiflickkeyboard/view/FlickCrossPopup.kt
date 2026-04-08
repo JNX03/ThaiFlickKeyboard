@@ -10,6 +10,7 @@ import android.view.View
 import android.widget.PopupWindow
 import com.Jnx03.thaiflickkeyboard.model.FlickDirection
 import com.Jnx03.thaiflickkeyboard.model.FlickKey
+import com.Jnx03.thaiflickkeyboard.util.ThemeManager
 import com.Jnx03.thaiflickkeyboard.util.dpToPx
 import com.Jnx03.thaiflickkeyboard.util.spToPx
 
@@ -62,14 +63,11 @@ class FlickCrossPopup(private val context: Context) {
         private var key: FlickKey? = null
         private var activeDirection = FlickDirection.TAP
 
-        private val bgPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-            color = Color.parseColor("#404040")
-        }
-        private val highlightPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-            color = Color.parseColor("#4285f4")
-        }
+        private inline val colors get() = ThemeManager.currentColors
+
+        private val bgPaint = Paint(Paint.ANTI_ALIAS_FLAG)
+        private val highlightPaint = Paint(Paint.ANTI_ALIAS_FLAG)
         private val textPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-            color = Color.parseColor("#e8e8e8")
             textAlign = Paint.Align.CENTER
             textSize = 22f.spToPx(context)
         }
@@ -99,6 +97,9 @@ class FlickCrossPopup(private val context: Context) {
         override fun onDraw(canvas: Canvas) {
             super.onDraw(canvas)
             val k = key ?: return
+            bgPaint.color = colors.flickBalloonBg
+            highlightPaint.color = colors.flickBalloonActive
+            textPaint.color = colors.textColor
 
             // 3x3 grid, only cross cells (center, top, left, right, bottom)
             // Layout:   [  ] [UP] [  ]
