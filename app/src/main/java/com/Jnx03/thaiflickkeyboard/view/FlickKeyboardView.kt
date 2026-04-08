@@ -35,7 +35,7 @@ class FlickKeyboardView @JvmOverloads constructor(
     defStyleAttr: Int = 0
 ) : View(context, attrs, defStyleAttr) {
 
-    var layout: KeyboardLayout = KeyboardLayout.default()
+    var layout: KeyboardLayout = KeyboardLayout.optimizedCenter()
         set(value) {
             field = value
             charKeys = value.keys.filter {

@@ -22,7 +22,7 @@ class LayoutCustomizationActivity : AppCompatActivity() {
 
     private lateinit var layoutRepository: LayoutRepository
     private lateinit var adapter: KeyAdapter
-    private var currentLayout: KeyboardLayout = KeyboardLayout.default()
+    private var currentLayout: KeyboardLayout = KeyboardLayout.optimizedCenter()
     private val editableKeys = mutableListOf<FlickKey>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -58,7 +58,7 @@ class LayoutCustomizationActivity : AppCompatActivity() {
                 .setPositiveButton(R.string.ok) { _, _ ->
                     layoutRepository.resetToDefault()
                     editableKeys.clear()
-                    editableKeys.addAll(KeyboardLayout.default().keys)
+                    editableKeys.addAll(KeyboardLayout.optimizedCenter().keys)
                     adapter.notifyDataSetChanged()
                 }
                 .setNegativeButton(R.string.cancel, null)
