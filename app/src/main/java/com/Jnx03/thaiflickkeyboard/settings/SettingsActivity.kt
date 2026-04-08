@@ -17,6 +17,7 @@ import androidx.core.content.ContextCompat
 import com.Jnx03.thaiflickkeyboard.R
 import com.Jnx03.thaiflickkeyboard.data.LayoutRepository
 import com.Jnx03.thaiflickkeyboard.data.PreferencesManager
+import com.Jnx03.thaiflickkeyboard.model.KeyboardLayout
 import com.Jnx03.thaiflickkeyboard.util.ThemeManager
 import com.google.android.material.slider.Slider
 import com.google.android.material.switchmaterial.SwitchMaterial
@@ -51,6 +52,12 @@ class SettingsActivity : AppCompatActivity() {
             showThemePicker()
         }
         updateThemeDisplay()
+
+        // Layout preset
+        findViewById<LinearLayout>(R.id.row_preset).setOnClickListener {
+            showPresetPicker()
+        }
+        updatePresetDisplay()
 
         // Flick sensitivity slider
         val sliderSensitivity = findViewById<Slider>(R.id.slider_sensitivity)
@@ -140,6 +147,27 @@ class SettingsActivity : AppCompatActivity() {
         findViewById<TextView>(R.id.tv_theme_value).text = label
     }
 
+    private fun showPresetPicker() {
+        val presetNames = KeyboardLayout.presetNames().toTypedArray()
+        val current = presetNames.indexOf(prefsManager.selectedPreset).coerceAtLeast(0)
+
+        AlertDialog.Builder(this, R.style.Theme_ThaiFlickKeyboard_Dialog)
+            .setTitle("Layout Preset")
+            .setSingleChoiceItems(presetNames, current) { dialog, which ->
+                val name = presetNames[which]
+                prefsManager.selectedPreset = name
+                layoutRepository.setPreset(name)
+                updatePresetDisplay()
+                dialog.dismiss()
+            }
+            .setNegativeButton("Cancel", null)
+            .show()
+    }
+
+    private fun updatePresetDisplay() {
+        findViewById<TextView>(R.id.tv_preset_value).text = prefsManager.selectedPreset
+    }
+
     private fun requestMicPermissionIfNeeded() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M &&
             ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO)
@@ -152,6 +180,7 @@ class SettingsActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         updateKeyboardStatus()
+        updatePresetDisplay()
         updateThemeDisplay()
     }
 

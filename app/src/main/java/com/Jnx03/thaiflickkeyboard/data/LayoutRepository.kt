@@ -33,7 +33,7 @@ class LayoutRepository(context: Context) {
         return if (presetName != null) {
             KeyboardLayout.fromPresetName(presetName)
         } else {
-            KeyboardLayout.optimizedCenter()
+            KeyboardLayout.padPimOpti()
         }
     }
 

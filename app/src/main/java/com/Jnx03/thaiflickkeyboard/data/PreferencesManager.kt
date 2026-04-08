@@ -25,7 +25,7 @@ class PreferencesManager(context: Context) {
         set(value) = prefs.edit().putInt(KEY_HEIGHT, value).apply()
 
     var selectedPreset: String
-        get() = prefs.getString(KEY_PRESET, "Old") ?: "Old"
+        get() = prefs.getString(KEY_PRESET, "PadPim - Opti") ?: "PadPim - Opti"
         set(value) = prefs.edit().putString(KEY_PRESET, value).apply()
 
     var themeMode: String
