@@ -53,6 +53,10 @@ class ThaiFlickIMEService : InputMethodService(), SharedPreferences.OnSharedPref
     private var isSpeechListening = false
 
     private var clipListener: ClipboardManager.OnPrimaryClipChangedListener? = null
+    private var tutorialPrefs: SharedPreferences? = null
+    private val tutorialListener = SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
+        if (key == "highlight_char") updateHighlightChar()
+    }
 
     private val suggestionsThread = HandlerThread("suggestions").apply { start() }
     private val suggestionsHandler = Handler(suggestionsThread.looper)
@@ -66,6 +70,8 @@ class ThaiFlickIMEService : InputMethodService(), SharedPreferences.OnSharedPref
         clipboardHistory = ClipboardHistoryManager(this)
         ThemeManager.init(this, prefsManager.themeMode)
         layoutRepository.registerChangeListener(this)
+        tutorialPrefs = getSharedPreferences("tutorial_prefs", MODE_PRIVATE)
+        tutorialPrefs?.registerOnSharedPreferenceChangeListener(tutorialListener)
 
         // Listen for clipboard changes
         val cm = getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
@@ -187,6 +193,13 @@ class ThaiFlickIMEService : InputMethodService(), SharedPreferences.OnSharedPref
         if (clipboardShowing) hideClipboardPanel()
         if (emojiShowing) hideEmojiPanel()
         updateSuggestions()
+        updateHighlightChar()
+    }
+
+    private fun updateHighlightChar() {
+        val prefs = getSharedPreferences("tutorial_prefs", MODE_PRIVATE)
+        val ch = prefs.getString("highlight_char", "") ?: ""
+        keyboardView?.highlightChar = ch
     }
 
     // ── Clipboard Panel ──
@@ -392,6 +405,7 @@ class ThaiFlickIMEService : InputMethodService(), SharedPreferences.OnSharedPref
     }
 
     override fun onDestroy() {
+        tutorialPrefs?.unregisterOnSharedPreferenceChangeListener(tutorialListener)
         suggestionsThread.quitSafely()
         speechRecognizer?.destroy()
         speechRecognizer = null

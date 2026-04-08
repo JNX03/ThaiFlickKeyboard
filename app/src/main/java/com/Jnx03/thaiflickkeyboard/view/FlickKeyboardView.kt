@@ -58,6 +58,8 @@ class FlickKeyboardView @JvmOverloads constructor(
     var hapticEnabled: Boolean = true
     var modeLabel: String = "123"
         set(value) { field = value; invalidate() }
+    var highlightChar: String = ""
+        set(value) { field = value; invalidate() }
 
     private var charKeys: List<FlickKey> = emptyList()
 
@@ -183,9 +185,29 @@ class FlickKeyboardView @JvmOverloads constructor(
         if (keyIndex >= charKeys.size) return
         val key = charKeys[keyIndex]
 
-        // Background — blue highlight when active
-        keyBgPaint.color = if (isActive) colors.charKeyPressed else colors.charKeyBg
+        // Check if this key contains the highlighted character
+        val hasHighlight = highlightChar.isNotEmpty() && (
+            key.tap == highlightChar || key.left == highlightChar ||
+            key.up == highlightChar || key.right == highlightChar || key.down == highlightChar
+        )
+
+        // Background — blue highlight when active, green glow when tutorial highlight
+        keyBgPaint.color = when {
+            isActive -> colors.charKeyPressed
+            hasHighlight -> Color.parseColor("#1B5E20")
+            else -> colors.charKeyBg
+        }
         canvas.drawRoundRect(rect, cornerR, cornerR, keyBgPaint)
+
+        // Draw highlight border for tutorial
+        if (hasHighlight && !isActive) {
+            val borderPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+                style = Paint.Style.STROKE
+                strokeWidth = 2f.dpToPx(context)
+                color = Color.parseColor("#4CAF50")
+            }
+            canvas.drawRoundRect(rect, cornerR, cornerR, borderPaint)
+        }
 
         val cx = rect.centerX()
         val cy = rect.centerY()

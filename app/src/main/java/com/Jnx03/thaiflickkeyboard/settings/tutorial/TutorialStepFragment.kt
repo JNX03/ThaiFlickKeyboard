@@ -173,6 +173,21 @@ class TutorialStepFragment : Fragment() {
         desc.text = getString(R.string.tutorial_tone_desc)
     }
 
+    private fun setHighlightChar(char: String) {
+        requireContext().getSharedPreferences("tutorial_prefs", 0)
+            .edit().putString("highlight_char", char).apply()
+    }
+
+    private fun clearHighlight() {
+        requireContext().getSharedPreferences("tutorial_prefs", 0)
+            .edit().putString("highlight_char", "").apply()
+    }
+
+    override fun onDestroyView() {
+        if (stepIndex == 6) clearHighlight()
+        super.onDestroyView()
+    }
+
     private fun setupPracticeStep(
         animView: TutorialAnimationView, title: TextView,
         subtitle: TextView, desc: TextView,
@@ -194,6 +209,7 @@ class TutorialStepFragment : Fragment() {
         val tvResult = view.findViewById<TextView>(R.id.tv_result)
 
         tvTarget.text = PRACTICE_WORDS[currentWordIndex]
+        highlightNextChar("", PRACTICE_WORDS[currentWordIndex])
 
         etPractice.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
@@ -202,12 +218,14 @@ class TutorialStepFragment : Fragment() {
                 val input = s?.toString()?.trim() ?: ""
                 val target = PRACTICE_WORDS[currentWordIndex]
 
+                highlightNextChar(input, target)
+
                 if (input == target) {
+                    clearHighlight()
                     tvResult.visibility = View.VISIBLE
                     tvResult.text = getString(R.string.tutorial_correct)
                     tvResult.setTextColor(requireContext().getColor(R.color.key_green))
 
-                    // Advance to next word after a short delay
                     view.postDelayed({
                         if (!isAdded) return@postDelayed
                         currentWordIndex++
@@ -215,10 +233,12 @@ class TutorialStepFragment : Fragment() {
                             tvTarget.text = PRACTICE_WORDS[currentWordIndex]
                             etPractice.setText("")
                             tvResult.visibility = View.GONE
+                            highlightNextChar("", PRACTICE_WORDS[currentWordIndex])
                         } else {
                             tvResult.text = getString(R.string.tutorial_complete)
                             tvResult.setTextColor(requireContext().getColor(R.color.key_indigo))
                             etPractice.isEnabled = false
+                            clearHighlight()
                         }
                     }, 800)
                 } else if (target.startsWith(input) && input.isNotEmpty()) {
@@ -230,6 +250,14 @@ class TutorialStepFragment : Fragment() {
                 }
             }
         })
+    }
+
+    private fun highlightNextChar(input: String, target: String) {
+        if (input.length < target.length) {
+            setHighlightChar(target[input.length].toString())
+        } else {
+            clearHighlight()
+        }
     }
 
     companion object {

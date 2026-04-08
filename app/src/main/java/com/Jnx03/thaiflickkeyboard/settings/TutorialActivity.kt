@@ -1,6 +1,8 @@
 package com.Jnx03.thaiflickkeyboard.settings
 
+import android.content.Intent
 import android.graphics.drawable.GradientDrawable
+import android.net.Uri
 import android.os.Bundle
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -21,7 +23,7 @@ class TutorialActivity : AppCompatActivity() {
     private lateinit var btnSkip: TextView
     private lateinit var prefsManager: PreferencesManager
 
-    private val dots = mutableListOf<android.view.View>()
+    private val dots = mutableListOf<TextView>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         prefsManager = PreferencesManager(this)
@@ -64,19 +66,18 @@ class TutorialActivity : AppCompatActivity() {
     private fun setupDots() {
         dotsContainer.removeAllViews()
         dots.clear()
-        val dotSize = 8f.dpToPx(this).toInt()
-        val dotMargin = 4f.dpToPx(this).toInt()
+        val margin = 2f.dpToPx(this).toInt()
 
         for (i in 0 until TutorialPagerAdapter.STEP_COUNT) {
-            val dot = android.view.View(this).apply {
-                val shape = GradientDrawable().apply {
-                    shape = GradientDrawable.OVAL
-                    setSize(dotSize, dotSize)
-                }
-                background = shape
-                layoutParams = LinearLayout.LayoutParams(dotSize, dotSize).apply {
-                    marginStart = dotMargin
-                    marginEnd = dotMargin
+            val dot = TextView(this).apply {
+                text = "\u2022" // bullet
+                textSize = 16f
+                layoutParams = LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.WRAP_CONTENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+                ).apply {
+                    marginStart = margin
+                    marginEnd = margin
                 }
             }
             dots.add(dot)
@@ -90,14 +91,38 @@ class TutorialActivity : AppCompatActivity() {
         val inactiveColor = ThemeManager.currentColors.hintColor
 
         for (i in dots.indices) {
-            val shape = dots[i].background as GradientDrawable
-            shape.setColor(if (i == selected) activeColor else inactiveColor)
+            if (i == selected) {
+                dots[i].text = "☝"
+                dots[i].textSize = 18f
+                dots[i].setTextColor(activeColor)
+            } else {
+                dots[i].text = "\u2022"
+                dots[i].textSize = 16f
+                dots[i].setTextColor(inactiveColor)
+            }
         }
     }
 
     private fun finishTutorial() {
         prefsManager.tutorialSeen = true
-        finish()
+        // Clear any tutorial highlight
+        getSharedPreferences("tutorial_prefs", MODE_PRIVATE)
+            .edit().putString("highlight_char", "").apply()
+
+        // Offer feedback before closing
+        androidx.appcompat.app.AlertDialog.Builder(this, R.style.Theme_ThaiFlickKeyboard_Dialog)
+            .setTitle(getString(R.string.tutorial_feedback_title))
+            .setMessage(getString(R.string.tutorial_feedback_message))
+            .setPositiveButton(getString(R.string.tutorial_feedback_github)) { _, _ ->
+                startActivity(Intent(Intent.ACTION_VIEW,
+                    Uri.parse("https://github.com/JNX03/ThaiFlickKeyboard/issues/new")))
+                finish()
+            }
+            .setNegativeButton(getString(R.string.tutorial_feedback_skip)) { _, _ ->
+                finish()
+            }
+            .setCancelable(false)
+            .show()
     }
 
     private fun applyThemeMode() {

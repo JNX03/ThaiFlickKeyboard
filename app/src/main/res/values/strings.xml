@@ -51,8 +51,8 @@
     <string name="tutorial_done">เสร็จสิ้น</string>
 
     <string name="tutorial_welcome_title">ยินดีต้อนรับ</string>
-    <string name="tutorial_welcome_subtitle">Welcome to PadPim</string>
-    <string name="tutorial_welcome_desc">เปิดใช้งานและเลือกแป้นพิมพ์ PadPim\nเพื่อเริ่มต้นใช้งาน</string>
+    <string name="tutorial_welcome_subtitle">Welcome to ThaiFlick Keyboard</string>
+    <string name="tutorial_welcome_desc">เปิดใช้งานและเลือกแป้นพิมพ์ ThaiFlick\nเพื่อเริ่มต้นใช้งาน</string>
     <string name="tutorial_enable_keyboard">เปิดใช้งานแป้นพิมพ์</string>
     <string name="tutorial_select_keyboard">เลือกแป้นพิมพ์</string>
     <string name="tutorial_enabled">เปิดแล้ว</string>
@@ -87,4 +87,9 @@
     <string name="tutorial_correct">ถูกต้อง!</string>
     <string name="tutorial_keep_going">กำลังพิมพ์ดี…</string>
     <string name="tutorial_complete">ยอดเยี่ยม! คุณพิมพ์ครบทุกคำแล้ว</string>
+
+    <string name="tutorial_feedback_title">ช่วยเราพัฒนา</string>
+    <string name="tutorial_feedback_message">มีข้อเสนอแนะหรือพบปัญหา?\nส่งฟีดแบ็กผ่าน GitHub Issues</string>
+    <string name="tutorial_feedback_github">ส่งฟีดแบ็ก</string>
+    <string name="tutorial_feedback_skip">ข้ามไปก่อน</string>
 </resources>
