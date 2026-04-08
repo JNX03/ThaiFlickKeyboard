@@ -28,11 +28,16 @@ class PreferencesManager(context: Context) {
         get() = prefs.getString(KEY_PRESET, "Optimized (Center)") ?: "Optimized (Center)"
         set(value) = prefs.edit().putString(KEY_PRESET, value).apply()
 
+    var themeMode: String
+        get() = prefs.getString(KEY_THEME_MODE, "dark") ?: "dark"
+        set(value) = prefs.edit().putString(KEY_THEME_MODE, value).apply()
+
     companion object {
         private const val KEY_SENSITIVITY = "flick_sensitivity"
         private const val KEY_HAPTIC = "haptic_enabled"
         private const val KEY_SOUND = "sound_enabled"
         private const val KEY_HEIGHT = "keyboard_height_percent"
         private const val KEY_PRESET = "selected_preset"
+        private const val KEY_THEME_MODE = "theme_mode"
     }
 }
