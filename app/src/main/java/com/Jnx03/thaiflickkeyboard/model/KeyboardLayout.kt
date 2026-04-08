@@ -10,6 +10,69 @@ data class KeyboardLayout(
 
     companion object {
 
+        // ─────────────────────────────────────────────────────────
+        // PadPim - Key: Vowels grouped on 2 dedicated keys
+        // Easier to learn — vowels always in the same place
+        // Tone marks (่ ้ ๊) on space key flicks only
+        // ─────────────────────────────────────────────────────────
+        fun padPimKey(): KeyboardLayout {
+            val keys = listOf(
+                // Row 0 (top - low priority)
+                FlickKey("pk1", "ล", "ื", "์", "บ", "ึ", "#f59e0b", "ล Low"),
+                FlickKey("pk2", "ง", "ค", "ด", "ห", "ช", "#22c55e", "ง Mid"),
+                FlickKey("pk3", "ต", "ธ", "พ", "ผ", "ฟ", "#f59e0b", "ต Low"),
+
+                // Row 1 (center - highest priority)
+                FlickKey("pk4", "ร", "ม", "ก", "ย", "ส", "#6366f1", "ร Mid"),
+                FlickKey("pk5", "า", "ั", "เ", "ี", "ะ", "#ec4899", "สระ ๑"),
+                FlickKey("pk6", "น", "ว", "อ", "ท", "ไ", "#6366f1", "น Mid"),
+
+                // Row 2 (low priority)
+                FlickKey("pk7", "ป", "็", "ข", "ณ", "ญ", "#f59e0b", "ป Low"),
+                FlickKey("pk8", "ิ", "ุ", "แ", "ู", "ำ", "#ec4899", "สระ ๒"),
+                FlickKey("pk9", "จ", "ศ", "ใ", "ถ", "ภ", "#f59e0b", "จ Low"),
+
+                // Row 3 (bottom - super low, no down flick)
+                FlickKey("pk10", "โ", "ฯ", "ๆ", "ฎ", "", "#64748b", "โ S.Low"),
+                FlickKey("pk11", "ซ", "ฏ", "ฉ", "ฐ", "", "#64748b", "ซ S.Low"),
+                FlickKey("pk12", "ษ", "ฤ", "ฒ", "ฑ", "", "#64748b", "ษ S.Low")
+            )
+            return KeyboardLayout("PadPim - Key", keys,
+                description = "Vowels grouped on 2 keys. Easy to learn, frequency-aware.")
+        }
+
+        // ─────────────────────────────────────────────────────────
+        // PadPim - Opti: Pure frequency optimization
+        // Every char placed by score = grid_score × flick_multiplier
+        // Fastest possible but vowels spread across many keys
+        // Tone marks (่ ้ ๊) on space key flicks only
+        // ─────────────────────────────────────────────────────────
+        fun padPimOpti(): KeyboardLayout {
+            val keys = listOf(
+                // Row 0 (top - low priority)
+                FlickKey("po1", "ะ", "ธ", "ข", "ผ", "ึ", "#f59e0b", "ะ Low"),
+                FlickKey("po2", "ม", "ห", "ล", "ส", "ุ", "#22c55e", "ม Mid"),
+                FlickKey("po3", "ป", "ู", "ใ", "็", "ฟ", "#f59e0b", "ป Low"),
+
+                // Row 1 (center - highest priority)
+                FlickKey("po4", "น", "ว", "อ", "ี", "ไ", "#6366f1", "น Mid"),
+                FlickKey("po5", "า", "ง", "ร", "ั", "ต", "#ec4899", "า HIGH"),
+                FlickKey("po6", "ก", "ท", "เ", "ด", "พ", "#6366f1", "ก Mid"),
+
+                // Row 2 (low priority)
+                FlickKey("po7", "จ", "ำ", "ช", "ณ", "ญ", "#f59e0b", "จ Low"),
+                FlickKey("po8", "ย", "แ", "ิ", "์", "บ", "#22c55e", "ย Mid"),
+                FlickKey("po9", "ค", "ศ", "ื", "ถ", "ภ", "#f59e0b", "ค Low"),
+
+                // Row 3 (bottom - super low, no down flick)
+                FlickKey("po10", "โ", "ฯ", "ๆ", "ฎ", "", "#64748b", "โ S.Low"),
+                FlickKey("po11", "ซ", "ฏ", "ฉ", "ฐ", "", "#64748b", "ซ S.Low"),
+                FlickKey("po12", "ษ", "ฤ", "ฒ", "ฑ", "", "#64748b", "ษ S.Low")
+            )
+            return KeyboardLayout("PadPim - Opti", keys,
+                description = "Pure frequency optimization. Fastest but harder to learn.")
+        }
+
         fun optimizedCenter(): KeyboardLayout {
             val keys = listOf(
                 // Row 0 (top - hardest to reach)
@@ -113,15 +176,15 @@ data class KeyboardLayout(
 
         fun thaiShift(): KeyboardLayout {
             val keys = listOf(
-                // Row 0: Missing Thai chars + Thai numerals
-                FlickKey("ts1", "์", "ฌ", "ฺ", "๋", "็", "#a855f7", "Missing"),
+                // Row 0: Rare Thai chars + Thai numerals
+                FlickKey("ts1", "ฆ", "ฌ", "ฺ", "๋", "ฮ", "#a855f7", "Rare"),
                 FlickKey("ts2", "๑", "๒", "๓", "๔", "๕", "#6366f1", "Thai 1-5"),
                 FlickKey("ts3", "๖", "๗", "๘", "๙", "๐", "#6366f1", "Thai 6-0"),
 
-                // Row 1: Numbers
+                // Row 1: Numbers + rare chars
                 FlickKey("ts4", "1", "2", "3", "4", "5", "#22c55e", "Num 1-5"),
                 FlickKey("ts5", "6", "7", "8", "9", "0", "#22c55e", "Num 6-0"),
-                FlickKey("ts6", "฿", "$", "€", "£", "¥", "#f59e0b", "Currency"),
+                FlickKey("ts6", "฿", "ฬ", "ฃ", "ฅ", "ฦ", "#f59e0b", "Currency+"),
 
                 // Row 2: Punctuation
                 FlickKey("ts7", ".", ",", "!", "?", ":", "#ec4899", "Punct"),
@@ -131,7 +194,7 @@ data class KeyboardLayout(
                 // Row 3: Symbols
                 FlickKey("ts10", "@", "#", "%", "&", "*", "#64748b", "Symbols"),
                 FlickKey("ts11", "+", "=", "<", ">", "^", "#64748b", "Math"),
-                FlickKey("ts12", "_", "~", "`", "{", "}", "#64748b", "More")
+                FlickKey("ts12", "$", "€", "£", "¥", "~", "#64748b", "Currency")
             )
             return KeyboardLayout("Thai Shift", keys)
         }
@@ -161,8 +224,16 @@ data class KeyboardLayout(
             return KeyboardLayout("Numbers", keys)
         }
 
+        fun allPresets(): List<KeyboardLayout> = listOf(
+            padPimOpti(),
+            padPimKey(),
+            optimizedCenter()
+        )
+
+        fun presetNames(): List<String> = allPresets().map { it.name }
+
         fun fromPresetName(name: String): KeyboardLayout {
-            return optimizedCenter()
+            return allPresets().find { it.name == name } ?: padPimOpti()
         }
     }
 }
