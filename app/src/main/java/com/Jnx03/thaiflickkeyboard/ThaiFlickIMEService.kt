@@ -15,7 +15,6 @@ import android.speech.RecognizerIntent
 import android.speech.SpeechRecognizer
 import android.view.View
 import android.view.inputmethod.EditorInfo
-import android.view.inputmethod.InputMethodManager
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import android.widget.Toast
@@ -27,6 +26,7 @@ import com.Jnx03.thaiflickkeyboard.model.KeyboardLayout
 import com.Jnx03.thaiflickkeyboard.model.KeyboardMode
 import com.Jnx03.thaiflickkeyboard.util.HapticHelper
 import com.Jnx03.thaiflickkeyboard.view.ClipboardPanelView
+import com.Jnx03.thaiflickkeyboard.view.EmojiPanelView
 import com.Jnx03.thaiflickkeyboard.view.FlickKeyboardView
 import com.Jnx03.thaiflickkeyboard.view.QwertyKeyboardView
 import com.Jnx03.thaiflickkeyboard.view.SuggestionBarView
@@ -44,8 +44,10 @@ class ThaiFlickIMEService : InputMethodService(), SharedPreferences.OnSharedPref
     private var qwertyView: QwertyKeyboardView? = null
     private var suggestionBar: SuggestionBarView? = null
     private var clipboardPanel: ClipboardPanelView? = null
+    private var emojiPanel: EmojiPanelView? = null
     private var currentMode = KeyboardMode.THAI
     private var clipboardShowing = false
+    private var emojiShowing = false
 
     private var speechRecognizer: SpeechRecognizer? = null
     private var isSpeechListening = false
@@ -97,7 +99,7 @@ class ThaiFlickIMEService : InputMethodService(), SharedPreferences.OnSharedPref
                 startActivity(intent)
             }
             onMic = { startSpeechRecognition() }
-            onEmoji = { showSystemEmoji() }
+            onEmoji = { toggleEmojiPanel() }
             onClipboard = { toggleClipboardPanel() }
         }
 
@@ -168,6 +170,12 @@ class ThaiFlickIMEService : InputMethodService(), SharedPreferences.OnSharedPref
             }
         }
 
+        emojiPanel = view.findViewById<EmojiPanelView>(R.id.emoji_panel).apply {
+            onEmojiSelected = { emoji ->
+                currentInputConnection?.commitText(emoji, 1)
+            }
+        }
+
         updateModeLabel()
         updateShiftIcon()
         showKeyboardForMode()
@@ -177,6 +185,7 @@ class ThaiFlickIMEService : InputMethodService(), SharedPreferences.OnSharedPref
     override fun onStartInputView(info: EditorInfo?, restarting: Boolean) {
         super.onStartInputView(info, restarting)
         if (clipboardShowing) hideClipboardPanel()
+        if (emojiShowing) hideEmojiPanel()
         updateSuggestions()
     }
 
@@ -188,6 +197,7 @@ class ThaiFlickIMEService : InputMethodService(), SharedPreferences.OnSharedPref
     }
 
     private fun showClipboardPanel() {
+        if (emojiShowing) hideEmojiPanel()
         clipboardPanel?.setHistory(clipboardHistory.getHistory())
         keyboardView?.visibility = View.GONE
         qwertyView?.visibility = View.GONE
@@ -204,7 +214,7 @@ class ThaiFlickIMEService : InputMethodService(), SharedPreferences.OnSharedPref
     // ── Mode Switching ──
 
     private fun showKeyboardForMode() {
-        if (clipboardShowing) return
+        if (clipboardShowing || emojiShowing) return
         when (currentMode) {
             KeyboardMode.ENGLISH -> {
                 keyboardView?.visibility = View.GONE
@@ -246,7 +256,7 @@ class ThaiFlickIMEService : InputMethodService(), SharedPreferences.OnSharedPref
             keyboardView?.layout = layoutRepository.loadLayout()
             updateShiftIcon()
         } else {
-            showSystemEmoji()
+            toggleEmojiPanel()
         }
     }
 
@@ -292,11 +302,26 @@ class ThaiFlickIMEService : InputMethodService(), SharedPreferences.OnSharedPref
         suggestionBar?.setSuggestions(emptyList())
     }
 
-    // ── Emoji ──
+    // ── Emoji Panel ──
 
-    private fun showSystemEmoji() {
-        val imeManager = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
-        imeManager.showInputMethodPicker()
+    private fun toggleEmojiPanel() {
+        if (emojiShowing) hideEmojiPanel()
+        else showEmojiPanel()
+    }
+
+    private fun showEmojiPanel() {
+        if (clipboardShowing) hideClipboardPanel()
+        keyboardView?.visibility = View.GONE
+        qwertyView?.visibility = View.GONE
+        emojiPanel?.showRecent()
+        emojiPanel?.visibility = View.VISIBLE
+        emojiShowing = true
+    }
+
+    private fun hideEmojiPanel() {
+        emojiPanel?.visibility = View.GONE
+        emojiShowing = false
+        showKeyboardForMode()
     }
 
     // ── Speech-to-Text ──
