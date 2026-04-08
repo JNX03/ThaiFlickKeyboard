@@ -13,6 +13,7 @@ import androidx.core.content.ContextCompat
 import com.Jnx03.thaiflickkeyboard.R
 import com.Jnx03.thaiflickkeyboard.gesture.FlickGestureDetector
 import com.Jnx03.thaiflickkeyboard.model.FlickDirection
+import com.Jnx03.thaiflickkeyboard.util.ThemeManager
 import com.Jnx03.thaiflickkeyboard.util.dpToPx
 import com.Jnx03.thaiflickkeyboard.util.spToPx
 
@@ -32,14 +33,11 @@ class UtilityBarView @JvmOverloads constructor(
     private var activeRegion = -1 // 0=lang, 1=space, 2=enter
     private var isTouching = false
 
-    private val bgPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        color = Color.parseColor("#3c3c3c")
-    }
-    private val activeBgPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        color = Color.parseColor("#4a4a4a")
-    }
+    private inline val colors get() = ThemeManager.currentColors
+
+    private val bgPaint = Paint(Paint.ANTI_ALIAS_FLAG)
+    private val activeBgPaint = Paint(Paint.ANTI_ALIAS_FLAG)
     private val textPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        color = Color.WHITE
         textAlign = Paint.Align.CENTER
         textSize = 14f.spToPx(context)
     }
@@ -63,6 +61,9 @@ class UtilityBarView @JvmOverloads constructor(
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
+        bgPaint.color = colors.charKeyBg
+        activeBgPaint.color = colors.utilKeyPressed
+        textPaint.color = colors.textColor
         val h = height.toFloat()
 
         // Language switch button
@@ -74,6 +75,7 @@ class UtilityBarView @JvmOverloads constructor(
             val cx = rect.centerX().toInt()
             val cy = rect.centerY().toInt()
             it.setBounds(cx - iconSize / 2, cy - iconSize / 2, cx + iconSize / 2, cy + iconSize / 2)
+            it.setTint(colors.textColor)
             it.draw(canvas)
         }
 
@@ -92,6 +94,7 @@ class UtilityBarView @JvmOverloads constructor(
             val cx = rect.centerX().toInt()
             val cy = rect.centerY().toInt()
             it.setBounds(cx - iconSize / 2, cy - iconSize / 2, cx + iconSize / 2, cy + iconSize / 2)
+            it.setTint(colors.textColor)
             it.draw(canvas)
         }
     }
