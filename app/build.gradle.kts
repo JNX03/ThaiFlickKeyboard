@@ -11,8 +11,8 @@ android {
         applicationId = "com.Jnx03.thaiflickkeyboard"
         minSdk = 24
         targetSdk = 36
-        versionCode = 264
-        versionName = "2.6.4"
+        versionCode = 270
+        versionName = "2.7.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
