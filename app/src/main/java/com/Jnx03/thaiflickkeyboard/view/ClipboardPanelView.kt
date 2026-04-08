@@ -9,6 +9,7 @@ import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
 import com.Jnx03.thaiflickkeyboard.data.ClipboardHistoryManager
+import com.Jnx03.thaiflickkeyboard.util.ThemeManager
 import com.Jnx03.thaiflickkeyboard.util.dpToPx
 import com.Jnx03.thaiflickkeyboard.util.spToPx
 
@@ -37,27 +38,21 @@ class ClipboardPanelView @JvmOverloads constructor(
     private val pad = 12f.dpToPx(context)
     private val cornerR = 8f.dpToPx(context)
 
-    private val bgColor = Color.parseColor("#1C1C1E")
-    private val itemBg = Color.parseColor("#2C2C2E")
-    private val itemPressed = Color.parseColor("#3A3A3C")
-    private val headerColor = Color.parseColor("#8E8E93")
-    private val textColor = Color.parseColor("#FFFFFF")
-    private val subtextColor = Color.parseColor("#8E8E93")
     private val deleteColor = Color.parseColor("#FF453A")
-    private val clearBg = Color.parseColor("#2C2C2E")
+    private inline val colors get() = ThemeManager.currentColors
 
     private val bgPaint = Paint(Paint.ANTI_ALIAS_FLAG)
     private val textPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        color = textColor; textSize = 15f.spToPx(context)
+        textSize = 15f.spToPx(context)
     }
     private val headerPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        color = headerColor; textSize = 13f.spToPx(context); textAlign = Paint.Align.LEFT
+        textSize = 13f.spToPx(context); textAlign = Paint.Align.LEFT
     }
     private val deletePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         color = deleteColor; textSize = 13f.spToPx(context); textAlign = Paint.Align.CENTER
     }
     private val subtextPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        color = subtextColor; textSize = 11f.spToPx(context)
+        textSize = 11f.spToPx(context)
     }
     private val rect = RectF()
 
@@ -75,18 +70,21 @@ class ClipboardPanelView @JvmOverloads constructor(
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
-        canvas.drawColor(bgColor)
+        canvas.drawColor(colors.kbBg)
+        textPaint.color = colors.textColor
+        headerPaint.color = colors.hintColor
+        subtextPaint.color = colors.hintColor
 
         // Header: "Clipboard" + Close button + Clear All
-        bgPaint.color = bgColor
+        bgPaint.color = colors.kbBg
         headerPaint.textAlign = Paint.Align.LEFT
         canvas.drawText("Clipboard", pad, headerHeight / 2 + 5f.dpToPx(context), headerPaint)
 
         // Close button (X)
         headerPaint.textAlign = Paint.Align.RIGHT
-        headerPaint.color = textColor
+        headerPaint.color = colors.textColor
         canvas.drawText("✕", width - pad, headerHeight / 2 + 5f.dpToPx(context), headerPaint)
-        headerPaint.color = headerColor
+        headerPaint.color = colors.hintColor
 
         // Clear all button
         if (items.isNotEmpty()) {
@@ -95,7 +93,7 @@ class ClipboardPanelView @JvmOverloads constructor(
         }
 
         // Divider
-        bgPaint.color = Color.parseColor("#3A3A3C")
+        bgPaint.color = colors.dividerColor
         canvas.drawRect(pad, headerHeight, width - pad, headerHeight + 1f, bgPaint)
 
         if (items.isEmpty()) {
@@ -113,7 +111,7 @@ class ClipboardPanelView @JvmOverloads constructor(
             if (y + itemHeight < headerHeight || y > height) continue
 
             rect.set(pad, y, width - pad, y + itemHeight)
-            bgPaint.color = if (i == pressedIndex) itemPressed else itemBg
+            bgPaint.color = if (i == pressedIndex) colors.utilKeyPressed else colors.utilKeyBg
             canvas.drawRoundRect(rect, cornerR, cornerR, bgPaint)
 
             // Text (truncated)
