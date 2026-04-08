@@ -17,6 +17,7 @@ import com.Jnx03.thaiflickkeyboard.gesture.FlickGestureDetector
 import com.Jnx03.thaiflickkeyboard.model.FlickDirection
 import com.Jnx03.thaiflickkeyboard.model.FlickKey
 import com.Jnx03.thaiflickkeyboard.model.KeyboardLayout
+import com.Jnx03.thaiflickkeyboard.util.ThemeManager
 import com.Jnx03.thaiflickkeyboard.util.dpToPx
 import com.Jnx03.thaiflickkeyboard.util.spToPx
 
@@ -65,7 +66,11 @@ class FlickKeyboardView @JvmOverloads constructor(
     // Emoji key: tap=emoji, flick=special Thai chars
     private val emojiSpecialKey = FlickKey("emoji_special", "😀", "ๆ", "ฯ", "็", "๋", "", "")
 
-    private val gestureDetector = FlickGestureDetector(20f.dpToPx(context))
+    private var gestureDetector = FlickGestureDetector(20f.dpToPx(context))
+
+    fun updateSensitivity(deadZoneDp: Float) {
+        gestureDetector = FlickGestureDetector(deadZoneDp.dpToPx(context))
+    }
 
     // Touch state
     private var activeCol = -1
@@ -83,25 +88,15 @@ class FlickKeyboardView @JvmOverloads constructor(
     private var colStarts = FloatArray(COLS)
     private var rowHeight = 0f
 
-    // Colors — matching dark Japanese flick keyboard
-    private val kbBg = Color.parseColor("#1C1C1E")
-    private val charKeyBg = Color.parseColor("#3A3A3C")
-    private val charKeyPressed = Color.parseColor("#4285f4")
-    private val utilKeyBg = Color.parseColor("#2C2C2E")
-    private val utilKeyPressed = Color.parseColor("#3A3A3C")
-    private val textColor = Color.parseColor("#FFFFFF")
-    private val hintColor = Color.parseColor("#8E8E93")
-    private val flickBalloonBg = Color.parseColor("#3A3A3C")
-    private val flickBalloonActive = Color.parseColor("#4285f4")
-    private val flickDimOverlay = Color.argb(160, 0, 0, 0)
+    private inline val colors get() = ThemeManager.currentColors
 
-    private val dimPaint = Paint().apply { color = flickDimOverlay }
+    private val dimPaint = Paint()
     private val keyBgPaint = Paint(Paint.ANTI_ALIAS_FLAG)
     private val textPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        color = textColor; textAlign = Paint.Align.CENTER
+        textAlign = Paint.Align.CENTER
     }
     private val hintPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        color = hintColor; textAlign = Paint.Align.CENTER
+        textAlign = Paint.Align.CENTER
     }
 
     private val pad = 3f.dpToPx(context)
@@ -142,10 +137,14 @@ class FlickKeyboardView @JvmOverloads constructor(
         }
     }
 
-    private val bgFillPaint = Paint().apply { color = kbBg }
+    private val bgFillPaint = Paint()
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
+        bgFillPaint.color = colors.kbBg
+        dimPaint.color = colors.dimOverlay
+        textPaint.color = colors.textColor
+        hintPaint.color = colors.hintColor
         canvas.drawRect(0f, 0f, width.toFloat(), height.toFloat(), bgFillPaint)
 
         for (row in 0 until ROWS) {
@@ -185,15 +184,15 @@ class FlickKeyboardView @JvmOverloads constructor(
         val key = charKeys[keyIndex]
 
         // Background — blue highlight when active
-        keyBgPaint.color = if (isActive) charKeyPressed else charKeyBg
+        keyBgPaint.color = if (isActive) colors.charKeyPressed else colors.charKeyBg
         canvas.drawRoundRect(rect, cornerR, cornerR, keyBgPaint)
 
         val cx = rect.centerX()
         val cy = rect.centerY()
 
-        // Main character (large, white)
+        // Main character
         textPaint.textSize = 24f.spToPx(context)
-        textPaint.color = textColor
+        textPaint.color = if (isActive) Color.WHITE else colors.textColor
         textPaint.isFakeBoldText = false
         canvas.drawText(toDisplayChar(key.tap), cx, cy + 8f.dpToPx(context), textPaint)
 
@@ -212,12 +211,12 @@ class FlickKeyboardView @JvmOverloads constructor(
     }
 
     private fun drawUtilKey(canvas: Canvas, row: Int, col: Int, rect: RectF, isActive: Boolean) {
-        keyBgPaint.color = if (isActive) utilKeyPressed else utilKeyBg
+        keyBgPaint.color = if (isActive) colors.utilKeyPressed else colors.utilKeyBg
         canvas.drawRoundRect(rect, cornerR, cornerR, keyBgPaint)
 
         val cx = rect.centerX()
         val cy = rect.centerY()
-        textPaint.color = textColor
+        textPaint.color = colors.textColor
         textPaint.isFakeBoldText = false
 
         when {
@@ -247,7 +246,7 @@ class FlickKeyboardView @JvmOverloads constructor(
                 // Space key with tone hints
                 val spaceActive = isTouching && activeCol == col && activeRow == row
                 if (spaceActive) {
-                    keyBgPaint.color = charKeyPressed
+                    keyBgPaint.color = colors.charKeyPressed
                     canvas.drawRoundRect(rect, cornerR, cornerR, keyBgPaint)
                 }
                 textPaint.textSize = 12f.spToPx(context)
@@ -296,7 +295,7 @@ class FlickKeyboardView @JvmOverloads constructor(
         flickRect.set(x, y, x + w, y + h)
 
         val isActive = dir == currentDirection
-        keyBgPaint.color = if (isActive) flickBalloonActive else flickBalloonBg
+        keyBgPaint.color = if (isActive) colors.flickBalloonActive else colors.flickBalloonBg
         canvas.drawRoundRect(flickRect, cornerR, cornerR, keyBgPaint)
 
         textPaint.textSize = 22f.spToPx(context)
@@ -313,6 +312,7 @@ class FlickKeyboardView @JvmOverloads constructor(
             val cx = rect.centerX().toInt()
             val cy = rect.centerY().toInt()
             it.setBounds(cx - size / 2, cy - size / 2, cx + size / 2, cy + size / 2)
+            it.setTint(colors.textColor)
             it.draw(canvas)
         }
     }
