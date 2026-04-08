@@ -11,12 +11,15 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.Jnx03.thaiflickkeyboard.R
 import com.Jnx03.thaiflickkeyboard.data.LayoutRepository
 import com.Jnx03.thaiflickkeyboard.data.PreferencesManager
 import com.Jnx03.thaiflickkeyboard.model.KeyboardLayout
+import com.Jnx03.thaiflickkeyboard.util.ThemeManager
+import com.google.android.material.slider.Slider
 import com.google.android.material.switchmaterial.SwitchMaterial
 
 class SettingsActivity : AppCompatActivity() {
@@ -25,11 +28,13 @@ class SettingsActivity : AppCompatActivity() {
     private lateinit var layoutRepository: LayoutRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        prefsManager = PreferencesManager(this)
+        applyThemeMode()
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
 
-        prefsManager = PreferencesManager(this)
         layoutRepository = LayoutRepository(this)
+        ThemeManager.init(this, prefsManager.themeMode)
 
         // Enable keyboard
         findViewById<LinearLayout>(R.id.row_enable).setOnClickListener {
@@ -42,11 +47,37 @@ class SettingsActivity : AppCompatActivity() {
             imm.showInputMethodPicker()
         }
 
-        // Layout preset - show dialog picker
+        // Theme picker
+        findViewById<LinearLayout>(R.id.row_theme).setOnClickListener {
+            showThemePicker()
+        }
+        updateThemeDisplay()
+
+        // Layout preset
         findViewById<LinearLayout>(R.id.row_preset).setOnClickListener {
             showPresetPicker()
         }
         updatePresetDisplay()
+
+        // Flick sensitivity slider
+        val sliderSensitivity = findViewById<Slider>(R.id.slider_sensitivity)
+        val tvSensitivity = findViewById<TextView>(R.id.tv_sensitivity_value)
+        sliderSensitivity.value = prefsManager.flickSensitivity
+        tvSensitivity.text = prefsManager.flickSensitivity.toInt().toString()
+        sliderSensitivity.addOnChangeListener { _, value, _ ->
+            prefsManager.flickSensitivity = value
+            tvSensitivity.text = value.toInt().toString()
+        }
+
+        // Keyboard height slider
+        val sliderHeight = findViewById<Slider>(R.id.slider_height)
+        val tvHeight = findViewById<TextView>(R.id.tv_height_value)
+        sliderHeight.value = prefsManager.keyboardHeightPercent.toFloat()
+        tvHeight.text = "${prefsManager.keyboardHeightPercent}%"
+        sliderHeight.addOnChangeListener { _, value, _ ->
+            prefsManager.keyboardHeightPercent = value.toInt()
+            tvHeight.text = "${value.toInt()}%"
+        }
 
         // Haptic toggle
         val switchHaptic = findViewById<SwitchMaterial>(R.id.switch_haptic)
@@ -62,7 +93,48 @@ class SettingsActivity : AppCompatActivity() {
             prefsManager.soundEnabled = isChecked
         }
 
+        // About
+        findViewById<LinearLayout>(R.id.row_about).setOnClickListener {
+            startActivity(Intent(this, AboutActivity::class.java))
+        }
+
         requestMicPermissionIfNeeded()
+    }
+
+    private fun applyThemeMode() {
+        val mode = PreferencesManager(this).themeMode
+        AppCompatDelegate.setDefaultNightMode(
+            when (mode) {
+                "light" -> AppCompatDelegate.MODE_NIGHT_NO
+                "dark" -> AppCompatDelegate.MODE_NIGHT_YES
+                else -> AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
+            }
+        )
+    }
+
+    private fun showThemePicker() {
+        val options = arrayOf("Light", "Dark", "Follow System")
+        val values = arrayOf("light", "dark", "system")
+        val current = values.indexOf(prefsManager.themeMode).coerceAtLeast(0)
+
+        AlertDialog.Builder(this, R.style.Theme_ThaiFlickKeyboard_Dialog)
+            .setTitle("Theme")
+            .setSingleChoiceItems(options, current) { dialog, which ->
+                prefsManager.themeMode = values[which]
+                dialog.dismiss()
+                recreate()
+            }
+            .setNegativeButton("Cancel", null)
+            .show()
+    }
+
+    private fun updateThemeDisplay() {
+        val label = when (prefsManager.themeMode) {
+            "light" -> "Light"
+            "dark" -> "Dark"
+            else -> "Follow System"
+        }
+        findViewById<TextView>(R.id.tv_theme_value).text = label
     }
 
     private fun showPresetPicker() {
@@ -99,6 +171,7 @@ class SettingsActivity : AppCompatActivity() {
         super.onResume()
         updateKeyboardStatus()
         updatePresetDisplay()
+        updateThemeDisplay()
     }
 
     private fun updateKeyboardStatus() {
