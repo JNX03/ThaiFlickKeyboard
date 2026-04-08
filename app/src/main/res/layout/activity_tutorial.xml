@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/tutorial_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="?android:attr/windowBackground">
+    android:background="?android:attr/windowBackground"
+    android:fitsSystemWindows="true">
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/view_pager"
@@ -13,21 +15,28 @@
 
     <!-- Bottom navigation bar -->
     <LinearLayout
+        android:id="@+id/bottom_bar"
         android:layout_width="match_parent"
-        android:layout_height="56dp"
+        android:layout_height="wrap_content"
+        android:minHeight="56dp"
         android:orientation="horizontal"
         android:gravity="center_vertical"
         android:paddingHorizontal="20dp"
-        android:background="?attr/colorSurface">
+        android:paddingTop="12dp"
+        android:paddingBottom="12dp"
+        android:background="?attr/colorSurface"
+        android:elevation="4dp">
 
         <TextView
             android:id="@+id/btn_skip"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="40dp"
+            android:gravity="center"
             android:text="@string/tutorial_skip"
             android:textSize="15sp"
             android:textColor="?android:attr/textColorSecondary"
-            android:padding="8dp" />
+            android:paddingHorizontal="16dp"
+            android:background="?android:attr/selectableItemBackgroundBorderless" />
 
         <!-- Dots indicator -->
         <LinearLayout
@@ -41,12 +50,14 @@
         <TextView
             android:id="@+id/btn_next"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="40dp"
+            android:gravity="center"
             android:text="@string/tutorial_next"
             android:textSize="15sp"
             android:textColor="@color/key_indigo"
             android:textStyle="bold"
-            android:padding="8dp" />
+            android:paddingHorizontal="16dp"
+            android:background="?android:attr/selectableItemBackgroundBorderless" />
 
     </LinearLayout>
 

@@ -10,6 +10,6 @@ class TutorialPagerAdapter(activity: FragmentActivity) : FragmentStateAdapter(ac
     override fun createFragment(position: Int) = TutorialStepFragment.newInstance(position)
 
     companion object {
-        const val STEP_COUNT = 6
+        const val STEP_COUNT = 7
     }
 }

@@ -1,14 +1,18 @@
 package com.Jnx03.thaiflickkeyboard.settings.tutorial
 
+import android.content.Intent
 import android.os.Bundle
+import android.provider.Settings
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.Jnx03.thaiflickkeyboard.R
 import com.Jnx03.thaiflickkeyboard.view.KeyboardHeatmapView
@@ -38,13 +42,70 @@ class TutorialStepFragment : Fragment() {
         val tvDescription = view.findViewById<TextView>(R.id.tv_description)
         val practiceSection = view.findViewById<LinearLayout>(R.id.practice_section)
 
+        val setupSection = view.findViewById<LinearLayout>(R.id.setup_section)
+
         when (stepIndex) {
-            0 -> setupTapStep(animView, tvTitle, tvSubtitle, tvDescription)
-            1 -> setupFlickStep(animView, tvTitle, tvSubtitle, tvDescription)
-            2 -> setupLayoutStep(animView, heatmapView, tvTitle, tvSubtitle, tvDescription)
-            3 -> setupVowelStep(animView, tvTitle, tvSubtitle, tvDescription)
-            4 -> setupToneStep(animView, tvTitle, tvSubtitle, tvDescription)
-            5 -> setupPracticeStep(animView, tvTitle, tvSubtitle, tvDescription, practiceSection, view)
+            0 -> setupWelcomeStep(animView, tvTitle, tvSubtitle, tvDescription, setupSection, view)
+            1 -> setupTapStep(animView, tvTitle, tvSubtitle, tvDescription)
+            2 -> setupFlickStep(animView, tvTitle, tvSubtitle, tvDescription)
+            3 -> setupLayoutStep(animView, heatmapView, tvTitle, tvSubtitle, tvDescription)
+            4 -> setupVowelStep(animView, tvTitle, tvSubtitle, tvDescription)
+            5 -> setupToneStep(animView, tvTitle, tvSubtitle, tvDescription)
+            6 -> setupPracticeStep(animView, tvTitle, tvSubtitle, tvDescription, practiceSection, view)
+        }
+    }
+
+    private fun setupWelcomeStep(
+        animView: TutorialAnimationView, title: TextView,
+        subtitle: TextView, desc: TextView,
+        setupSection: LinearLayout, view: View
+    ) {
+        animView.animationType = TutorialAnimationView.AnimationType.TAP
+        animView.keyLabel = "า"
+        animView.flickLabels = mapOf("up" to "ร", "left" to "ง", "right" to "ั", "down" to "ต")
+
+        title.text = getString(R.string.tutorial_welcome_title)
+        subtitle.text = getString(R.string.tutorial_welcome_subtitle)
+        desc.text = getString(R.string.tutorial_welcome_desc)
+
+        setupSection.visibility = View.VISIBLE
+
+        val btnEnable = view.findViewById<LinearLayout>(R.id.btn_enable_keyboard)
+        val btnSelect = view.findViewById<LinearLayout>(R.id.btn_select_keyboard)
+        val tvStatus = view.findViewById<TextView>(R.id.tv_enable_status)
+
+        updateEnableStatus(tvStatus)
+
+        btnEnable.setOnClickListener {
+            startActivity(Intent(Settings.ACTION_INPUT_METHOD_SETTINGS))
+        }
+
+        btnSelect.setOnClickListener {
+            val imm = requireContext().getSystemService(AppCompatActivity.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.showInputMethodPicker()
+        }
+    }
+
+    private fun updateEnableStatus(tvStatus: TextView) {
+        val imm = requireContext().getSystemService(AppCompatActivity.INPUT_METHOD_SERVICE) as InputMethodManager
+        val enabled = imm.enabledInputMethodList.any {
+            it.packageName == requireContext().packageName
+        }
+        if (enabled) {
+            tvStatus.text = getString(R.string.tutorial_enabled)
+            tvStatus.setTextColor(requireContext().getColor(R.color.key_green))
+        } else {
+            tvStatus.text = getString(R.string.tutorial_not_enabled)
+            tvStatus.setTextColor(requireContext().getColor(R.color.key_amber))
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (stepIndex == 0) {
+            view?.findViewById<TextView>(R.id.tv_enable_status)?.let {
+                updateEnableStatus(it)
+            }
         }
     }
 

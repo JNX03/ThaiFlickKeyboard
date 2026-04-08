@@ -50,6 +50,14 @@
     <string name="tutorial_next">ถัดไป</string>
     <string name="tutorial_done">เสร็จสิ้น</string>
 
+    <string name="tutorial_welcome_title">ยินดีต้อนรับ</string>
+    <string name="tutorial_welcome_subtitle">Welcome to PadPim</string>
+    <string name="tutorial_welcome_desc">เปิดใช้งานและเลือกแป้นพิมพ์ PadPim\nเพื่อเริ่มต้นใช้งาน</string>
+    <string name="tutorial_enable_keyboard">เปิดใช้งานแป้นพิมพ์</string>
+    <string name="tutorial_select_keyboard">เลือกแป้นพิมพ์</string>
+    <string name="tutorial_enabled">เปิดแล้ว</string>
+    <string name="tutorial_not_enabled">ยังไม่เปิด</string>
+
     <string name="tutorial_tap_title">แตะเพื่อพิมพ์</string>
     <string name="tutorial_tap_subtitle">Tap to Type</string>
     <string name="tutorial_tap_desc">แตะที่ปุ่มเพื่อพิมพ์ตัวอักษรหลัก\nตัวอักษรกลางปุ่มคือตัวที่จะถูกพิมพ์\n\nตัวอย่าง: แตะปุ่ม \"า\" จะได้ \"า\"</string>
