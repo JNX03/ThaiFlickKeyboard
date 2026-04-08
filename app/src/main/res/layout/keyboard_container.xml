@@ -3,8 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:clipChildren="false"
-    android:background="#1C1C1E">
+    android:clipChildren="false">
 
     <com.Jnx03.thaiflickkeyboard.view.ToolbarView
         android:id="@+id/toolbar_view"
@@ -14,8 +13,7 @@
     <com.Jnx03.thaiflickkeyboard.view.SuggestionBarView
         android:id="@+id/suggestion_bar"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/suggestion_bar_height"
-        android:background="#1C1C1E" />
+        android:layout_height="@dimen/suggestion_bar_height" />
 
     <com.Jnx03.thaiflickkeyboard.view.FlickKeyboardView
         android:id="@+id/keyboard_view"
