@@ -25,12 +25,16 @@ class PreferencesManager(context: Context) {
         set(value) = prefs.edit().putInt(KEY_HEIGHT, value).apply()
 
     var selectedPreset: String
-        get() = prefs.getString(KEY_PRESET, "Optimized (Center)") ?: "Optimized (Center)"
+        get() = prefs.getString(KEY_PRESET, "Old") ?: "Old"
         set(value) = prefs.edit().putString(KEY_PRESET, value).apply()
 
     var themeMode: String
         get() = prefs.getString(KEY_THEME_MODE, "dark") ?: "dark"
         set(value) = prefs.edit().putString(KEY_THEME_MODE, value).apply()
+
+    var tutorialSeen: Boolean
+        get() = prefs.getBoolean(KEY_TUTORIAL_SEEN, false)
+        set(value) = prefs.edit().putBoolean(KEY_TUTORIAL_SEEN, value).apply()
 
     companion object {
         private const val KEY_SENSITIVITY = "flick_sensitivity"
@@ -39,5 +43,6 @@ class PreferencesManager(context: Context) {
         private const val KEY_HEIGHT = "keyboard_height_percent"
         private const val KEY_PRESET = "selected_preset"
         private const val KEY_THEME_MODE = "theme_mode"
+        private const val KEY_TUTORIAL_SEEN = "tutorial_seen"
     }
 }

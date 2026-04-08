@@ -52,6 +52,12 @@
             android:label="About"
             android:theme="@style/Theme.ThaiFlickKeyboard" />
 
+        <activity
+            android:name=".settings.TutorialActivity"
+            android:exported="false"
+            android:label="Tutorial"
+            android:theme="@style/Theme.ThaiFlickKeyboard" />
+
     </application>
 
 </manifest>

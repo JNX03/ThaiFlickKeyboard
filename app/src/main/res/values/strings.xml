@@ -29,11 +29,7 @@
     <string name="label_hint">Hint</string>
 
     <string name="layout_preset">Layout Preset</string>
-    <string name="preset_optimized_center">Optimized (Center) - Both hands</string>
-    <string name="preset_optimized_right">Optimized (Right Hand)</string>
-    <string name="preset_optimized_left">Optimized (Left Hand)</string>
-    <string name="preset_phonetic">Phonetic (Original)</string>
-    <string name="preset_speed">Speed (Experimental)</string>
+    <string name="preset_old">Old</string>
 
     <string name="settings_title">Settings</string>
     <string name="pref_sensitivity">Flick Sensitivity</string>
@@ -45,4 +41,36 @@
     <string name="reset_confirm_message">Reset all keys to the default layout?</string>
     <string name="cancel">Cancel</string>
     <string name="ok">OK</string>
+
+    <!-- Tutorial -->
+    <string name="tutorial_title">Tutorial</string>
+    <string name="tutorial_skip">ข้าม</string>
+    <string name="tutorial_next">ถัดไป</string>
+    <string name="tutorial_done">เสร็จสิ้น</string>
+
+    <string name="tutorial_tap_title">แตะเพื่อพิมพ์</string>
+    <string name="tutorial_tap_subtitle">Tap to Type</string>
+    <string name="tutorial_tap_desc">แตะที่ปุ่มเพื่อพิมพ์ตัวอักษรหลัก\nตัวอักษรกลางปุ่มคือตัวที่จะถูกพิมพ์\n\nตัวอย่าง: แตะปุ่ม \"ก\" จะได้ \"ก\"</string>
+
+    <string name="tutorial_flick_title">ปัดนิ้วเพื่อเลือก</string>
+    <string name="tutorial_flick_subtitle">Flick to Select</string>
+    <string name="tutorial_flick_desc">กดค้างแล้วปัดนิ้วไปใน 4 ทิศทาง\nเพื่อเลือกตัวอักษรอื่นบนปุ่มเดียวกัน\n\nแต่ละปุ่มมีตัวอักษร 5 ตัว:\nแตะ + ซ้าย + ขวา + บน + ล่าง</string>
+
+    <string name="tutorial_vowel_title">สระ</string>
+    <string name="tutorial_vowel_subtitle">Vowels</string>
+    <string name="tutorial_vowel_desc">สระแบ่งเป็น 3 กลุ่ม:\n\n• สระนำ: เ แ ไ ใ โ\n(วางก่อนพยัญชนะ)\n\n• สระบน: ิ ี ึ ื ั\n(วางบนพยัญชนะ)\n\n• สระหลัง: า ะ ุ ู ำ\n(วางหลังพยัญชนะ)</string>
+
+    <string name="tutorial_tone_title">วรรณยุกต์</string>
+    <string name="tutorial_tone_subtitle">Tone Marks</string>
+    <string name="tutorial_tone_desc">วรรณยุกต์อยู่ที่ปุ่ม Space\nกดค้างแล้วปัดนิ้ว:\n\n• ปัดซ้าย = ่ (ไม้เอก)\n• ปัดขึ้น = ้ (ไม้โท)\n• ปัดลง = ๊ (ไม้ตรี)\n\nหรือใช้ปุ่ม ์ สำหรับวรรณยุกต์เพิ่มเติม</string>
+
+    <string name="tutorial_practice_title">ฝึกพิมพ์</string>
+    <string name="tutorial_practice_subtitle">Practice Typing</string>
+    <string name="tutorial_practice_desc">ลองพิมพ์คำด้านล่างนี้</string>
+
+    <string name="tutorial_type_this">พิมพ์คำนี้:</string>
+    <string name="tutorial_type_here">พิมพ์ที่นี่…</string>
+    <string name="tutorial_correct">ถูกต้อง!</string>
+    <string name="tutorial_keep_going">กำลังพิมพ์ดี…</string>
+    <string name="tutorial_complete">ยอดเยี่ยม! คุณพิมพ์ครบทุกคำแล้ว</string>
 </resources>

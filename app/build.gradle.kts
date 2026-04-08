@@ -56,6 +56,7 @@ dependencies {
     implementation(libs.gson)
     implementation(libs.constraintlayout)
     implementation(libs.recyclerview)
+    implementation(libs.viewpager2)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

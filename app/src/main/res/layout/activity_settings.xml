@@ -105,6 +105,30 @@
                         android:text="›" android:textSize="20sp" android:textColor="?android:attr/textColorSecondary" />
                 </LinearLayout>
 
+                <View android:layout_width="match_parent" android:layout_height="1dp"
+                    android:background="?android:attr/listDivider" android:layout_marginStart="56dp" />
+
+                <!-- Tutorial -->
+                <LinearLayout
+                    android:id="@+id/row_tutorial"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:paddingHorizontal="16dp"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:focusable="true">
+                    <ImageView android:layout_width="24dp" android:layout_height="24dp"
+                        android:src="@drawable/ic_layout" android:layout_marginEnd="16dp"
+                        app:tint="?android:attr/textColorPrimary" />
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content"
+                        android:layout_weight="1" android:text="@string/tutorial_title"
+                        android:textSize="16sp" android:textColor="?android:attr/textColorPrimary" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="›" android:textSize="20sp" android:textColor="?android:attr/textColorSecondary" />
+                </LinearLayout>
+
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
@@ -182,33 +206,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
-
-                <!-- Layout Preset -->
-                <LinearLayout
-                    android:id="@+id/row_preset"
-                    android:layout_width="match_parent"
-                    android:layout_height="52dp"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical"
-                    android:paddingHorizontal="16dp"
-                    android:background="?android:attr/selectableItemBackground"
-                    android:clickable="true"
-                    android:focusable="true">
-                    <ImageView android:layout_width="24dp" android:layout_height="24dp"
-                        android:src="@drawable/ic_layout" android:layout_marginEnd="16dp"
-                        app:tint="?android:attr/textColorPrimary" />
-                    <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
-                        android:layout_weight="1" android:orientation="vertical">
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                            android:text="Layout Preset" android:textSize="16sp"
-                            android:textColor="?android:attr/textColorPrimary" />
-                        <TextView android:id="@+id/tv_preset_value" android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" android:text="Optimized (Center)"
-                            android:textSize="12sp" android:textColor="?android:attr/textColorSecondary" />
-                    </LinearLayout>
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:text="›" android:textSize="20sp" android:textColor="?android:attr/textColorSecondary" />
-                </LinearLayout>
 
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
