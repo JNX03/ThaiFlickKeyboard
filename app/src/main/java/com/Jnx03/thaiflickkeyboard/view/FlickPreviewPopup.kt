@@ -9,6 +9,7 @@ import android.view.View
 import android.widget.PopupWindow
 import android.widget.TextView
 import com.Jnx03.thaiflickkeyboard.R
+import com.Jnx03.thaiflickkeyboard.util.ThemeManager
 import com.Jnx03.thaiflickkeyboard.util.dpToPx
 
 class FlickPreviewPopup(private val context: Context) {
@@ -34,6 +35,7 @@ class FlickPreviewPopup(private val context: Context) {
     fun show(anchor: View, text: String, color: Int, x: Int, y: Int) {
         ensurePopup()
         previewText?.text = text
+        previewText?.setTextColor(ThemeManager.currentColors.textColor)
 
         val bg = GradientDrawable().apply {
             shape = GradientDrawable.RECTANGLE
