@@ -4,7 +4,10 @@ object ThaiWordList {
 
     fun getSuggestions(prefix: String, limit: Int = 3): List<String> {
         if (prefix.isEmpty()) return emptyList()
-        return words.filter { it.startsWith(prefix) && it != prefix }.take(limit)
+        return words.asSequence()
+            .filter { it.startsWith(prefix) && it != prefix }
+            .take(limit)
+            .toList()
     }
 
     // Top ~500 Thai words by frequency (Chulalongkorn corpus)
