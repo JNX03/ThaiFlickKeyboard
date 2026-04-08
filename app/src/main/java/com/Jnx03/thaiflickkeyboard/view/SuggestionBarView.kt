@@ -8,6 +8,7 @@ import android.graphics.RectF
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
+import com.Jnx03.thaiflickkeyboard.util.ThemeManager
 import com.Jnx03.thaiflickkeyboard.util.dpToPx
 import com.Jnx03.thaiflickkeyboard.util.spToPx
 
@@ -21,20 +22,15 @@ class SuggestionBarView @JvmOverloads constructor(
 
     private var suggestions = listOf<String>()
     private var pressedIndex = -1
+    private inline val colors get() = ThemeManager.currentColors
 
-    private val bgPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        color = Color.parseColor("#1C1C1E")
-    }
+    private val bgPaint = Paint(Paint.ANTI_ALIAS_FLAG)
     private val textPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        color = Color.parseColor("#FFFFFF")
         textAlign = Paint.Align.CENTER
         textSize = 15f.spToPx(context)
     }
-    private val pressedBgPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        color = Color.parseColor("#3A3A3C")
-    }
+    private val pressedBgPaint = Paint(Paint.ANTI_ALIAS_FLAG)
     private val dividerPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        color = Color.parseColor("#3A3A3C")
         strokeWidth = 1f.dpToPx(context)
     }
 
@@ -77,6 +73,10 @@ class SuggestionBarView @JvmOverloads constructor(
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
+        bgPaint.color = colors.kbBg
+        textPaint.color = colors.textColor
+        pressedBgPaint.color = colors.dividerColor
+        dividerPaint.color = colors.dividerColor
         canvas.drawRect(0f, 0f, width.toFloat(), height.toFloat(), bgPaint)
 
         val balloonChar = flickBalloonChar
@@ -117,7 +117,7 @@ class SuggestionBarView @JvmOverloads constructor(
         val top = height.toFloat() - balloonH - flickPad
         flickRect.set(left, top, left + balloonW, top + balloonH)
 
-        flickBgPaint.color = if (flickBalloonActive) Color.parseColor("#4285f4") else Color.parseColor("#3A3A3C")
+        flickBgPaint.color = if (flickBalloonActive) colors.flickBalloonActive else colors.flickBalloonBg
         canvas.drawRoundRect(flickRect, flickCornerR, flickCornerR, flickBgPaint)
 
         flickTextPaint.isFakeBoldText = flickBalloonActive
