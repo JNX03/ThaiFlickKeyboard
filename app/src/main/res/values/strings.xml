@@ -52,19 +52,23 @@
 
     <string name="tutorial_tap_title">แตะเพื่อพิมพ์</string>
     <string name="tutorial_tap_subtitle">Tap to Type</string>
-    <string name="tutorial_tap_desc">แตะที่ปุ่มเพื่อพิมพ์ตัวอักษรหลัก\nตัวอักษรกลางปุ่มคือตัวที่จะถูกพิมพ์\n\nตัวอย่าง: แตะปุ่ม \"ก\" จะได้ \"ก\"</string>
+    <string name="tutorial_tap_desc">แตะที่ปุ่มเพื่อพิมพ์ตัวอักษรหลัก\nตัวอักษรกลางปุ่มคือตัวที่จะถูกพิมพ์\n\nตัวอย่าง: แตะปุ่ม \"า\" จะได้ \"า\"</string>
 
     <string name="tutorial_flick_title">ปัดนิ้วเพื่อเลือก</string>
     <string name="tutorial_flick_subtitle">Flick to Select</string>
     <string name="tutorial_flick_desc">กดค้างแล้วปัดนิ้วไปใน 4 ทิศทาง\nเพื่อเลือกตัวอักษรอื่นบนปุ่มเดียวกัน\n\nแต่ละปุ่มมีตัวอักษร 5 ตัว:\nแตะ + ซ้าย + ขวา + บน + ล่าง</string>
 
+    <string name="tutorial_layout_title">ผังแป้นพิมพ์</string>
+    <string name="tutorial_layout_subtitle">Key Importance</string>
+    <string name="tutorial_layout_desc">ปุ่มกลางแถว 2 สำคัญที่สุด (แดง)\nตัวอักษรที่ใช้บ่อยจะอยู่ตำแหน่งง่าย\n\n🔴 100 = ใช้มากที่สุด (า ร)\n🟠 80 = ใช้บ่อย (น ก)\n🟡 60 = ใช้ปานกลาง (ม ย)\n🟢 40 = ใช้น้อย\n⚪ 20 = ใช้น้อยมาก\n\nออกแบบจากข้อมูลภาษาไทย 354 ล้านตัวอักษร</string>
+
     <string name="tutorial_vowel_title">สระ</string>
     <string name="tutorial_vowel_subtitle">Vowels</string>
-    <string name="tutorial_vowel_desc">สระแบ่งเป็น 3 กลุ่ม:\n\n• สระนำ: เ แ ไ ใ โ\n(วางก่อนพยัญชนะ)\n\n• สระบน: ิ ี ึ ื ั\n(วางบนพยัญชนะ)\n\n• สระหลัง: า ะ ุ ู ำ\n(วางหลังพยัญชนะ)</string>
+    <string name="tutorial_vowel_desc">PadPim - Key: สระอยู่ 2 ปุ่ม\n• ปุ่มสระ ๑: า เ ั ี ะ\n• ปุ่มสระ ๒: ิ แ ุ ู ำ\n\nPadPim - Opti: สระกระจายตามความถี่\n\nสระนำ (เ แ ไ ใ โ) วางก่อนพยัญชนะ\nสระบน (ิ ี ึ ื ั) วางบนพยัญชนะ\nสระหลัง (า ะ ุ ู ำ) วางหลังพยัญชนะ</string>
 
     <string name="tutorial_tone_title">วรรณยุกต์</string>
     <string name="tutorial_tone_subtitle">Tone Marks</string>
-    <string name="tutorial_tone_desc">วรรณยุกต์อยู่ที่ปุ่ม Space\nกดค้างแล้วปัดนิ้ว:\n\n• ปัดซ้าย = ่ (ไม้เอก)\n• ปัดขึ้น = ้ (ไม้โท)\n• ปัดลง = ๊ (ไม้ตรี)\n\nหรือใช้ปุ่ม ์ สำหรับวรรณยุกต์เพิ่มเติม</string>
+    <string name="tutorial_tone_desc">วรรณยุกต์อยู่ที่ปุ่ม Space\nกดค้างแล้วปัดนิ้ว:\n\n• ปัดซ้าย = ่ (ไม้เอก)\n• ปัดขึ้น = ้ (ไม้โท)\n• ปัดขวา = ๊ (ไม้ตรี)\n\nตัวอักษรหายาก เช่น ฆ ๋ ฺ อยู่ในหน้า Shift</string>
 
     <string name="tutorial_practice_title">ฝึกพิมพ์</string>
     <string name="tutorial_practice_subtitle">Practice Typing</string>

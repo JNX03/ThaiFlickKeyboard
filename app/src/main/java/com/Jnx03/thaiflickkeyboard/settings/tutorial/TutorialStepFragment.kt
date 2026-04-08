@@ -11,6 +11,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.Jnx03.thaiflickkeyboard.R
+import com.Jnx03.thaiflickkeyboard.view.KeyboardHeatmapView
 import com.Jnx03.thaiflickkeyboard.view.TutorialAnimationView
 
 class TutorialStepFragment : Fragment() {
@@ -31,6 +32,7 @@ class TutorialStepFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val animView = view.findViewById<TutorialAnimationView>(R.id.animation_view)
+        val heatmapView = view.findViewById<KeyboardHeatmapView>(R.id.heatmap_view)
         val tvTitle = view.findViewById<TextView>(R.id.tv_title)
         val tvSubtitle = view.findViewById<TextView>(R.id.tv_subtitle)
         val tvDescription = view.findViewById<TextView>(R.id.tv_description)
@@ -39,9 +41,10 @@ class TutorialStepFragment : Fragment() {
         when (stepIndex) {
             0 -> setupTapStep(animView, tvTitle, tvSubtitle, tvDescription)
             1 -> setupFlickStep(animView, tvTitle, tvSubtitle, tvDescription)
-            2 -> setupVowelStep(animView, tvTitle, tvSubtitle, tvDescription)
-            3 -> setupToneStep(animView, tvTitle, tvSubtitle, tvDescription)
-            4 -> setupPracticeStep(animView, tvTitle, tvSubtitle, tvDescription, practiceSection, view)
+            2 -> setupLayoutStep(animView, heatmapView, tvTitle, tvSubtitle, tvDescription)
+            3 -> setupVowelStep(animView, tvTitle, tvSubtitle, tvDescription)
+            4 -> setupToneStep(animView, tvTitle, tvSubtitle, tvDescription)
+            5 -> setupPracticeStep(animView, tvTitle, tvSubtitle, tvDescription, practiceSection, view)
         }
     }
 
@@ -50,8 +53,8 @@ class TutorialStepFragment : Fragment() {
         subtitle: TextView, desc: TextView
     ) {
         animView.animationType = TutorialAnimationView.AnimationType.TAP
-        animView.keyLabel = "ก"
-        animView.flickLabels = mapOf("up" to "ค", "left" to "ข", "right" to "ฆ", "down" to "ฃ")
+        animView.keyLabel = "า"
+        animView.flickLabels = mapOf("up" to "ร", "left" to "ง", "right" to "ั", "down" to "ต")
 
         title.text = getString(R.string.tutorial_tap_title)
         subtitle.text = getString(R.string.tutorial_tap_subtitle)
@@ -64,11 +67,23 @@ class TutorialStepFragment : Fragment() {
     ) {
         animView.animationType = TutorialAnimationView.AnimationType.FLICK_ALL
         animView.keyLabel = "ก"
-        animView.flickLabels = mapOf("up" to "ค", "left" to "ข", "right" to "ฆ", "down" to "ฃ")
+        animView.flickLabels = mapOf("up" to "เ", "left" to "ท", "right" to "ด", "down" to "พ")
 
         title.text = getString(R.string.tutorial_flick_title)
         subtitle.text = getString(R.string.tutorial_flick_subtitle)
         desc.text = getString(R.string.tutorial_flick_desc)
+    }
+
+    private fun setupLayoutStep(
+        animView: TutorialAnimationView, heatmapView: KeyboardHeatmapView,
+        title: TextView, subtitle: TextView, desc: TextView
+    ) {
+        animView.visibility = View.GONE
+        heatmapView.visibility = View.VISIBLE
+
+        title.text = getString(R.string.tutorial_layout_title)
+        subtitle.text = getString(R.string.tutorial_layout_subtitle)
+        desc.text = getString(R.string.tutorial_layout_desc)
     }
 
     private fun setupVowelStep(
@@ -76,8 +91,8 @@ class TutorialStepFragment : Fragment() {
         subtitle: TextView, desc: TextView
     ) {
         animView.animationType = TutorialAnimationView.AnimationType.FLICK_ALL
-        animView.keyLabel = "เ"
-        animView.flickLabels = mapOf("up" to "ไ", "left" to "แ", "right" to "ใ", "down" to "โ")
+        animView.keyLabel = "า"
+        animView.flickLabels = mapOf("up" to "เ", "left" to "ั", "right" to "ี", "down" to "ะ")
 
         title.text = getString(R.string.tutorial_vowel_title)
         subtitle.text = getString(R.string.tutorial_vowel_subtitle)
@@ -90,7 +105,7 @@ class TutorialStepFragment : Fragment() {
     ) {
         animView.animationType = TutorialAnimationView.AnimationType.FLICK_ALL
         animView.keyLabel = "Space"
-        animView.flickLabels = mapOf("up" to "้", "left" to "่", "right" to "", "down" to "๊")
+        animView.flickLabels = mapOf("up" to "้", "left" to "่", "right" to "๊", "down" to "")
 
         title.text = getString(R.string.tutorial_tone_title)
         subtitle.text = getString(R.string.tutorial_tone_subtitle)
@@ -103,8 +118,8 @@ class TutorialStepFragment : Fragment() {
         practiceSection: LinearLayout, view: View
     ) {
         animView.animationType = TutorialAnimationView.AnimationType.TAP
-        animView.keyLabel = "า"
-        animView.flickLabels = mapOf("up" to "ุ", "left" to "ะ", "right" to "ู", "down" to "ำ")
+        animView.keyLabel = "น"
+        animView.flickLabels = mapOf("up" to "อ", "left" to "ว", "right" to "ี", "down" to "ไ")
 
         title.text = getString(R.string.tutorial_practice_title)
         subtitle.text = getString(R.string.tutorial_practice_subtitle)
