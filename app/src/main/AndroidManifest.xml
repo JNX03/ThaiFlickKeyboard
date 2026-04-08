@@ -46,6 +46,12 @@
             android:label="@string/customize_layout"
             android:theme="@style/Theme.ThaiFlickKeyboard" />
 
+        <activity
+            android:name=".settings.AboutActivity"
+            android:exported="false"
+            android:label="About"
+            android:theme="@style/Theme.ThaiFlickKeyboard" />
+
     </application>
 
 </manifest>
