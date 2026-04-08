@@ -11,6 +11,7 @@ import android.view.MotionEvent
 import android.view.View
 import androidx.core.content.ContextCompat
 import com.Jnx03.thaiflickkeyboard.R
+import com.Jnx03.thaiflickkeyboard.util.ThemeManager
 import com.Jnx03.thaiflickkeyboard.util.dpToPx
 
 /**
@@ -34,14 +35,11 @@ class ToolbarView @JvmOverloads constructor(
     private var items = listOf<ToolbarItem>()
     private var pressedIndex = -1
 
-    private val bgColor = Color.parseColor("#1C1C1E")
-    private val itemBg = Color.parseColor("#2C2C2E")
-    private val itemPressed = Color.parseColor("#3A3A3C")
-    private val dividerColor = Color.parseColor("#3A3A3C")
+    private inline val colors get() = ThemeManager.currentColors
 
     private val bgPaint = Paint(Paint.ANTI_ALIAS_FLAG)
     private val dividerPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        color = dividerColor; strokeWidth = 1f.dpToPx(context)
+        strokeWidth = 1f.dpToPx(context)
     }
     private val cornerR = 8f.dpToPx(context)
     private val pad = 4f.dpToPx(context)
@@ -67,7 +65,8 @@ class ToolbarView @JvmOverloads constructor(
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
-        canvas.drawColor(bgColor)
+        canvas.drawColor(colors.kbBg)
+        dividerPaint.color = colors.dividerColor
 
         if (items.isEmpty()) return
         val itemW = width.toFloat() / items.size
@@ -84,7 +83,7 @@ class ToolbarView @JvmOverloads constructor(
             rect.set(left, top, right, bottom)
 
             if (i == pressedIndex) {
-                bgPaint.color = itemPressed
+                bgPaint.color = colors.utilKeyPressed
                 canvas.drawRoundRect(rect, cornerR, cornerR, bgPaint)
             }
 
@@ -92,7 +91,7 @@ class ToolbarView @JvmOverloads constructor(
             val cy = rect.centerY().toInt()
             items[i].icon?.let {
                 it.setBounds(cx - iconSize / 2, cy - iconSize / 2, cx + iconSize / 2, cy + iconSize / 2)
-                it.setTint(Color.parseColor("#8E8E93"))
+                it.setTint(colors.hintColor)
                 it.draw(canvas)
             }
         }
