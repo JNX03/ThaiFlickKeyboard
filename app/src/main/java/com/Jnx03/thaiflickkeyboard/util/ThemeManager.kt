@@ -3,6 +3,7 @@ package com.Jnx03.thaiflickkeyboard.util
 import android.content.Context
 import android.content.res.Configuration
 import android.graphics.Color
+import com.Jnx03.thaiflickkeyboard.data.PreferencesManager
 
 data class ThemeColors(
     val kbBg: Int,
@@ -48,15 +49,69 @@ object ThemeManager {
         dimOverlay = Color.argb(80, 0, 0, 0)
     )
 
+    private val AMOLED = ThemeColors(
+        kbBg = Color.parseColor("#000000"),
+        charKeyBg = Color.parseColor("#1A1A1A"),
+        charKeyPressed = Color.parseColor("#4285f4"),
+        utilKeyBg = Color.parseColor("#0D0D0D"),
+        utilKeyPressed = Color.parseColor("#1A1A1A"),
+        textColor = Color.parseColor("#FFFFFF"),
+        hintColor = Color.parseColor("#6E6E73"),
+        flickBalloonBg = Color.parseColor("#1A1A1A"),
+        flickBalloonActive = Color.parseColor("#4285f4"),
+        dividerColor = Color.parseColor("#2C2C2E"),
+        dimOverlay = Color.argb(180, 0, 0, 0)
+    )
+
     var currentColors: ThemeColors = DARK
         private set
 
-    fun init(context: Context, preference: String) {
-        currentColors = when (preference) {
+    // Appearance properties
+    var cornerRadiusDp: Float = 10f
+        private set
+    var keySpacingDp: Float = 3f
+        private set
+    var fontSizeMultiplier: Float = 1.0f
+        private set
+    var keyBorderEnabled: Boolean = false
+        private set
+    var flickHintsVisible: Boolean = true
+        private set
+    var bottomPaddingDp: Int = 0
+        private set
+    var popupStyle: String = "balloon"
+        private set
+
+    fun init(context: Context, preference: String, accentColor: String = "#4285f4") {
+        val base = when (preference) {
             "light" -> LIGHT
             "dark" -> DARK
+            "amoled" -> AMOLED
             else -> if (isSystemDark(context)) DARK else LIGHT
         }
+        val accent = try { Color.parseColor(accentColor) } catch (_: Exception) { Color.parseColor("#4285f4") }
+        currentColors = base.copy(
+            charKeyPressed = accent,
+            flickBalloonActive = accent
+        )
+    }
+
+    fun updateAppearance(prefs: PreferencesManager) {
+        cornerRadiusDp = prefs.cornerRadius.toFloat()
+        keySpacingDp = when (prefs.keySpacing) {
+            "small" -> 2f
+            "large" -> 5f
+            else -> 3f
+        }
+        fontSizeMultiplier = when (prefs.fontSize) {
+            "small" -> 0.85f
+            "large" -> 1.15f
+            else -> 1.0f
+        }
+        keyBorderEnabled = prefs.keyBorderEnabled
+        flickHintsVisible = prefs.flickHintsVisible
+        bottomPaddingDp = prefs.bottomPadding
+        popupStyle = prefs.popupStyle
     }
 
     private fun isSystemDark(context: Context): Boolean {
