@@ -98,6 +98,11 @@ class SettingsActivity : AppCompatActivity() {
             startActivity(Intent(this, TutorialActivity::class.java))
         }
 
+        // Practice
+        findViewById<LinearLayout>(R.id.row_practice).setOnClickListener {
+            startActivity(Intent(this, PracticeActivity::class.java))
+        }
+
         // About
         findViewById<LinearLayout>(R.id.row_about).setOnClickListener {
             startActivity(Intent(this, AboutActivity::class.java))
