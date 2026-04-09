@@ -24,6 +24,7 @@ import com.Jnx03.thaiflickkeyboard.data.PreferencesManager
 import com.Jnx03.thaiflickkeyboard.data.ThaiWordList
 import com.Jnx03.thaiflickkeyboard.model.KeyboardLayout
 import com.Jnx03.thaiflickkeyboard.model.KeyboardMode
+import com.Jnx03.thaiflickkeyboard.util.dpToPx
 import com.Jnx03.thaiflickkeyboard.util.HapticHelper
 import com.Jnx03.thaiflickkeyboard.view.ClipboardPanelView
 import com.Jnx03.thaiflickkeyboard.view.EmojiPanelView
@@ -54,6 +55,7 @@ class ThaiFlickIMEService : InputMethodService(), SharedPreferences.OnSharedPref
 
     private var clipListener: ClipboardManager.OnPrimaryClipChangedListener? = null
     private var tutorialPrefs: SharedPreferences? = null
+    private var appSettingsPrefs: SharedPreferences? = null
     private val tutorialListener = SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
         if (key == "highlight_char") updateHighlightChar()
     }
@@ -68,8 +70,11 @@ class ThaiFlickIMEService : InputMethodService(), SharedPreferences.OnSharedPref
         prefsManager = PreferencesManager(this)
         actionHandler = InputActionHandler(this)
         clipboardHistory = ClipboardHistoryManager(this)
-        ThemeManager.init(this, prefsManager.themeMode)
+        ThemeManager.init(this, prefsManager.themeMode, prefsManager.accentColor)
+        ThemeManager.updateAppearance(prefsManager)
         layoutRepository.registerChangeListener(this)
+        appSettingsPrefs = getSharedPreferences("app_settings", MODE_PRIVATE)
+        appSettingsPrefs?.registerOnSharedPreferenceChangeListener(this)
         tutorialPrefs = getSharedPreferences("tutorial_prefs", MODE_PRIVATE)
         tutorialPrefs?.registerOnSharedPreferenceChangeListener(tutorialListener)
 
@@ -86,19 +91,22 @@ class ThaiFlickIMEService : InputMethodService(), SharedPreferences.OnSharedPref
     }
 
     override fun onCreateInputView(): View {
-        ThemeManager.init(this, prefsManager.themeMode)
+        ThemeManager.init(this, prefsManager.themeMode, prefsManager.accentColor)
+        ThemeManager.updateAppearance(prefsManager)
         val view = layoutInflater.inflate(R.layout.keyboard_container, null)
         view.setBackgroundColor(ThemeManager.currentColors.kbBg)
 
-        // Push keyboard above the navigation bar
+        // Push keyboard above the navigation bar + user bottom padding
         ViewCompat.setOnApplyWindowInsetsListener(view) { v, insets ->
             val navBarHeight = insets.getInsets(WindowInsetsCompat.Type.systemBars()).bottom
-            v.setPadding(v.paddingLeft, v.paddingTop, v.paddingRight, navBarHeight)
+            val extraPadding = ThemeManager.bottomPaddingDp.dpToPx(this@ThaiFlickIMEService).toInt()
+            v.setPadding(v.paddingLeft, v.paddingTop, v.paddingRight, navBarHeight + extraPadding)
             insets
         }
 
         // Toolbar
         view.findViewById<ToolbarView>(R.id.toolbar_view).apply {
+            visibility = if (prefsManager.showToolbar) View.VISIBLE else View.GONE
             onSettings = {
                 val intent = Intent(this@ThaiFlickIMEService, com.Jnx03.thaiflickkeyboard.settings.SettingsActivity::class.java)
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
@@ -109,11 +117,16 @@ class ThaiFlickIMEService : InputMethodService(), SharedPreferences.OnSharedPref
             onClipboard = { toggleClipboardPanel() }
         }
 
+        val suggestionsVisible = prefsManager.showSuggestions
         suggestionBar = view.findViewById<SuggestionBarView>(R.id.suggestion_bar).apply {
+            visibility = if (suggestionsVisible) View.VISIBLE else View.GONE
             onSuggestionSelected = { word -> commitSuggestion(word) }
         }
 
+        val heightPct = prefsManager.keyboardHeightPercent / 100f
+
         keyboardView = view.findViewById<FlickKeyboardView>(R.id.keyboard_view).apply {
+            heightPercent = heightPct
             layout = layoutRepository.loadLayout()
             hapticEnabled = prefsManager.hapticEnabled
             onCharacterSelected = { char ->
@@ -145,13 +158,14 @@ class ThaiFlickIMEService : InputMethodService(), SharedPreferences.OnSharedPref
             onCursorRight = { actionHandler.moveCursorRight() }
             onMicPressed = { startSpeechRecognition() }
             onEmojiPressed = { handleEmojiOrShift() }
-            onTopRowUpBalloon = { displayChar, centerX, width, height, isActive ->
+            onTopRowUpBalloon = if (suggestionsVisible) { displayChar, centerX, width, height, isActive ->
                 suggestionBar?.showFlickBalloon(displayChar, centerX, width, height, isActive)
-            }
+            } else null
             updateSensitivity(prefsManager.flickSensitivity)
         }
 
         qwertyView = view.findViewById<QwertyKeyboardView>(R.id.qwerty_view).apply {
+            heightPercent = heightPct
             hapticEnabled = prefsManager.hapticEnabled
             onCharacterSelected = { char -> actionHandler.commitChar(char) }
             onBackspace = { actionHandler.deleteBackward() }
@@ -385,15 +399,30 @@ class ThaiFlickIMEService : InputMethodService(), SharedPreferences.OnSharedPref
     }
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
-        if (key == "theme_mode") {
-            ThemeManager.init(this, prefsManager.themeMode)
-            setInputView(onCreateInputView())
-            return
+        when (key) {
+            // Layout-affecting changes: rebuild the entire input view
+            "theme_mode", "accent_color", "show_toolbar", "show_suggestions",
+            "keyboard_height_percent", "bottom_padding" -> {
+                ThemeManager.init(this, prefsManager.themeMode, prefsManager.accentColor)
+                ThemeManager.updateAppearance(prefsManager)
+                setInputView(onCreateInputView())
+            }
+            // Visual-only changes: update ThemeManager + invalidate views
+            "font_size", "key_spacing", "key_border_enabled", "corner_radius",
+            "flick_hints_visible", "popup_style" -> {
+                ThemeManager.updateAppearance(prefsManager)
+                keyboardView?.invalidate()
+                qwertyView?.invalidate()
+                suggestionBar?.invalidate()
+            }
+            // Existing behavior for other keys
+            else -> {
+                if (currentMode == KeyboardMode.THAI) keyboardView?.layout = layoutRepository.loadLayout()
+                keyboardView?.hapticEnabled = prefsManager.hapticEnabled
+                keyboardView?.updateSensitivity(prefsManager.flickSensitivity)
+                qwertyView?.hapticEnabled = prefsManager.hapticEnabled
+            }
         }
-        if (currentMode == KeyboardMode.THAI) keyboardView?.layout = layoutRepository.loadLayout()
-        keyboardView?.hapticEnabled = prefsManager.hapticEnabled
-        keyboardView?.updateSensitivity(prefsManager.flickSensitivity)
-        qwertyView?.hapticEnabled = prefsManager.hapticEnabled
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {
@@ -405,6 +434,7 @@ class ThaiFlickIMEService : InputMethodService(), SharedPreferences.OnSharedPref
     }
 
     override fun onDestroy() {
+        appSettingsPrefs?.unregisterOnSharedPreferenceChangeListener(this)
         tutorialPrefs?.unregisterOnSharedPreferenceChangeListener(tutorialListener)
         suggestionsThread.quitSafely()
         speechRecognizer?.destroy()
