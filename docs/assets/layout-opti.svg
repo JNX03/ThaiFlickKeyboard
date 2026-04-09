@@ -1,0 +1,108 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 530" width="480" height="530">
+  <!-- Background -->
+  <rect width="480" height="530" rx="16" fill="#1b1b1f"/>
+
+  <!-- Title -->
+  <text x="240" y="32" text-anchor="middle" font-family="Noto Sans Thai, sans-serif" font-size="16" font-weight="bold" fill="#e0e0e0">PadPim — Opti</text>
+
+  <!-- Row 0 -->
+  <g transform="translate(16, 48)">
+    <rect width="142" height="108" rx="10" fill="#2d2d33"/>
+    <text x="71" y="20" text-anchor="middle" font-family="Noto Sans Thai, sans-serif" font-size="13" fill="#888888">ข</text>
+    <text x="16" y="60" text-anchor="middle" font-family="Noto Sans Thai, sans-serif" font-size="13" fill="#888888">ธ</text>
+    <text x="71" y="66" text-anchor="middle" font-family="Noto Sans Thai, sans-serif" font-size="32" font-weight="bold" fill="#ffffff">ะ</text>
+    <text x="126" y="60" text-anchor="middle" font-family="Noto Sans Thai, sans-serif" font-size="13" fill="#888888">ผ</text>
+    <text x="71" y="100" text-anchor="middle" font-family="Noto Sans Thai, sans-serif" font-size="13" fill="#888888">ึ</text>
+  </g>
+  <g transform="translate(169, 48)">
+    <rect width="142" height="108" rx="10" fill="#2d2d33"/>
+    <text x="71" y="20" text-anchor="middle" font-family="Noto Sans Thai, sans-serif" font-size="13" fill="#888888">ล</text>
+    <text x="16" y="60" text-anchor="middle" font-family="Noto Sans Thai, sans-serif" font-size="13" fill="#888888">ห</text>
+    <text x="71" y="66" text-anchor="middle" font-family="Noto Sans Thai, sans-serif" font-size="32" font-weight="bold" fill="#ffffff">ม</text>
+    <text x="126" y="60" text-anchor="middle" font-family="Noto Sans Thai, sans-serif" font-size="13" fill="#888888">ส</text>
+    <text x="71" y="100" text-anchor="middle" font-family="Noto Sans Thai, sans-serif" font-size="13" fill="#888888">ุ</text>
+  </g>
+  <g transform="translate(322, 48)">
+    <rect width="142" height="108" rx="10" fill="#2d2d33"/>
+    <text x="71" y="20" text-anchor="middle" font-family="Noto Sans Thai, sans-serif" font-size="13" fill="#888888">ใ</text>
+    <text x="16" y="60" text-anchor="middle" font-family="Noto Sans Thai, sans-serif" font-size="13" fill="#888888">ู</text>
+    <text x="71" y="66" text-anchor="middle" font-family="Noto Sans Thai, sans-serif" font-size="32" font-weight="bold" fill="#ffffff">ป</text>
+    <text x="126" y="60" text-anchor="middle" font-family="Noto Sans Thai, sans-serif" font-size="13" fill="#888888">็</text>
+    <text x="71" y="100" text-anchor="middle" font-family="Noto Sans Thai, sans-serif" font-size="13" fill="#888888">ฟ</text>
+  </g>
+
+  <!-- Row 1 -->
+  <g transform="translate(16, 168)">
+    <rect width="142" height="108" rx="10" fill="#2d2d33"/>
+    <text x="71" y="20" text-anchor="middle" font-family="Noto Sans Thai, sans-serif" font-size="13" fill="#888888">อ</text>
+    <text x="16" y="60" text-anchor="middle" font-family="Noto Sans Thai, sans-serif" font-size="13" fill="#888888">ว</text>
+    <text x="71" y="66" text-anchor="middle" font-family="Noto Sans Thai, sans-serif" font-size="32" font-weight="bold" fill="#ffffff">น</text>
+    <text x="126" y="60" text-anchor="middle" font-family="Noto Sans Thai, sans-serif" font-size="13" fill="#888888">ี</text>
+    <text x="71" y="100" text-anchor="middle" font-family="Noto Sans Thai, sans-serif" font-size="13" fill="#888888">ไ</text>
+  </g>
+  <g transform="translate(169, 168)">
+    <rect width="142" height="108" rx="10" fill="#2d2d33"/>
+    <text x="71" y="20" text-anchor="middle" font-family="Noto Sans Thai, sans-serif" font-size="13" fill="#888888">ร</text>
+    <text x="16" y="60" text-anchor="middle" font-family="Noto Sans Thai, sans-serif" font-size="13" fill="#888888">ง</text>
+    <text x="71" y="66" text-anchor="middle" font-family="Noto Sans Thai, sans-serif" font-size="32" font-weight="bold" fill="#ffffff">า</text>
+    <text x="126" y="60" text-anchor="middle" font-family="Noto Sans Thai, sans-serif" font-size="13" fill="#888888">ั</text>
+    <text x="71" y="100" text-anchor="middle" font-family="Noto Sans Thai, sans-serif" font-size="13" fill="#888888">ต</text>
+  </g>
+  <g transform="translate(322, 168)">
+    <rect width="142" height="108" rx="10" fill="#2d2d33"/>
+    <text x="71" y="20" text-anchor="middle" font-family="Noto Sans Thai, sans-serif" font-size="13" fill="#888888">เ</text>
+    <text x="16" y="60" text-anchor="middle" font-family="Noto Sans Thai, sans-serif" font-size="13" fill="#888888">ท</text>
+    <text x="71" y="66" text-anchor="middle" font-family="Noto Sans Thai, sans-serif" font-size="32" font-weight="bold" fill="#ffffff">ก</text>
+    <text x="126" y="60" text-anchor="middle" font-family="Noto Sans Thai, sans-serif" font-size="13" fill="#888888">ด</text>
+    <text x="71" y="100" text-anchor="middle" font-family="Noto Sans Thai, sans-serif" font-size="13" fill="#888888">พ</text>
+  </g>
+
+  <!-- Row 2 -->
+  <g transform="translate(16, 288)">
+    <rect width="142" height="108" rx="10" fill="#2d2d33"/>
+    <text x="71" y="20" text-anchor="middle" font-family="Noto Sans Thai, sans-serif" font-size="13" fill="#888888">ช</text>
+    <text x="16" y="60" text-anchor="middle" font-family="Noto Sans Thai, sans-serif" font-size="13" fill="#888888">ำ</text>
+    <text x="71" y="66" text-anchor="middle" font-family="Noto Sans Thai, sans-serif" font-size="32" font-weight="bold" fill="#ffffff">จ</text>
+    <text x="126" y="60" text-anchor="middle" font-family="Noto Sans Thai, sans-serif" font-size="13" fill="#888888">ณ</text>
+    <text x="71" y="100" text-anchor="middle" font-family="Noto Sans Thai, sans-serif" font-size="13" fill="#888888">ญ</text>
+  </g>
+  <g transform="translate(169, 288)">
+    <rect width="142" height="108" rx="10" fill="#2d2d33"/>
+    <text x="71" y="20" text-anchor="middle" font-family="Noto Sans Thai, sans-serif" font-size="13" fill="#888888">ิ</text>
+    <text x="16" y="60" text-anchor="middle" font-family="Noto Sans Thai, sans-serif" font-size="13" fill="#888888">แ</text>
+    <text x="71" y="66" text-anchor="middle" font-family="Noto Sans Thai, sans-serif" font-size="32" font-weight="bold" fill="#ffffff">ย</text>
+    <text x="126" y="60" text-anchor="middle" font-family="Noto Sans Thai, sans-serif" font-size="13" fill="#888888">์</text>
+    <text x="71" y="100" text-anchor="middle" font-family="Noto Sans Thai, sans-serif" font-size="13" fill="#888888">บ</text>
+  </g>
+  <g transform="translate(322, 288)">
+    <rect width="142" height="108" rx="10" fill="#2d2d33"/>
+    <text x="71" y="20" text-anchor="middle" font-family="Noto Sans Thai, sans-serif" font-size="13" fill="#888888">ื</text>
+    <text x="16" y="60" text-anchor="middle" font-family="Noto Sans Thai, sans-serif" font-size="13" fill="#888888">ศ</text>
+    <text x="71" y="66" text-anchor="middle" font-family="Noto Sans Thai, sans-serif" font-size="32" font-weight="bold" fill="#ffffff">ค</text>
+    <text x="126" y="60" text-anchor="middle" font-family="Noto Sans Thai, sans-serif" font-size="13" fill="#888888">ถ</text>
+    <text x="71" y="100" text-anchor="middle" font-family="Noto Sans Thai, sans-serif" font-size="13" fill="#888888">ภ</text>
+  </g>
+
+  <!-- Row 3 (no down flick) -->
+  <g transform="translate(16, 408)">
+    <rect width="142" height="100" rx="10" fill="#252529"/>
+    <text x="71" y="20" text-anchor="middle" font-family="Noto Sans Thai, sans-serif" font-size="13" fill="#666666">ๆ</text>
+    <text x="16" y="56" text-anchor="middle" font-family="Noto Sans Thai, sans-serif" font-size="13" fill="#666666">ฯ</text>
+    <text x="71" y="62" text-anchor="middle" font-family="Noto Sans Thai, sans-serif" font-size="28" font-weight="bold" fill="#aaaaaa">โ</text>
+    <text x="126" y="56" text-anchor="middle" font-family="Noto Sans Thai, sans-serif" font-size="13" fill="#666666">ฎ</text>
+  </g>
+  <g transform="translate(169, 408)">
+    <rect width="142" height="100" rx="10" fill="#252529"/>
+    <text x="71" y="20" text-anchor="middle" font-family="Noto Sans Thai, sans-serif" font-size="13" fill="#666666">ฉ</text>
+    <text x="16" y="56" text-anchor="middle" font-family="Noto Sans Thai, sans-serif" font-size="13" fill="#666666">ฏ</text>
+    <text x="71" y="62" text-anchor="middle" font-family="Noto Sans Thai, sans-serif" font-size="28" font-weight="bold" fill="#aaaaaa">ซ</text>
+    <text x="126" y="56" text-anchor="middle" font-family="Noto Sans Thai, sans-serif" font-size="13" fill="#666666">ฐ</text>
+  </g>
+  <g transform="translate(322, 408)">
+    <rect width="142" height="100" rx="10" fill="#252529"/>
+    <text x="71" y="20" text-anchor="middle" font-family="Noto Sans Thai, sans-serif" font-size="13" fill="#666666">ฒ</text>
+    <text x="16" y="56" text-anchor="middle" font-family="Noto Sans Thai, sans-serif" font-size="13" fill="#666666">ฤ</text>
+    <text x="71" y="62" text-anchor="middle" font-family="Noto Sans Thai, sans-serif" font-size="28" font-weight="bold" fill="#aaaaaa">ษ</text>
+    <text x="126" y="56" text-anchor="middle" font-family="Noto Sans Thai, sans-serif" font-size="13" fill="#666666">ฑ</text>
+  </g>
+</svg>
