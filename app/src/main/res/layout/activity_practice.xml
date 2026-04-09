@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="?android:attr/windowBackground">
+
+    <!-- Top bar -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingHorizontal="8dp">
+
+        <ImageView
+            android:id="@+id/btn_back"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:padding="8dp"
+            android:src="@drawable/ic_back"
+            android:background="?android:attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:focusable="true"
+            android:contentDescription="Back"
+            app:tint="?android:attr/textColorPrimary" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/practice_title"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="?android:attr/textColorPrimary"
+            android:layout_marginStart="8dp" />
+
+        <TextView
+            android:id="@+id/tv_progress_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:textColor="?android:attr/textColorSecondary"
+            android:layout_marginEnd="8dp" />
+    </LinearLayout>
+
+    <!-- Difficulty tabs -->
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginBottom="16dp"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="0dp"
+        app:cardBackgroundColor="?attr/colorSurface">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tab_easy"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="@string/practice_easy"
+                android:textSize="14sp"
+                android:gravity="center"
+                android:background="?android:attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true" />
+
+            <TextView
+                android:id="@+id/tab_medium"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="@string/practice_medium"
+                android:textSize="14sp"
+                android:gravity="center"
+                android:background="?android:attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true" />
+
+            <TextView
+                android:id="@+id/tab_hard"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="@string/practice_hard"
+                android:textSize="14sp"
+                android:gravity="center"
+                android:background="?android:attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true" />
+
+            <TextView
+                android:id="@+id/tab_all"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="@string/practice_all"
+                android:textSize="14sp"
+                android:gravity="center"
+                android:background="?android:attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true" />
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <!-- Progress bar -->
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="4dp"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginBottom="24dp"
+        android:progressTint="@color/key_indigo"
+        android:progressBackgroundTint="?android:attr/textColorSecondary" />
+
+    <!-- Target word label -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/tutorial_type_this"
+        android:textSize="13sp"
+        android:textColor="?android:attr/textColorSecondary"
+        android:gravity="center"
+        android:layout_marginBottom="4dp" />
+
+    <!-- Target word -->
+    <TextView
+        android:id="@+id/tv_target_word"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="36sp"
+        android:textStyle="bold"
+        android:textColor="@color/key_indigo"
+        android:gravity="center"
+        android:layout_marginBottom="24dp" />
+
+    <!-- Input card -->
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginBottom="12dp"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="0dp"
+        app:cardBackgroundColor="?attr/colorSurface">
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:hint="@string/tutorial_type_here"
+            app:boxCornerRadiusTopStart="10dp"
+            app:boxCornerRadiusTopEnd="10dp"
+            app:boxCornerRadiusBottomStart="10dp"
+            app:boxCornerRadiusBottomEnd="10dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_practice"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="22sp"
+                android:textColor="?android:attr/textColorPrimary"
+                android:gravity="center"
+                android:inputType="text"
+                android:imeOptions="actionDone" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <!-- Feedback -->
+    <TextView
+        android:id="@+id/tv_result"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:gravity="center"
+        android:layout_marginBottom="16dp"
+        android:visibility="gone" />
+
+    <!-- Skip button -->
+    <TextView
+        android:id="@+id/btn_skip"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center"
+        android:paddingHorizontal="24dp"
+        android:text="@string/practice_skip"
+        android:textSize="14sp"
+        android:textColor="?android:attr/textColorSecondary"
+        android:background="?android:attr/selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true" />
+
+</LinearLayout>

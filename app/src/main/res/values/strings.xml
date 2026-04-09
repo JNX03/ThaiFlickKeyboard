@@ -88,6 +88,16 @@
     <string name="tutorial_keep_going">กำลังพิมพ์ดี…</string>
     <string name="tutorial_complete">ยอดเยี่ยม! คุณพิมพ์ครบทุกคำแล้ว</string>
 
+    <!-- Practice -->
+    <string name="practice_title">ฝึกพิมพ์</string>
+    <string name="practice_easy">ง่าย</string>
+    <string name="practice_medium">กลาง</string>
+    <string name="practice_hard">ยาก</string>
+    <string name="practice_all">ทั้งหมด</string>
+    <string name="practice_skip">ข้ามคำนี้</string>
+    <string name="practice_complete">ยอดเยี่ยม! คุณฝึกครบทุกคำแล้ว</string>
+    <string name="practice_try_again">ลองใหม่อีกครั้ง</string>
+
     <string name="tutorial_feedback_title">ช่วยเราพัฒนา</string>
     <string name="tutorial_feedback_message">มีข้อเสนอแนะหรือพบปัญหา?\nส่งฟีดแบ็กผ่าน GitHub Issues</string>
     <string name="tutorial_feedback_github">ส่งฟีดแบ็ก</string>
