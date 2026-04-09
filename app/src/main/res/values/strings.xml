@@ -38,6 +38,16 @@
     <string name="pref_haptic">Haptic Feedback</string>
     <string name="pref_sound">Key Sound</string>
     <string name="pref_height">Keyboard Height</string>
+    <string name="pref_font_size">Font Size</string>
+    <string name="pref_key_spacing">Key Spacing</string>
+    <string name="pref_accent_color">Accent Color</string>
+    <string name="pref_key_border">Key Border</string>
+    <string name="pref_corner_radius">Key Corner Radius</string>
+    <string name="pref_show_toolbar">Show Toolbar</string>
+    <string name="pref_show_suggestions">Show Suggestion Bar</string>
+    <string name="pref_bottom_padding">Bottom Padding</string>
+    <string name="pref_flick_hints">Show Flick Hints</string>
+    <string name="pref_popup_style">Popup Style</string>
 
     <string name="reset_confirm_title">Reset Layout</string>
     <string name="reset_confirm_message">Reset all keys to the default layout?</string>

@@ -156,11 +156,11 @@
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- Section: Appearance -->
+        <!-- Section: Theme & Colors -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Appearance"
+            android:text="Theme &amp; Colors"
             android:textSize="13sp"
             android:textColor="?android:attr/textColorSecondary"
             android:textAllCaps="true"
@@ -178,31 +178,376 @@
             app:cardBackgroundColor="?attr/colorSurface">
 
             <LinearLayout
-                android:id="@+id/row_theme"
                 android:layout_width="match_parent"
-                android:layout_height="52dp"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:paddingHorizontal="16dp"
-                android:background="?android:attr/selectableItemBackground"
-                android:clickable="true"
-                android:focusable="true">
-                <ImageView android:layout_width="24dp" android:layout_height="24dp"
-                    android:src="@drawable/ic_tune" android:layout_marginEnd="16dp"
-                    app:tint="?android:attr/textColorPrimary" />
-                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
-                    android:layout_weight="1" android:orientation="vertical">
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:text="Theme" android:textSize="16sp"
-                        android:textColor="?android:attr/textColorPrimary" />
-                    <TextView android:id="@+id/tv_theme_value" android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" android:text="Dark"
-                        android:textSize="12sp" android:textColor="?android:attr/textColorSecondary" />
-                </LinearLayout>
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                    android:text="›" android:textSize="20sp" android:textColor="?android:attr/textColorSecondary" />
-            </LinearLayout>
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
+                <!-- Theme -->
+                <LinearLayout
+                    android:id="@+id/row_theme"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:paddingHorizontal="16dp"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:focusable="true">
+                    <ImageView android:layout_width="24dp" android:layout_height="24dp"
+                        android:src="@drawable/ic_tune" android:layout_marginEnd="16dp"
+                        app:tint="?android:attr/textColorPrimary" />
+                    <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+                        android:layout_weight="1" android:orientation="vertical">
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                            android:text="Theme" android:textSize="16sp"
+                            android:textColor="?android:attr/textColorPrimary" />
+                        <TextView android:id="@+id/tv_theme_value" android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" android:text="Dark"
+                            android:textSize="12sp" android:textColor="?android:attr/textColorSecondary" />
+                    </LinearLayout>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="›" android:textSize="20sp" android:textColor="?android:attr/textColorSecondary" />
+                </LinearLayout>
+
+                <View android:layout_width="match_parent" android:layout_height="1dp"
+                    android:background="?android:attr/listDivider" android:layout_marginStart="56dp" />
+
+                <!-- Accent Color -->
+                <LinearLayout
+                    android:id="@+id/row_accent_color"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:paddingHorizontal="16dp"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:focusable="true">
+                    <View android:id="@+id/accent_color_preview"
+                        android:layout_width="24dp" android:layout_height="24dp"
+                        android:layout_marginEnd="16dp"
+                        android:background="@drawable/accent_color_circle" />
+                    <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+                        android:layout_weight="1" android:orientation="vertical">
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                            android:text="@string/pref_accent_color" android:textSize="16sp"
+                            android:textColor="?android:attr/textColorPrimary" />
+                        <TextView android:id="@+id/tv_accent_color_value" android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" android:text="Blue"
+                            android:textSize="12sp" android:textColor="?android:attr/textColorSecondary" />
+                    </LinearLayout>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="›" android:textSize="20sp" android:textColor="?android:attr/textColorSecondary" />
+                </LinearLayout>
+
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Section: Size -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Size"
+            android:textSize="13sp"
+            android:textColor="?android:attr/textColorSecondary"
+            android:textAllCaps="true"
+            android:letterSpacing="0.05"
+            android:paddingHorizontal="20dp"
+            android:paddingTop="24dp"
+            android:paddingBottom="8dp" />
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="0dp"
+            app:cardBackgroundColor="?attr/colorSurface">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingVertical="8dp">
+
+                <!-- Keyboard Height -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingHorizontal="16dp"
+                    android:paddingVertical="4dp">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+                        <TextView android:layout_width="0dp" android:layout_height="wrap_content"
+                            android:layout_weight="1" android:text="@string/pref_height"
+                            android:textSize="16sp" android:textColor="?android:attr/textColorPrimary" />
+                        <TextView android:id="@+id/tv_height_value" android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" android:text="38%"
+                            android:textSize="14sp" android:textColor="?android:attr/textColorSecondary" />
+                    </LinearLayout>
+                    <com.google.android.material.slider.Slider
+                        android:id="@+id/slider_height"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:valueFrom="25"
+                        android:valueTo="50"
+                        android:stepSize="1"
+                        android:value="38" />
+                </LinearLayout>
+
+                <View android:layout_width="match_parent" android:layout_height="1dp"
+                    android:background="?android:attr/listDivider" android:layout_marginStart="16dp" />
+
+                <!-- Font Size -->
+                <LinearLayout
+                    android:id="@+id/row_font_size"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:paddingHorizontal="16dp"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:focusable="true">
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content"
+                        android:layout_weight="1" android:text="@string/pref_font_size"
+                        android:textSize="16sp" android:textColor="?android:attr/textColorPrimary" />
+                    <TextView android:id="@+id/tv_font_size_value" android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" android:text="Medium"
+                        android:textSize="14sp" android:textColor="?android:attr/textColorSecondary" />
+                </LinearLayout>
+
+                <View android:layout_width="match_parent" android:layout_height="1dp"
+                    android:background="?android:attr/listDivider" android:layout_marginStart="16dp" />
+
+                <!-- Key Spacing -->
+                <LinearLayout
+                    android:id="@+id/row_key_spacing"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:paddingHorizontal="16dp"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:focusable="true">
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content"
+                        android:layout_weight="1" android:text="@string/pref_key_spacing"
+                        android:textSize="16sp" android:textColor="?android:attr/textColorPrimary" />
+                    <TextView android:id="@+id/tv_key_spacing_value" android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" android:text="Medium"
+                        android:textSize="14sp" android:textColor="?android:attr/textColorSecondary" />
+                </LinearLayout>
+
+                <View android:layout_width="match_parent" android:layout_height="1dp"
+                    android:background="?android:attr/listDivider" android:layout_marginStart="16dp" />
+
+                <!-- Corner Radius -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingHorizontal="16dp"
+                    android:paddingVertical="4dp">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+                        <TextView android:layout_width="0dp" android:layout_height="wrap_content"
+                            android:layout_weight="1" android:text="@string/pref_corner_radius"
+                            android:textSize="16sp" android:textColor="?android:attr/textColorPrimary" />
+                        <TextView android:id="@+id/tv_corner_radius_value" android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" android:text="10"
+                            android:textSize="14sp" android:textColor="?android:attr/textColorSecondary" />
+                    </LinearLayout>
+                    <com.google.android.material.slider.Slider
+                        android:id="@+id/slider_corner_radius"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:valueFrom="0"
+                        android:valueTo="20"
+                        android:stepSize="1"
+                        android:value="10" />
+                </LinearLayout>
+
+                <View android:layout_width="match_parent" android:layout_height="1dp"
+                    android:background="?android:attr/listDivider" android:layout_marginStart="16dp" />
+
+                <!-- Bottom Padding -->
+                <LinearLayout
+                    android:id="@+id/row_bottom_padding"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:paddingHorizontal="16dp"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:focusable="true">
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content"
+                        android:layout_weight="1" android:text="@string/pref_bottom_padding"
+                        android:textSize="16sp" android:textColor="?android:attr/textColorPrimary" />
+                    <TextView android:id="@+id/tv_bottom_padding_value" android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" android:text="0dp"
+                        android:textSize="14sp" android:textColor="?android:attr/textColorSecondary" />
+                </LinearLayout>
+
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Section: Key Style -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Key Style"
+            android:textSize="13sp"
+            android:textColor="?android:attr/textColorSecondary"
+            android:textAllCaps="true"
+            android:letterSpacing="0.05"
+            android:paddingHorizontal="20dp"
+            android:paddingTop="24dp"
+            android:paddingBottom="8dp" />
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="0dp"
+            app:cardBackgroundColor="?attr/colorSurface">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <!-- Key Border -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:paddingHorizontal="16dp">
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content"
+                        android:layout_weight="1" android:text="@string/pref_key_border"
+                        android:textSize="16sp" android:textColor="?android:attr/textColorPrimary" />
+                    <com.google.android.material.switchmaterial.SwitchMaterial
+                        android:id="@+id/switch_key_border"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+
+                <View android:layout_width="match_parent" android:layout_height="1dp"
+                    android:background="?android:attr/listDivider" android:layout_marginStart="16dp" />
+
+                <!-- Flick Hints -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:paddingHorizontal="16dp">
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content"
+                        android:layout_weight="1" android:text="@string/pref_flick_hints"
+                        android:textSize="16sp" android:textColor="?android:attr/textColorPrimary" />
+                    <com.google.android.material.switchmaterial.SwitchMaterial
+                        android:id="@+id/switch_flick_hints"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+
+                <View android:layout_width="match_parent" android:layout_height="1dp"
+                    android:background="?android:attr/listDivider" android:layout_marginStart="16dp" />
+
+                <!-- Popup Style -->
+                <LinearLayout
+                    android:id="@+id/row_popup_style"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:paddingHorizontal="16dp"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:focusable="true">
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content"
+                        android:layout_weight="1" android:text="@string/pref_popup_style"
+                        android:textSize="16sp" android:textColor="?android:attr/textColorPrimary" />
+                    <TextView android:id="@+id/tv_popup_style_value" android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" android:text="Balloon"
+                        android:textSize="14sp" android:textColor="?android:attr/textColorSecondary" />
+                </LinearLayout>
+
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Section: Layout Options -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Layout"
+            android:textSize="13sp"
+            android:textColor="?android:attr/textColorSecondary"
+            android:textAllCaps="true"
+            android:letterSpacing="0.05"
+            android:paddingHorizontal="20dp"
+            android:paddingTop="24dp"
+            android:paddingBottom="8dp" />
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="0dp"
+            app:cardBackgroundColor="?attr/colorSurface">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <!-- Show Toolbar -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:paddingHorizontal="16dp">
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content"
+                        android:layout_weight="1" android:text="@string/pref_show_toolbar"
+                        android:textSize="16sp" android:textColor="?android:attr/textColorPrimary" />
+                    <com.google.android.material.switchmaterial.SwitchMaterial
+                        android:id="@+id/switch_show_toolbar"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+
+                <View android:layout_width="match_parent" android:layout_height="1dp"
+                    android:background="?android:attr/listDivider" android:layout_marginStart="16dp" />
+
+                <!-- Show Suggestion Bar -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:paddingHorizontal="16dp">
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content"
+                        android:layout_weight="1" android:text="@string/pref_show_suggestions"
+                        android:textSize="16sp" android:textColor="?android:attr/textColorPrimary" />
+                    <com.google.android.material.switchmaterial.SwitchMaterial
+                        android:id="@+id/switch_show_suggestions"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+
+            </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
         <!-- Section: Input -->
@@ -317,37 +662,6 @@
                         android:value="20" />
                 </LinearLayout>
 
-                <View android:layout_width="match_parent" android:layout_height="1dp"
-                    android:background="?android:attr/listDivider" android:layout_marginStart="16dp" />
-
-                <!-- Keyboard Height -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:paddingHorizontal="16dp"
-                    android:paddingVertical="4dp">
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:gravity="center_vertical">
-                        <TextView android:layout_width="0dp" android:layout_height="wrap_content"
-                            android:layout_weight="1" android:text="@string/pref_height"
-                            android:textSize="16sp" android:textColor="?android:attr/textColorPrimary" />
-                        <TextView android:id="@+id/tv_height_value" android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" android:text="38%"
-                            android:textSize="14sp" android:textColor="?android:attr/textColorSecondary" />
-                    </LinearLayout>
-                    <com.google.android.material.slider.Slider
-                        android:id="@+id/slider_height"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:valueFrom="25"
-                        android:valueTo="50"
-                        android:stepSize="1"
-                        android:value="38" />
-                </LinearLayout>
 
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
