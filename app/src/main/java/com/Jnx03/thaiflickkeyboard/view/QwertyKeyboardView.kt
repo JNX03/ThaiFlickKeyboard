@@ -50,8 +50,14 @@ class QwertyKeyboardView @JvmOverloads constructor(
         textAlign = Paint.Align.CENTER
     }
 
-    private val pad = 3f.dpToPx(context)
-    private val cornerR = 8f.dpToPx(context)
+    var heightPercent: Float = 0.38f
+        set(value) { field = value; requestLayout() }
+
+    private val pad get() = ThemeManager.keySpacingDp.dpToPx(context)
+    private val cornerR get() = ThemeManager.cornerRadiusDp.dpToPx(context)
+    private val borderPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        style = Paint.Style.STROKE
+    }
     private val rect = RectF()
 
     private val backspaceIcon: Drawable? = ContextCompat.getDrawable(context, R.drawable.ic_backspace)
@@ -68,7 +74,7 @@ class QwertyKeyboardView @JvmOverloads constructor(
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         val w = MeasureSpec.getSize(widthMeasureSpec)
-        val h = (resources.displayMetrics.heightPixels * 0.32f).toInt()
+        val h = (resources.displayMetrics.heightPixels * heightPercent).toInt()
         setMeasuredDimension(w, h)
     }
 
@@ -142,6 +148,7 @@ class QwertyKeyboardView @JvmOverloads constructor(
         super.onDraw(canvas)
         canvas.drawColor(colors.kbBg)
         textPaint.color = colors.textColor
+        val fontMul = ThemeManager.fontSizeMultiplier
 
         for (rowIdx in rows.indices) {
             val row = rows[rowIdx]
@@ -159,12 +166,19 @@ class QwertyKeyboardView @JvmOverloads constructor(
                 }
                 canvas.drawRoundRect(r, cornerR, cornerR, keyBgPaint)
 
+                // Key border
+                if (ThemeManager.keyBorderEnabled && !isActive) {
+                    borderPaint.color = colors.hintColor
+                    borderPaint.strokeWidth = 1f.dpToPx(context)
+                    canvas.drawRoundRect(r, cornerR, cornerR, borderPaint)
+                }
+
                 val cx = r.centerX()
                 val cy = r.centerY()
 
                 when (key) {
                     "SHIFT" -> {
-                        textPaint.textSize = 16f.spToPx(context)
+                        textPaint.textSize = (16f * fontMul).spToPx(context)
                         textPaint.color = if (isShifted || isCaps) colors.charKeyPressed else colors.textColor
                         canvas.drawText(if (isCaps) "⇪" else "⇧", cx, cy + 6f.dpToPx(context), textPaint)
                         textPaint.color = colors.textColor
@@ -172,15 +186,15 @@ class QwertyKeyboardView @JvmOverloads constructor(
                     "BKSP" -> drawIcon(canvas, backspaceIcon, r, 0.35f)
                     "ENTER" -> drawIcon(canvas, enterIcon, r, 0.35f)
                     "MODE" -> {
-                        textPaint.textSize = 13f.spToPx(context)
+                        textPaint.textSize = (13f * fontMul).spToPx(context)
                         canvas.drawText("ก", cx, cy + 5f.dpToPx(context), textPaint)
                     }
                     "SPACE" -> {
-                        textPaint.textSize = 12f.spToPx(context)
+                        textPaint.textSize = (12f * fontMul).spToPx(context)
                         canvas.drawText("space", cx, cy + 4f.dpToPx(context), textPaint)
                     }
                     else -> {
-                        textPaint.textSize = 20f.spToPx(context)
+                        textPaint.textSize = (20f * fontMul).spToPx(context)
                         val display = if (isShifted || isCaps) key.uppercase() else key
                         canvas.drawText(display, cx, cy + 7f.dpToPx(context), textPaint)
                     }

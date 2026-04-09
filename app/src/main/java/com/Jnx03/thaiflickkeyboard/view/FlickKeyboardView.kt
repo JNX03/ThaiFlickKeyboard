@@ -101,8 +101,14 @@ class FlickKeyboardView @JvmOverloads constructor(
         textAlign = Paint.Align.CENTER
     }
 
-    private val pad = 3f.dpToPx(context)
-    private val cornerR = 10f.dpToPx(context)
+    var heightPercent: Float = 0.38f
+        set(value) { field = value; requestLayout() }
+
+    private val pad get() = ThemeManager.keySpacingDp.dpToPx(context)
+    private val cornerR get() = ThemeManager.cornerRadiusDp.dpToPx(context)
+    private val borderPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        style = Paint.Style.STROKE
+    }
     private val rect = RectF()
     private val flickRect = RectF()
 
@@ -113,7 +119,7 @@ class FlickKeyboardView @JvmOverloads constructor(
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         val w = MeasureSpec.getSize(widthMeasureSpec)
-        val h = (resources.displayMetrics.heightPixels * 0.32f).toInt()
+        val h = (resources.displayMetrics.heightPixels * heightPercent).toInt()
         setMeasuredDimension(w, h)
     }
 
@@ -184,6 +190,7 @@ class FlickKeyboardView @JvmOverloads constructor(
         val keyIndex = row * 3 + (col - 1)
         if (keyIndex >= charKeys.size) return
         val key = charKeys[keyIndex]
+        val fontMul = ThemeManager.fontSizeMultiplier
 
         // Check if this key contains the highlighted character
         val hasHighlight = highlightChar.isNotEmpty() && (
@@ -199,13 +206,17 @@ class FlickKeyboardView @JvmOverloads constructor(
         }
         canvas.drawRoundRect(rect, cornerR, cornerR, keyBgPaint)
 
+        // Key border
+        if (ThemeManager.keyBorderEnabled && !isActive) {
+            borderPaint.color = colors.hintColor
+            borderPaint.strokeWidth = 1f.dpToPx(context)
+            canvas.drawRoundRect(rect, cornerR, cornerR, borderPaint)
+        }
+
         // Draw highlight border for tutorial
         if (hasHighlight && !isActive) {
-            val borderPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-                style = Paint.Style.STROKE
-                strokeWidth = 2f.dpToPx(context)
-                color = Color.parseColor("#4CAF50")
-            }
+            borderPaint.strokeWidth = 2f.dpToPx(context)
+            borderPaint.color = Color.parseColor("#4CAF50")
             canvas.drawRoundRect(rect, cornerR, cornerR, borderPaint)
         }
 
@@ -213,14 +224,14 @@ class FlickKeyboardView @JvmOverloads constructor(
         val cy = rect.centerY()
 
         // Main character
-        textPaint.textSize = 24f.spToPx(context)
+        textPaint.textSize = (24f * fontMul).spToPx(context)
         textPaint.color = if (isActive) Color.WHITE else colors.textColor
         textPaint.isFakeBoldText = false
         canvas.drawText(toDisplayChar(key.tap), cx, cy + 8f.dpToPx(context), textPaint)
 
-        // Flick hints at edges (small, gray) — only when not active
-        if (!isActive) {
-            hintPaint.textSize = 10f.spToPx(context)
+        // Flick hints at edges (small, gray) — only when not active and hints visible
+        if (!isActive && ThemeManager.flickHintsVisible) {
+            hintPaint.textSize = (10f * fontMul).spToPx(context)
             if (key.up.isNotEmpty())
                 canvas.drawText(toDisplayChar(key.up), cx, rect.top + 14f.dpToPx(context), hintPaint)
             if (key.down.isNotEmpty())
@@ -235,6 +246,14 @@ class FlickKeyboardView @JvmOverloads constructor(
     private fun drawUtilKey(canvas: Canvas, row: Int, col: Int, rect: RectF, isActive: Boolean) {
         keyBgPaint.color = if (isActive) colors.utilKeyPressed else colors.utilKeyBg
         canvas.drawRoundRect(rect, cornerR, cornerR, keyBgPaint)
+        val fontMul = ThemeManager.fontSizeMultiplier
+
+        // Key border
+        if (ThemeManager.keyBorderEnabled && !isActive) {
+            borderPaint.color = colors.hintColor
+            borderPaint.strokeWidth = 1f.dpToPx(context)
+            canvas.drawRoundRect(rect, cornerR, cornerR, borderPaint)
+        }
 
         val cx = rect.centerX()
         val cy = rect.centerY()
@@ -244,16 +263,16 @@ class FlickKeyboardView @JvmOverloads constructor(
         when {
             col == 0 && row == 0 -> drawIcon(canvas, micIcon, rect, 0.35f)
             col == 0 && row == 1 -> {
-                textPaint.textSize = 18f.spToPx(context)
+                textPaint.textSize = (18f * fontMul).spToPx(context)
                 canvas.drawText("<", cx, cy + 6f.dpToPx(context), textPaint)
             }
             col == 0 && row == 2 -> {
-                textPaint.textSize = 14f.spToPx(context)
+                textPaint.textSize = (14f * fontMul).spToPx(context)
                 canvas.drawText(modeLabel, cx, cy + 5f.dpToPx(context), textPaint)
             }
             col == 0 && row == 3 -> {
                 if (showShiftIcon) {
-                    textPaint.textSize = 20f.spToPx(context)
+                    textPaint.textSize = (20f * fontMul).spToPx(context)
                     canvas.drawText("⇧", cx, cy + 6f.dpToPx(context), textPaint)
                 } else {
                     drawIcon(canvas, emojiIcon, rect, 0.35f)
@@ -261,7 +280,7 @@ class FlickKeyboardView @JvmOverloads constructor(
             }
             col == 4 && row == 0 -> drawIcon(canvas, backspaceIcon, rect, 0.40f)
             col == 4 && row == 1 -> {
-                textPaint.textSize = 18f.spToPx(context)
+                textPaint.textSize = (18f * fontMul).spToPx(context)
                 canvas.drawText(">", cx, cy + 6f.dpToPx(context), textPaint)
             }
             col == 4 && row == 2 -> {
@@ -271,10 +290,10 @@ class FlickKeyboardView @JvmOverloads constructor(
                     keyBgPaint.color = colors.charKeyPressed
                     canvas.drawRoundRect(rect, cornerR, cornerR, keyBgPaint)
                 }
-                textPaint.textSize = 12f.spToPx(context)
+                textPaint.textSize = (12f * fontMul).spToPx(context)
                 canvas.drawText("Space", cx, cy + 4f.dpToPx(context), textPaint)
-                if (!spaceActive) {
-                    hintPaint.textSize = 8f.spToPx(context)
+                if (!spaceActive && ThemeManager.flickHintsVisible) {
+                    hintPaint.textSize = (8f * fontMul).spToPx(context)
                     canvas.drawText(toDisplayChar(toneSpaceKey.left), rect.left + 8f.dpToPx(context), cy + 3f.dpToPx(context), hintPaint)
                     canvas.drawText(toDisplayChar(toneSpaceKey.up), cx, rect.top + 10f.dpToPx(context), hintPaint)
                     canvas.drawText(toDisplayChar(toneSpaceKey.right), rect.right - 8f.dpToPx(context), cy + 3f.dpToPx(context), hintPaint)
@@ -314,13 +333,30 @@ class FlickKeyboardView @JvmOverloads constructor(
     private fun drawBalloon(canvas: Canvas, char: String, dir: FlickDirection,
                             x: Float, y: Float, w: Float, h: Float) {
         if (char.isEmpty()) return
-        flickRect.set(x, y, x + w, y + h)
-
         val isActive = dir == currentDirection
+        val fontMul = ThemeManager.fontSizeMultiplier
+
+        if (ThemeManager.popupStyle == "minimal") {
+            // Minimal: only draw the active direction's character, smaller
+            if (!isActive) return
+            flickRect.set(x, y, x + w, y + h)
+            keyBgPaint.color = colors.flickBalloonActive
+            canvas.drawRoundRect(flickRect, cornerR, cornerR, keyBgPaint)
+            textPaint.textSize = (20f * fontMul).spToPx(context)
+            textPaint.color = Color.WHITE
+            textPaint.isFakeBoldText = true
+            canvas.drawText(toDisplayChar(char), flickRect.centerX(),
+                flickRect.centerY() + 8f.dpToPx(context), textPaint)
+            textPaint.isFakeBoldText = false
+            return
+        }
+
+        // Balloon style (default)
+        flickRect.set(x, y, x + w, y + h)
         keyBgPaint.color = if (isActive) colors.flickBalloonActive else colors.flickBalloonBg
         canvas.drawRoundRect(flickRect, cornerR, cornerR, keyBgPaint)
 
-        textPaint.textSize = 22f.spToPx(context)
+        textPaint.textSize = (22f * fontMul).spToPx(context)
         textPaint.color = Color.WHITE
         textPaint.isFakeBoldText = isActive
         canvas.drawText(toDisplayChar(char), flickRect.centerX(),
