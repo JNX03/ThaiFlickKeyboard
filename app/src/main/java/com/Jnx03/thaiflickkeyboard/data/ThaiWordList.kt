@@ -10,6 +10,45 @@ object ThaiWordList {
             .toList()
     }
 
+    private val wordsByFirstChar: Map<Char, List<String>> by lazy {
+        words.groupBy { it.first() }
+            .mapValues { (_, v) -> v.sortedByDescending { it.length } }
+    }
+
+    fun segmentTrailing(text: String): Pair<String, String> {
+        if (text.isEmpty()) return "" to ""
+        var pos = 0
+        var lastCompleted = ""
+        var lastCompletedEnd = 0
+        while (pos < text.length) {
+            val candidates = wordsByFirstChar[text[pos]].orEmpty()
+            val match = candidates.firstOrNull { w ->
+                pos + w.length <= text.length &&
+                    text.regionMatches(pos, w, 0, w.length)
+            }
+            if (match != null) {
+                lastCompleted = match
+                pos += match.length
+                lastCompletedEnd = pos
+            } else {
+                pos++
+                lastCompleted = ""
+                lastCompletedEnd = pos
+            }
+        }
+        return lastCompleted to text.substring(lastCompletedEnd)
+    }
+
+    fun getContinuations(previous: String, limit: Int = 3): List<String> {
+        if (previous.isEmpty()) return emptyList()
+        return words.asSequence()
+            .filter { it.length > previous.length && it.startsWith(previous) }
+            .map { it.substring(previous.length) }
+            .distinct()
+            .take(limit)
+            .toList()
+    }
+
     // Top ~500 Thai words by frequency (Chulalongkorn corpus)
     private val words = listOf(
         "ที่", "การ", "เป็น", "ใน", "จะ", "มี", "ของ", "ไม่", "และ", "ได้",

@@ -309,22 +309,34 @@ class ThaiFlickIMEService : InputMethodService(), SharedPreferences.OnSharedPref
             return
         }
         val ic = currentInputConnection ?: return
-        val textBefore = ic.getTextBeforeCursor(20, 0)?.toString() ?: ""
-        val lastWord = textBefore.split(" ", "\n").lastOrNull() ?: ""
-        if (lastWord.isEmpty()) { suggestionBar?.setSuggestions(emptyList()); return }
+        val textBefore = ic.getTextBeforeCursor(40, 0)?.toString() ?: ""
+        val chunk = textBefore.split(' ', '\n', '\t').lastOrNull().orEmpty()
+        if (chunk.isEmpty()) { suggestionBar?.setSuggestions(emptyList()); return }
 
         suggestionsHandler.removeCallbacksAndMessages(null)
         suggestionsHandler.post {
-            val results = ThaiWordList.getSuggestions(lastWord, 3)
+            val (lastWord, partial) = ThaiWordList.segmentTrailing(chunk)
+            val results = when {
+                partial.isNotEmpty() && lastWord.isNotEmpty() -> {
+                    val biased = ThaiWordList.getContinuations(lastWord, 8)
+                        .filter { it.startsWith(partial) }
+                    val plain = ThaiWordList.getSuggestions(partial, 6)
+                    (biased + plain).distinct().take(3)
+                }
+                partial.isNotEmpty() -> ThaiWordList.getSuggestions(partial, 3)
+                lastWord.isNotEmpty() -> ThaiWordList.getContinuations(lastWord, 3)
+                else -> emptyList()
+            }
             mainHandler.post { suggestionBar?.setSuggestions(results) }
         }
     }
 
     private fun commitSuggestion(word: String) {
         val ic = currentInputConnection ?: return
-        val textBefore = ic.getTextBeforeCursor(20, 0)?.toString() ?: ""
-        val lastWord = textBefore.split(" ", "\n").lastOrNull() ?: ""
-        if (lastWord.isNotEmpty()) ic.deleteSurroundingText(lastWord.length, 0)
+        val textBefore = ic.getTextBeforeCursor(40, 0)?.toString() ?: ""
+        val chunk = textBefore.split(' ', '\n', '\t').lastOrNull().orEmpty()
+        val (_, partial) = ThaiWordList.segmentTrailing(chunk)
+        if (partial.isNotEmpty()) ic.deleteSurroundingText(partial.length, 0)
         ic.commitText("$word ", 1)
         suggestionBar?.setSuggestions(emptyList())
     }
